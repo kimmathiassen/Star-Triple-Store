@@ -3,4 +3,38 @@
   <groupId>dk.aau.cs.qweb.star-triple-store</groupId>
   <artifactId>star-triple-store</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  <dependencies>
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-collections4</artifactId>
+	    <version>4.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-lang3</artifactId>
+	    <version>3.5</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.jena</groupId>
+		<artifactId>apache-jena-libs</artifactId>
+		<type>pom</type>
+		<version>3.1.0</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-tdb -->
+	<dependency>
+	    <groupId>org.apache.jena</groupId>
+	    <artifactId>jena-tdb</artifactId>
+	    <version>3.1.0</version>
+	</dependency>
+	<dependency>
+   		<groupId>junit</groupId>
+   		<artifactId>junit</artifactId>
+   		<version>4.11</version>
+   		<scope>test</scope>
+	</dependency>
+  </dependencies>
+  
 </project>
