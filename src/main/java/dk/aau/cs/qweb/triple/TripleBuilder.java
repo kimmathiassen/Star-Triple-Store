@@ -4,9 +4,9 @@ import org.apache.jena.graph.Node;
 
 public class TripleBuilder {
 
-	private int subject;
-	private int predicate;
-	private int object;
+	private Key subject;
+	private Key predicate;
+	private Key object;
 	private boolean subjectIsVariable;
 	private boolean predicateIsVariable;
 	private boolean objectIsVariable;
@@ -21,9 +21,9 @@ public class TripleBuilder {
 		subjectVariableName = "";
 		predicateVariableName = "";
 		objectVariableName = "";
-		subject = 0;
-		predicate = 0;
-		object = 0;
+		subject = new Key();
+		predicate = new Key();
+		object = new Key();
 		
 	}
 	
@@ -37,15 +37,15 @@ public class TripleBuilder {
 		predicateVariableName = node.getName();
 	}
 
-	public void setSubject(int i) {
+	public void setSubject(Key i) {
 		subject = i;
 	}
 
-	public void setPredicate(int i) {
+	public void setPredicate(Key i) {
 		predicate = i;
 	}
 
-	public void setObject(int i) {
+	public void setObject(Key i) {
 		object = i;
 	}
 
@@ -54,36 +54,36 @@ public class TripleBuilder {
 		objectVariableName = node.getName();
 	}
 
-	public MyTriple createTriple() {
+	public IdTriple createTriple() {
 		canTripleBeConstructed();
-		MyTriple triple;
+		IdTriple triple;
 		
 		if (subjectIsVariable) {
 			if (predicateIsVariable) {
 				if (objectIsVariable) {
-					triple = new MyTriple(subjectVariableName,predicateVariableName,objectVariableName);
+					triple = new IdTriple(subjectVariableName,predicateVariableName,objectVariableName);
 				} else {
-					triple = new MyTriple(subjectVariableName, predicateVariableName, object);
+					triple = new IdTriple(subjectVariableName, predicateVariableName, object);
 				}
 			} else {
 				if (objectIsVariable) {
-					triple = new MyTriple(subjectVariableName,predicate,objectVariableName);
+					triple = new IdTriple(subjectVariableName,predicate,objectVariableName);
 				} else {
-					triple = new MyTriple(subjectVariableName,predicate,object);
+					triple = new IdTriple(subjectVariableName,predicate,object);
 				}
 			}
 		} else {
 			if (predicateIsVariable) {
 				if (objectIsVariable) {
-					triple = new MyTriple(subject,predicateVariableName,objectVariableName);
+					triple = new IdTriple(subject,predicateVariableName,objectVariableName);
 				} else {
-					triple = new MyTriple(subject, predicateVariableName, object);
+					triple = new IdTriple(subject, predicateVariableName, object);
 				}
 			} else {
 				if (objectIsVariable) {
-					triple = new MyTriple(subject,predicate,objectVariableName);
+					triple = new IdTriple(subject,predicate,objectVariableName);
 				} else {
-					triple = new MyTriple(subject,predicate,object);
+					triple = new IdTriple(subject,predicate,object);
 				}
 			}
 		}
@@ -92,13 +92,13 @@ public class TripleBuilder {
 	}
 
 	private void canTripleBeConstructed() {
-		if (subject == 0 && subjectVariableName.equals("")) {
+		if (subject.id == 0 && subjectVariableName.equals("")) {
 			throw new IllegalArgumentException("TripleBuilder must recieve a valid subject");
 		}
-		if (predicate == 0 && predicateVariableName.equals("")) {
+		if (predicate.id == 0 && predicateVariableName.equals("")) {
 			throw new IllegalArgumentException("TripleBuilder must recieve a valid predicate");
 		}
-		if (object == 0 && objectVariableName.equals("")) {
+		if (object.id == 0 && objectVariableName.equals("")) {
 			throw new IllegalArgumentException("TripleBuilder must recieve a valid object");
 		}
 		// TODO Auto-generated method stub

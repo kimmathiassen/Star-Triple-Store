@@ -10,7 +10,7 @@ import org.apache.jena.graph.impl.SimpleEventManager;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
-import dk.aau.cs.qweb.triple.MyTriple;
+import dk.aau.cs.qweb.triple.IdTriple;
 
 public class MyGraph extends GraphBase {
 
@@ -167,7 +167,7 @@ public class MyGraph extends GraphBase {
     @Override 
     public ExtendedIterator<Triple> graphBaseFind( Triple triplePattern ) {
     	MyDictionary dict = MyDictionary.getInstance();
-    	MyTriple triple = dict.createTriple(triplePattern);
+    	IdTriple triple = dict.createTriple(triplePattern);
 		
 		return new DecodingTriplesIterator(store.find(triple) );
     }

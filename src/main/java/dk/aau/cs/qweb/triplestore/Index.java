@@ -2,16 +2,16 @@ package dk.aau.cs.qweb.triplestore;
 
 import java.util.Iterator;
 
-import dk.aau.cs.qweb.triple.MyTriple;
+import dk.aau.cs.qweb.triple.IdTriple;
 
 public class Index {
 
-	public boolean add(MyTriple t) {
+	public boolean add(IdTriple t) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean remove(MyTriple t) {
+	public boolean remove(IdTriple t) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -31,17 +31,17 @@ public class Index {
 		return false;
 	}
 
-	public boolean containsBySameValueAs(MyTriple t) {
+	public boolean containsBySameValueAs(IdTriple t) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean contains(MyTriple t) {
+	public boolean contains(IdTriple t) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public Iterator<MyTriple> iterator(MyTriple triple) {
+	public Iterator<IdTriple> iterator(IdTriple triple) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -51,7 +51,7 @@ public class Index {
 		
 	}
 
-	public Iterator<MyTriple> iterateAll() {
+	public Iterator<IdTriple> iterateAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}

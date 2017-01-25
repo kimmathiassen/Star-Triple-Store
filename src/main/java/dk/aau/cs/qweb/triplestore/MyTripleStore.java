@@ -6,7 +6,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.triple.MyTriple;
+import dk.aau.cs.qweb.triple.IdTriple;
 
 public class MyTripleStore {
 	protected final Graph parent;
@@ -36,7 +36,7 @@ public class MyTripleStore {
      /**
           Add a triple to this triple store.
      */
-    public void add( MyTriple t ) {
+    public void add( IdTriple t ) {
          if (SPO.add( t ))
              {
              POS.add( t );
@@ -47,7 +47,7 @@ public class MyTripleStore {
      /**
           Remove a triple from this triple store.
      */
-    public void delete( MyTriple t ) {
+    public void delete( IdTriple t ) {
          if (SPO.remove( t ))
              {
              POS.remove( t );
@@ -92,7 +92,7 @@ public class MyTripleStore {
      /**
           Answer true iff this triple store contains the (concrete) triple <code>t</code>.
      */
-    public boolean contains( MyTriple t ) { 
+    public boolean contains( IdTriple t ) { 
     	return SPO.containsBySameValueAs( t ); 
     }
      
@@ -119,7 +119,7 @@ public class MyTripleStore {
          (ANY, P, O) searches on largish models with few predicates declined
          dramatically - specifically on the not-galen.owl ontology.
      */
-    public ExtendedIterator<MyTriple> find( MyTriple t ) {
+    public ExtendedIterator<IdTriple> find( IdTriple t ) {
     	 
          if (t.isSubjectConcrete())
              return new MyTripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );

@@ -5,22 +5,21 @@ import java.util.HashMap;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 
-import dk.aau.cs.qweb.triple.MyTriple;
+import dk.aau.cs.qweb.triple.Key;
+import dk.aau.cs.qweb.triple.IdTriple;
 import dk.aau.cs.qweb.triple.TripleBuilder;
 
 public class MyDictionary {
 	
 	private static MyDictionary instance;
-	HashMap<Integer, Node> id2Node;
-	HashMap<Node, Integer> node2Id;
-	int key;
+	HashMap<Key, Node> id2Node;
+	HashMap<Node, Key> node2Id;
+	long id;
 
 	private MyDictionary() {
-		id2Node = new HashMap<Integer, Node>();
-		node2Id = new HashMap<Node, Integer>();
-		//It is important that it starts as non zero, 
-		//0 is used a an error key in the TripleBuilder class
-		key = 1; 
+		id2Node = new HashMap<Key, Node>();
+		node2Id = new HashMap<Node, Key>();
+		id = 1;
 	}
 	
 	public static MyDictionary getInstance() {
@@ -31,7 +30,7 @@ public class MyDictionary {
 	}
 
 	// This methods seem over complicated but it is in order to be able to handle triple patterns
-	public MyTriple createTriple(Triple t) {
+	public IdTriple createTriple(Triple t) {
 		TripleBuilder builder = new TripleBuilder();
 		
 		if (t.getSubject().isConcrete()) {
@@ -57,25 +56,26 @@ public class MyDictionary {
 
 
 
-	public Node getNode(int id) {
+	public Node getNode(Key id) {
 		return id2Node.get(id);
 	}
 	
-	private int convertNodeToId(Node node){
-		int id;
+	private Key convertNodeToId(Node node){
+		Key tempId;
 		if (node2Id.containsKey(node)) {
-			id = node2Id.get(node);
+			tempId = node2Id.get(node);
 		} else {
+			Key key = new Key(id);
 			id2Node.put(key, node);
 			node2Id.put(node,key);
-			id = key;
-			key++;
+			tempId = key;
+			id++;
 		}
-		return id;
+		return tempId;
 	}
 	
-	public int size() {
-		return key;
+	public long size() {
+		return id;
 	}
 	
 

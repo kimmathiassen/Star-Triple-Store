@@ -5,19 +5,19 @@ import java.util.Iterator;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.util.iterator.WrappedIterator;
 
-import dk.aau.cs.qweb.triple.MyTriple;
+import dk.aau.cs.qweb.triple.IdTriple;
 
-public class MyTripleStoreIterator extends WrappedIterator<MyTriple> {
+public class MyTripleStoreIterator extends WrappedIterator<IdTriple> {
 	
 	protected Index X;
     protected Index A;
     protected Index B;
     protected Graph toNotify;
-    protected MyTriple current;
+    protected IdTriple current;
 
 	public MyTripleStoreIterator(
 			Graph toNotify, 
-			Iterator<MyTriple> it, 
+			Iterator<IdTriple> it, 
 	        Index X, 
 	        Index A, 
 	        Index B ) {
@@ -39,7 +39,7 @@ public class MyTripleStoreIterator extends WrappedIterator<MyTriple> {
 //    }
 	
 	@Override
-    public MyTriple next() {
+    public IdTriple next() {
         return current = super.next();       
     }
 
