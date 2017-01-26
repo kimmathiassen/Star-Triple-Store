@@ -111,4 +111,37 @@ public class IdTriple {
 		}
 		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
+	
+	public String toString () {
+		
+		if (!subjectIsConcrete) {
+			if (!predicateIsConcrete) {
+				if (!objectIsConcrete) {
+					return "(ANY,ANY,ANY)";
+				} else {
+					return "(ANY,ANY,"+getObject()+")";
+				}
+			} else {
+				if (!objectIsConcrete) {
+					return "(ANY,"+getPredicate()+",ANY)";
+				} else {
+					return "(ANY,"+getPredicate()+","+getObject()+")";
+				}
+			}
+		} else {
+			if (!predicateIsConcrete) {
+				if (!objectIsConcrete) {
+					return "("+getSubject()+",ANY,ANY)";
+				} else {
+					return "("+getSubject()+",ANY,"+getObject()+")";
+				}
+			} else {
+				if (!objectIsConcrete) {
+					return "("+getSubject()+","+getPredicate()+",ANY)";
+				} else {
+					return "("+getSubject()+","+getPredicate()+","+getObject()+")";
+				}
+			}
+		}
+	}
 }
