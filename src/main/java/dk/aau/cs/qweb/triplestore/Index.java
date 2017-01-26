@@ -1,59 +1,94 @@
 package dk.aau.cs.qweb.triplestore;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.Key;
 
-public class Index {
+public class Index   {
+	public enum Field {
+		 S, P, O, 
+		}
+	
+	private Map<Key,TripleBunch> indexMap;
+	private long size;
+	private Field field1;
+	private Field field2;
+	private Field field3;
+	
+	public Index(Field field1,Field field2,Field field3) {
+		this.field1 = field1;
+		this.field2 = field2;
+		this.field3 = field3;
+		indexMap = new HashMap<Key,TripleBunch>();
+		size = 0;
+	}
 
-	public boolean add(IdTriple t) {
-		// TODO Auto-generated method stub
-		return false;
+	public void add(IdTriple t) {
+		Key firstKey = getFieldKey(field1,t);
+		if (indexMap.containsKey(firstKey)) {
+			indexMap.get(firstKey).put(getFieldKey(field2,t),t);
+		} else {
+			TripleBunch tripleBunch = new TripleBunch();
+			tripleBunch.put(getFieldKey(field2,t),t);
+			indexMap.put(firstKey, tripleBunch);
+		}
+		size++;
+	}
+
+	private Key getFieldKey(Field field,IdTriple t) {
+		if (field == Field.S) {
+			return t.getSubject();
+		} else if (field == Field.P) {
+			return t.getPredicate();
+		} else {
+			return t.getObject();
+		}
 	}
 
 	public boolean remove(IdTriple t) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new NotImplementedException("Index.remove");
 	}
 
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		indexMap.clear();
+		size = 0;
 	}
 
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+	public long size() {
+		return size;
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return (size == 0 ? true : false);
 	}
 
 	public boolean containsBySameValueAs(IdTriple t) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new NotImplementedException("Index.containsBySameValueAs");
 	}
 
 	public boolean contains(IdTriple t) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new NotImplementedException("Index.contains");
 	}
 
 	public Iterator<IdTriple> iterator(IdTriple triple) {
-		// TODO Auto-generated method stub
-		return null;
+		Key firstKey = getFieldKey(field1,triple);
+		if (indexMap.containsKey(firstKey)) {
+			return indexMap.get(firstKey).iterator(getFieldKey(field2,triple));
+		}
+		throw new NotImplementedException("no match for "+triple+" an iterator over the empty set should have been returned");
 	}
 
 	public void removedOneViaIterator() {
-		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException("Index.removedOneViaIterator");
 	}
 
 	public Iterator<IdTriple> iterateAll() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException("Index.iterateAll");
 	}
 
 }
