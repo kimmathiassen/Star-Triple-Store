@@ -1,108 +1,69 @@
 package dk.aau.cs.qweb.triple;
 
-import org.apache.jena.graph.Node;
+import dk.aau.cs.qweb.triple.IdTriple.Variable;
 
 public class TripleBuilder {
 
 	private Key subject;
 	private Key predicate;
 	private Key object;
-	private boolean subjectIsVariable;
-	private boolean predicateIsVariable;
-	private boolean objectIsVariable;
-	private String subjectVariableName;
-	private String predicateVariableName;
-	private String objectVariableName;
+	private boolean subjectIsConcrete;
+	private boolean predicateIsConcrete;
+	private boolean objectIsConcrete;
 
 	public TripleBuilder() {
-		subjectIsVariable = false;
-		predicateIsVariable = false;
-		objectIsVariable = false;
-		subjectVariableName = "";
-		predicateVariableName = "";
-		objectVariableName = "";
-		subject = new Key();
-		predicate = new Key();
-		object = new Key();
-		
-	}
-	
-	public void setSubjectIsVariable(Node node) {
-		subjectIsVariable = true;
-		subjectVariableName = node.getName();
-	}
-
-	public void setPredicateIsVariable(Node node) {
-		predicateIsVariable = true;
-		predicateVariableName = node.getName();
+		subjectIsConcrete = false;
+		predicateIsConcrete = false;
+		objectIsConcrete = false;
 	}
 
 	public void setSubject(Key i) {
 		subject = i;
+		subjectIsConcrete = true;
 	}
 
 	public void setPredicate(Key i) {
 		predicate = i;
+		predicateIsConcrete = true;
 	}
 
 	public void setObject(Key i) {
 		object = i;
-	}
-
-	public void setObjectIsVariable(Node node) {
-		objectIsVariable = true;
-		objectVariableName = node.getName();
+		objectIsConcrete = true;
 	}
 
 	public IdTriple createTriple() {
-		canTripleBeConstructed();
 		IdTriple triple;
 		
-		if (subjectIsVariable) {
-			if (predicateIsVariable) {
-				if (objectIsVariable) {
-					triple = new IdTriple(subjectVariableName,predicateVariableName,objectVariableName);
+		if (subjectIsConcrete) {
+			if (predicateIsConcrete) {
+				if (objectIsConcrete) {
+					triple = new IdTriple(Variable.ANY,Variable.ANY,Variable.ANY);
 				} else {
-					triple = new IdTriple(subjectVariableName, predicateVariableName, object);
+					triple = new IdTriple(Variable.ANY, Variable.ANY, object);
 				}
 			} else {
-				if (objectIsVariable) {
-					triple = new IdTriple(subjectVariableName,predicate,objectVariableName);
+				if (objectIsConcrete) {
+					triple = new IdTriple(Variable.ANY,predicate,Variable.ANY);
 				} else {
-					triple = new IdTriple(subjectVariableName,predicate,object);
+					triple = new IdTriple(Variable.ANY,predicate,object);
 				}
 			}
 		} else {
-			if (predicateIsVariable) {
-				if (objectIsVariable) {
-					triple = new IdTriple(subject,predicateVariableName,objectVariableName);
+			if (predicateIsConcrete) {
+				if (objectIsConcrete) {
+					triple = new IdTriple(subject,Variable.ANY,Variable.ANY);
 				} else {
-					triple = new IdTriple(subject, predicateVariableName, object);
+					triple = new IdTriple(subject, Variable.ANY, object);
 				}
 			} else {
-				if (objectIsVariable) {
-					triple = new IdTriple(subject,predicate,objectVariableName);
+				if (objectIsConcrete) {
+					triple = new IdTriple(subject,predicate,Variable.ANY);
 				} else {
 					triple = new IdTriple(subject,predicate,object);
 				}
 			}
 		}
-		
 		return triple;
 	}
-
-	private void canTripleBeConstructed() {
-		if (subject.id == 0 && subjectVariableName.equals("")) {
-			throw new IllegalArgumentException("TripleBuilder must recieve a valid subject");
-		}
-		if (predicate.id == 0 && predicateVariableName.equals("")) {
-			throw new IllegalArgumentException("TripleBuilder must recieve a valid predicate");
-		}
-		if (object.id == 0 && objectVariableName.equals("")) {
-			throw new IllegalArgumentException("TripleBuilder must recieve a valid object");
-		}
-		// TODO Auto-generated method stub
-		
-	}
-
 }

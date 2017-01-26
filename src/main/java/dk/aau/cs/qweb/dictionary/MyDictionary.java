@@ -35,20 +35,14 @@ public class MyDictionary {
 		
 		if (t.getSubject().isConcrete()) {
 			builder.setSubject(convertNodeToId(t.getSubject()));
-		} else {
-			builder.setSubjectIsVariable(t.getSubject());
 		}
 		
 		if (t.getPredicate().isConcrete()) {
 			builder.setPredicate(convertNodeToId(t.getPredicate()));
-		} else {
-			builder.setPredicateIsVariable(t.getPredicate());
 		}
 		
 		if (t.getObject().isConcrete()) {
 			builder.setObject(convertNodeToId(t.getObject()));
-		} else {
-			builder.setObjectIsVariable(t.getObject());
 		}
 		
 		return builder.createTriple();
