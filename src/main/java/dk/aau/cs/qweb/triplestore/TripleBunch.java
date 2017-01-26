@@ -33,4 +33,10 @@ public class TripleBunch  {
 			return new IteratorOfIterators(innerMap.values());
 		}
 	}
+	
+	public Iterator<IdTriple> iterator() {
+		return new IteratorOfIterators(innerMap.values());
+	}
+	
+	
 }

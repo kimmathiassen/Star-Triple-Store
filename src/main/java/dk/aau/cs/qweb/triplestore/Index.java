@@ -78,7 +78,12 @@ public class Index   {
 	public Iterator<IdTriple> iterator(IdTriple triple) {
 		Key firstKey = getFieldKey(field1,triple);
 		if (indexMap.containsKey(firstKey)) {
-			return indexMap.get(firstKey).iterator(getFieldKey(field2,triple));
+			if (triple.isConcrete(field2)) {
+				return indexMap.get(firstKey).iterator(getFieldKey(field2,triple));
+			} else {
+				return indexMap.get(firstKey).iterator();
+			}
+			
 		}
 		throw new NotImplementedException("no match for "+triple+" an iterator over the empty set should have been returned");
 	}
