@@ -1,5 +1,9 @@
 package dk.aau.cs.qweb.triple;
 
+import org.apache.jena.reasoner.IllegalParameterException;
+
+import dk.aau.cs.qweb.triplestore.Index.Field;
+
 //This class is a triple and a triple pattern
 public class IdTriple {
 	private Key subjectId;
@@ -95,5 +99,16 @@ public class IdTriple {
 
 	public boolean isObjectConcrete() {
 		return objectIsConcrete;
+	}
+
+	public boolean isConcrete(Field field) {
+		if (field == Field.S) {
+			return isSubjectConcrete();
+		} else if (field == Field.P) {
+			return isPredicateConcrete();
+		} else if (field == Field.O) {
+			return isObjectConcrete();
+		}
+		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
 }
