@@ -10,11 +10,12 @@ import org.junit.Test;
 
 import dk.aau.cs.qweb.triple.IdTriple;
 import dk.aau.cs.qweb.triple.Key;
+import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.IdTriple.Variable;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
-public class IndexTest {
+public class IndexNormalTripleTest {
 	static Index SPO;
 	static Index POS;
 	static Index OSP;
