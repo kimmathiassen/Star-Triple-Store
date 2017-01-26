@@ -16,7 +16,7 @@ public class MyTripleStore {
     protected Index POS;
     protected Index OSP;
     
-    protected MyTripleStore ( Graph parent) { 
+    public MyTripleStore ( Graph parent) { 
     	this.SPO = new Index(Field.S,Field.P,Field.O );
     	this.POS = new Index(Field.P, Field.O, Field.S );
         this.OSP = new Index(Field.O, Field.S,Field.P);

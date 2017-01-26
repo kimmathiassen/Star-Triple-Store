@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.triplestore;
+package dk.aau.cs.qweb.graph;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.GraphEventManager;
@@ -11,6 +11,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
 import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triplestore.MyTripleStore;
 
 public class MyGraph extends GraphBase {
 

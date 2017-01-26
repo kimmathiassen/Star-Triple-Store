@@ -1,3 +1,4 @@
+package dk.aau.cs.qweb.graph;
 //package dk.aau.cs.qweb.triplestore;
 //
 //import java.util.Iterator;
