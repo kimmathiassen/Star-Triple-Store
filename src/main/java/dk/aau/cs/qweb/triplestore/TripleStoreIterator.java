@@ -7,7 +7,7 @@ import org.apache.jena.util.iterator.WrappedIterator;
 
 import dk.aau.cs.qweb.triple.IdTriple;
 
-public class MyTripleStoreIterator extends WrappedIterator<IdTriple> {
+public class TripleStoreIterator extends WrappedIterator<IdTriple> {
 	
 	protected Index X;
     protected Index A;
@@ -15,7 +15,7 @@ public class MyTripleStoreIterator extends WrappedIterator<IdTriple> {
     protected Graph toNotify;
     protected IdTriple current;
 
-	public MyTripleStoreIterator(
+	public TripleStoreIterator(
 			Graph toNotify, 
 			Iterator<IdTriple> it, 
 	        Index X, 

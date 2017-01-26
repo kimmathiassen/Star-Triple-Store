@@ -116,13 +116,13 @@ public class MyTripleStore {
     public ExtendedIterator<IdTriple> find( IdTriple t ) {
     	 
          if (t.isSubjectConcrete())
-             return new MyTripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
+             return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
          else if (t.isObjectConcrete())
-             return new MyTripleStoreIterator( parent, OSP.iterator( t ), OSP, SPO, POS );
+             return new TripleStoreIterator( parent, OSP.iterator( t ), OSP, SPO, POS );
          else if (t.isPredicateConcrete())
-             return new MyTripleStoreIterator( parent, POS.iterator( t ), POS, SPO, OSP );
+             return new TripleStoreIterator( parent, POS.iterator( t ), POS, SPO, OSP );
          else
-             return new MyTripleStoreIterator( parent, SPO.iterateAll(), SPO, POS, OSP );
+             return new TripleStoreIterator( parent, SPO.iterateAll(), SPO, POS, OSP );
          }
 
 
