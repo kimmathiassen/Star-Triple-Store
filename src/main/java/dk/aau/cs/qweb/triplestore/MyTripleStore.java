@@ -7,6 +7,7 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
 import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class MyTripleStore {
 	protected final Graph parent;
@@ -15,17 +16,12 @@ public class MyTripleStore {
     protected Index POS;
     protected Index OSP;
     
-    protected MyTripleStore ( Graph parent)
-        { 
-//    	this.subjects =new NodeToTriplesMapMem( Field.fieldSubject, Field.fieldPredicate, Field.fieldObject );
-//    	this.predicates = new NodeToTriplesMapMem( Field.fieldPredicate, Field.fieldObject, Field.fieldSubject );
-//        this.objects = new NodeToTriplesMapMem( Field.fieldObject, Field.fieldSubject, Field.fieldPredicate );
-    	
-    	this.SPO = new Index( );
-    	this.POS = new Index( );
-        this.OSP = new Index( );
+    protected MyTripleStore ( Graph parent) { 
+    	this.SPO = new Index(Field.S,Field.P,Field.O );
+    	this.POS = new Index(Field.P, Field.O, Field.S );
+        this.OSP = new Index(Field.O, Field.S,Field.P);
         this.parent = parent; 
-        }   
+    }   
     
     /**
         Destroy this triple store - discard the indexes.
@@ -37,11 +33,9 @@ public class MyTripleStore {
           Add a triple to this triple store.
      */
     public void add( IdTriple t ) {
-         if (SPO.add( t ))
-             {
-             POS.add( t );
-             OSP.add( t ); 
-             }
+         SPO.add( t );
+         POS.add( t );
+         OSP.add( t ); 
          }
      
      /**
@@ -68,7 +62,7 @@ public class MyTripleStore {
      /**
           Answer the size (number of triples) of this triple store.
      */
-    public int size()
+    public long size()
          { return SPO.size(); }
      
      /**
