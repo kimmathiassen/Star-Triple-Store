@@ -68,8 +68,10 @@ public class MyGraph extends GraphBase {
     	//store.delete( t );
     }
 
-    public int graphBaseSize()  
-    { return store.size(); }
+    public int graphBaseSize() { 
+    	throw new NotImplementedException("MyGraph.graphBaseSize");
+    	//return store.size(); 
+    }
 
 //    protected GraphStatisticsHandler createStatisticsHandler()
 //    { return new GraphMemStatisticsHandler( (MyTripleStore) store ); }
