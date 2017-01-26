@@ -1,13 +1,19 @@
 package dk.aau.cs.qweb.triple;
 
 public class Key {
-	public Key(long id2) {
-		// TODO Auto-generated constructor stub
+	
+	public Key(long id) {
+		this.id=id;
+	}
+	
+	public long getId(){
+		return id;
+	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(id);
 	}
 
-	public Key() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public final long id = 0;
+	private final long id;
 }
