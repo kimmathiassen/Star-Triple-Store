@@ -35,29 +35,29 @@ public class TripleBuilder {
 	public IdTriple createTriple() {
 		IdTriple triple;
 		
-		if (subjectIsConcrete) {
-			if (predicateIsConcrete) {
-				if (objectIsConcrete) {
+		if (!subjectIsConcrete) {
+			if (!predicateIsConcrete) {
+				if (!objectIsConcrete) {
 					triple = new IdTriple(Variable.ANY,Variable.ANY,Variable.ANY);
 				} else {
 					triple = new IdTriple(Variable.ANY, Variable.ANY, object);
 				}
 			} else {
-				if (objectIsConcrete) {
+				if (!objectIsConcrete) {
 					triple = new IdTriple(Variable.ANY,predicate,Variable.ANY);
 				} else {
 					triple = new IdTriple(Variable.ANY,predicate,object);
 				}
 			}
 		} else {
-			if (predicateIsConcrete) {
-				if (objectIsConcrete) {
+			if (!predicateIsConcrete) {
+				if (!objectIsConcrete) {
 					triple = new IdTriple(subject,Variable.ANY,Variable.ANY);
 				} else {
 					triple = new IdTriple(subject, Variable.ANY, object);
 				}
 			} else {
-				if (objectIsConcrete) {
+				if (!objectIsConcrete) {
 					triple = new IdTriple(subject,predicate,Variable.ANY);
 				} else {
 					triple = new IdTriple(subject,predicate,object);
