@@ -1,68 +1,99 @@
 package dk.aau.cs.qweb.triple;
 
+//This class is a triple and a triple pattern
 public class IdTriple {
 	private Key subjectId;
-	private Key propertyId;
+	private Key predicateId;
 	private Key objectId;
+	private boolean subjectIsConcrete = false;
+	private boolean predicateIsConcrete = false;
+	private boolean objectIsConcrete = false;
 	
-
-	public IdTriple(String variableA, String variableB, String variableC) {
-		// TODO Auto-generated constructor stub
+	public enum Variable {
+		ANY;
+	}
+	
+	private final void setSubject(final Key key) {
+		subjectId = key;
+		subjectIsConcrete = true;
+	}
+	
+	private void setPredicate(Key key) {
+		predicateId = key;
+		predicateIsConcrete = true;
+	}
+	
+	private final void setObject(Key key) {
+		objectId = key;
+		objectIsConcrete = true;
 	}
 
-	public IdTriple(String variableA, String variableB, Key object) {
-		// TODO Auto-generated constructor stub
+	public IdTriple(Variable variableA, Variable variableB, Variable variableC) {
 	}
 
-	public IdTriple(String subjectVariableName, Key predicate, String objectVariableName) {
-		// TODO Auto-generated constructor stub
+	public IdTriple(Variable variableA, Variable variableB, Key object) {
+		setObject(object);
 	}
 
-	public IdTriple(String subjectVariableName, Key predicate, Key object) {
-		// TODO Auto-generated constructor stub
+	public IdTriple(Variable subjectVariableName, Key predicate, Variable objectVariableName) {
+		setPredicate(predicate);
 	}
 
-	public IdTriple(Key subject, String predicateVariableName, String objectVariableName) {
-		// TODO Auto-generated constructor stub
+	public IdTriple(Variable subjectVariableName, Key predicate, Key object) {
+		setPredicate(predicate);
+		setObject(object);
 	}
 
-	public IdTriple(Key subject, String predicateVariableName, Key object) {
-		// TODO Auto-generated constructor stub
+	public IdTriple(final Key subject, Variable predicateVariableName, Variable objectVariableName) {
+		setSubject(subject);
 	}
 
-	public IdTriple(Key subject, Key predicate, String objectVariableName) {
-		// TODO Auto-generated constructor stub
+	public IdTriple(Key subject, Variable predicateVariableName, Key object) {
+		setSubject(subject);
+		setObject(object);
+	}
+
+	public IdTriple(Key subject, Key predicate, Variable objectVariableName) {
+		setPredicate(predicate);
+		setSubject(subject);
 	}
 
 	public IdTriple(Key subject, Key predicate, Key object) {
-		// TODO Auto-generated constructor stub
+		setSubject(subject);
+		setPredicate(predicate);
+		setObject(object);
 	}
 
 	public Key getPredicate() {
-		return propertyId;
+		if (predicateIsConcrete) {
+			return predicateId;
+		}
+		throw new UnsupportedOperationException("Predicate is not concrete");
 	}
 
 	public Key getObject() {
-		return objectId;
+		if (objectIsConcrete) {
+			return objectId;
+		}
+		throw new UnsupportedOperationException("Object is not concrete");
 	}
 
 	public Key getSubject() {
-		return subjectId;
+		if (subjectIsConcrete) {
+			return subjectId;
+		}
+		throw new UnsupportedOperationException("Subject is not concrete");
 	}
 
 	public boolean isSubjectConcrete() {
-		// TODO Auto-generated method stub
-		return false;
+		return subjectIsConcrete;
 	}
 
 	public boolean isPredicateConcrete() {
-		// TODO Auto-generated method stub
-		return false;
+		return predicateIsConcrete;
 	}
 
 	public boolean isObjectConcrete() {
-		// TODO Auto-generated method stub
-		return false;
+		return objectIsConcrete;
 	}
-
 }
