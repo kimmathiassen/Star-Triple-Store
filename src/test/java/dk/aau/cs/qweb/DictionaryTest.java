@@ -10,7 +10,7 @@ import org.junit.Test;
 import dk.aau.cs.qweb.dictionary.MyDictionary;
 import dk.aau.cs.qweb.triple.IdTriple;
 
-public class Dictionary {
+public class DictionaryTest {
 
 	@Test
 	public void writeAndReadTriple() {
