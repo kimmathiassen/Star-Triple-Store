@@ -9,14 +9,14 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 import dk.aau.cs.qweb.triple.IdTriple;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
-public class MyTripleStore {
+public class TripleStore {
 	protected final Graph parent;
 	
     protected Index SPO;
     protected Index POS;
     protected Index OSP;
     
-    public MyTripleStore ( Graph parent) { 
+    public TripleStore ( Graph parent) { 
     	this.SPO = new Index(Field.S,Field.P,Field.O );
     	this.POS = new Index(Field.P, Field.O, Field.S );
         this.OSP = new Index(Field.O, Field.S,Field.P);

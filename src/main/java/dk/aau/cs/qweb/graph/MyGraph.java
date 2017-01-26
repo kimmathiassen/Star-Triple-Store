@@ -11,12 +11,12 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
 import dk.aau.cs.qweb.triple.IdTriple;
-import dk.aau.cs.qweb.triplestore.MyTripleStore;
+import dk.aau.cs.qweb.triplestore.TripleStore;
 
 public class MyGraph extends GraphBase {
 
 	protected int count;
-	public final MyTripleStore store;
+	public final TripleStore store;
 	
 	public MyGraph() {
 		store = createTripleStore();
@@ -51,8 +51,8 @@ public class MyGraph extends GraphBase {
 	}
 
 
-	protected MyTripleStore createTripleStore()
-    { return new MyTripleStore( this ); }
+	protected TripleStore createTripleStore()
+    { return new TripleStore( this ); }
 
     protected void destroy()
     { store.close(); }
