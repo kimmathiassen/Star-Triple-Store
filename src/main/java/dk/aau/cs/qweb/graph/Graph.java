@@ -13,12 +13,12 @@ import dk.aau.cs.qweb.dictionary.MyDictionary;
 import dk.aau.cs.qweb.triple.IdTriple;
 import dk.aau.cs.qweb.triplestore.TripleStore;
 
-public class MyGraph extends GraphBase {
+public class Graph extends GraphBase {
 
 	protected int count;
 	public final TripleStore store;
 	
-	public MyGraph() {
+	public Graph() {
 		store = createTripleStore();
         count = 1; 
 	}

@@ -14,7 +14,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DC;
 
-import dk.aau.cs.qweb.triplestore.MyGraph;
+import dk.aau.cs.qweb.graph.Graph;
 
 public class App {
 	static public final String NL = System.getProperty("line.separator") ; 
@@ -27,7 +27,7 @@ public class App {
         //Dataset dataset = TDBFactory.createDataset(directory) ;
         
         
-        MyGraph g = new MyGraph();
+        Graph g = new Graph();
         Model test2 = ModelFactory.createModelForGraph(g);
         
         
@@ -41,7 +41,7 @@ public class App {
         
         // Query string.
         String queryString = prolog + NL +
-            "SELECT ?title WHERE {?x dc:title ?title}" ; 
+            "SELECT ?title WHERE {?x dc:title ?title. ?x dc:description ?y .}" ; 
         
         Query query = QueryFactory.create(queryString) ;
         // Print with line numbers
@@ -75,7 +75,6 @@ public class App {
                 }
                 else
                     System.out.println("Strange - not a literal: "+x) ;
-
             }
         }
         
@@ -86,7 +85,6 @@ public class App {
     
     public static Model populateModel(Model m)
     {
-    	
         Resource r1 = m.createResource("http://example.org/book#1") ;
         Resource r2 = m.createResource("http://example.org/book#2") ;
         
@@ -97,7 +95,4 @@ public class App {
         
         return m ;
     }
-
-	
-
 }
