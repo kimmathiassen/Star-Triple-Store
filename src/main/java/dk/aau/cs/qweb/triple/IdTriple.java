@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.triple;
 
+import java.util.Objects;
+
 import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.triplestore.Index.Field;
@@ -142,6 +144,49 @@ public class IdTriple {
 					return "("+getSubject()+","+getPredicate()+","+getObject()+")";
 				}
 			}
+		}
+	}
+	
+	@Override
+    public int hashCode() {
+		if (!subjectIsConcrete) {
+			if (!predicateIsConcrete) {
+				if (!objectIsConcrete) {
+					return Objects.hash(false,false,false);
+				} else {
+					return Objects.hash(false,false,getObject());
+				}
+			} else {
+				if (!objectIsConcrete) {
+					return Objects.hash(false,getPredicate(),false);
+				} else {
+					return Objects.hash(false,getPredicate(),getObject());
+				}
+			}
+		} else {
+			if (!predicateIsConcrete) {
+				if (!objectIsConcrete) {
+					return Objects.hash(getSubject(),false,false);
+				} else {
+					return Objects.hash(getSubject(),false,getObject());
+				}
+			} else {
+				if (!objectIsConcrete) {
+					return Objects.hash(getSubject(),getPredicate(),false);
+				} else {
+					return Objects.hash(getSubject(),getPredicate(),getObject());
+				}
+			}
+		}
+    }
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof IdTriple) {
+			IdTriple casted = (IdTriple)other;
+			return (this.hashCode() == casted.hashCode());
+		} else {
+			return super.equals(other);
 		}
 	}
 }
