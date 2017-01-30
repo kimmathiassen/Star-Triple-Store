@@ -4,6 +4,11 @@
   <artifactId>star-triple-store</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
+  <properties>
+   <maven.compiler.source>1.8</maven.compiler.source>
+   <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  
   <dependencies>
 	<dependency>
 	    <groupId>org.apache.commons</groupId>
@@ -17,16 +22,16 @@
 	    <version>3.5</version>
 	</dependency>
 	<dependency>
-           <groupId>org.slf4j</groupId>
-           <artifactId>slf4j-api</artifactId>
-           <version>1.5.6</version>
-           <type>jar</type>
-</dependency>
-<dependency>
-           <groupId>org.slf4j</groupId>
-           <artifactId>slf4j-simple</artifactId>
-           <version>1.5.6</version>
-</dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.5.6</version>
+        <type>jar</type>
+	</dependency>
+	<dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.5.6</version>
+	</dependency>
 	<dependency>
 		<groupId>org.apache.jena</groupId>
 		<artifactId>apache-jena-libs</artifactId>
