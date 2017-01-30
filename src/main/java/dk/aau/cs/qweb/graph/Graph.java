@@ -62,7 +62,7 @@ public class Graph extends GraphBase {
     	MyDictionary dict = MyDictionary.getInstance();
     	store.add( dict.createTriple(t) ); 
     }
-
+    
     public void performDelete( Triple t )
     { 
     	throw new NotImplementedException("MyGraph.performAdd");

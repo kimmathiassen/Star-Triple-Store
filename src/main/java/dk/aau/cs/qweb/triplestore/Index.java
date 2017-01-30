@@ -95,5 +95,4 @@ public class Index   {
 	public Iterator<IdTriple> iterateAll() {
 		throw new NotImplementedException("Index.iterateAll");
 	}
-
 }
