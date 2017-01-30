@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.triplestore;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,10 +18,10 @@ public class IteratorOfIterators implements Iterator<IdTriple> {
     private Iterator<Iterator<IdTriple>> listIterator;
 
 
-    public IteratorOfIterators(Collection<ArrayList<IdTriple>> collection) {
+    public IteratorOfIterators(Collection<HashSet<IdTriple>> collection) {
     	iterators = new ArrayList<Iterator<IdTriple>>();
-    	for (ArrayList<IdTriple> arrayList : collection) {
-			iterators.add(arrayList.iterator());
+    	for (Collection<IdTriple> container : collection) {
+			iterators.add(container.iterator());
 		}
     	listIterator = iterators.iterator();
     	currentIterator = listIterator.next();
