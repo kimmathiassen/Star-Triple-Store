@@ -9,9 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.triple.IdTriple;
-import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.IdTriple.Variable;
+import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
@@ -179,4 +178,27 @@ public class IndexNormalTripleTest {
 		
 		assertEquals(count,0);
 	}
+	
+	@Test
+	public void doubeInsertOfIdenticalTriples() 
+	{
+		Index test = new Index(Field.S,Field.P,Field.O);
+		IdTriple t1 = new IdTriple(new Key(1),new Key(2),new Key(3));
+		IdTriple t2 = new IdTriple(new Key(1),new Key(2),new Key(3));
+		test.add(t1);
+		test.add(t2);
+		
+		IdTriple triplePattern = new IdTriple(new Key(1),Variable.ANY,Variable.ANY);
+		Iterator<IdTriple> iterator = test.iterator(triplePattern);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next());
+			count++;
+		}
+		
+		assertEquals(count,1);
+	}
+	
+	
 }
