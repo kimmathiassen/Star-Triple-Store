@@ -12,17 +12,18 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.input.TurtleStarReader;
 
 public class TurtleStarReaderTest {
+	static Graph g;
 
-
-	@Test
-	public void test() {
-		Graph g = new Graph();
+	@BeforeClass
+	public static void setup() {
+		g = new Graph();
         Model model = ModelFactory.createModelForGraph(g);
 		TurtleStarReader reader = new TurtleStarReader(model);
 		
@@ -34,7 +35,30 @@ public class TurtleStarReaderTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+
+	@Test
+	public void commaSeperatedTriples() {
+		Node subject = NodeFactory.createURI("http://example.org/spiderman");
+		Node predicate = NodeFactory.createURI("http://xmlns.com/foaf/0.1/name");
+		Node object = Node.ANY;
 		
+		Triple triplePattern = new Triple(subject,predicate,object );
+		
+		Iterator<Triple> iterator = g.graphBaseFind(triplePattern);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			iterator.next();
+			count++;
+		}
+		
+		assertEquals(count,2);
+	}
+	
+	@Test
+	public void standardTriplePattern() {
 		Node subject = NodeFactory.createURI("http://example.org/spiderman");
 		Node predicate = NodeFactory.createURI("http://www.perceive.net/schemas/relationship/enemyOf");
 		Node object = Node.ANY;
@@ -45,10 +69,30 @@ public class TurtleStarReaderTest {
 		int count = 0;
 		
 		while (iterator.hasNext()) {
+			iterator.next();
 			count++;
 		}
 		
 		assertEquals(count,1);
+	}
+	
+	@Test
+	public void linesWithComments() {
+		Node subject = Node.ANY;
+		Node predicate = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+		Node object = NodeFactory.createURI("http://xmlns.com/foaf/0.1/person");
+		
+		Triple triplePattern = new Triple(subject,predicate,object );
+		
+		Iterator<Triple> iterator = g.graphBaseFind(triplePattern);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			iterator.next();
+			count++;
+		}
+		
+		assertEquals(count,2);
 	}
 
 }
