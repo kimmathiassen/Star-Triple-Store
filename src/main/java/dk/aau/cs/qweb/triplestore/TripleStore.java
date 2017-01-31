@@ -114,19 +114,18 @@ public class TripleStore {
          dramatically - specifically on the not-galen.owl ontology.
      */
     public ExtendedIterator<IdTriple> find( IdTriple t ) {
-    	 
-         if (t.isSubjectConcrete())
+         if (t.isSubjectConcrete() && t.isPredicateConcrete())
              return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
-         else if (t.isObjectConcrete())
+         else if (t.isObjectConcrete() && t.isSubjectConcrete())
              return new TripleStoreIterator( parent, OSP.iterator( t ), OSP, SPO, POS );
-         else if (t.isPredicateConcrete())
+         else if (t.isPredicateConcrete() && t.isObjectConcrete())
              return new TripleStoreIterator( parent, POS.iterator( t ), POS, SPO, OSP );
-         else
-             return new TripleStoreIterator( parent, SPO.iterateAll(), SPO, POS, OSP );
-         }
-
-
-	
-	
-    
+         else if (t.isSubjectConcrete()) 
+        	 return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
+         else if (t.isObjectConcrete()) 
+        	 return new TripleStoreIterator( parent, OSP.iterator( t ), OSP, SPO, POS );
+         else if (t.isPredicateConcrete()) 
+        	 return new TripleStoreIterator( parent, POS.iterator( t ), POS, SPO, OSP );
+         else return new TripleStoreIterator( parent, SPO.iterateAll(), SPO, POS, OSP );
+    }
 }
