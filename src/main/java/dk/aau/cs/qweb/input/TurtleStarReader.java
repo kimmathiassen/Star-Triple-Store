@@ -40,7 +40,6 @@ public class TurtleStarReader {
 			State state = State.NEW;
 			
 		    for(String lineRaw; (lineRaw = br.readLine()) != null; ) {
-		    	System.out.println(lineRaw);
 		    	boolean isLineParsed = false;
 		    	lineRaw = lineRaw.trim();
 		    	if (lineRaw.startsWith("@")) {
