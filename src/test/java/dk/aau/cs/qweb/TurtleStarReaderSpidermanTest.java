@@ -18,7 +18,7 @@ import org.junit.Test;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.input.TurtleStarReader;
 
-public class TurtleStarReaderTest {
+public class TurtleStarReaderSpidermanTest {
 	static Graph g;
 
 	@BeforeClass
