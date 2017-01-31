@@ -122,17 +122,17 @@ public class TurtleStarReader {
 	}
 
 	private List<String> splitTriplePatternStatements(String lineRaw) {
-		boolean isQoute = false;
+		boolean isQuote = false;
 		boolean isResource = false;
 		lineRaw = lineRaw.trim();
 		List<String> triplePatterns = new ArrayList<String>();
 		StringBuilder sb = new StringBuilder();
 		for (char c : lineRaw.toCharArray()) {
 			if (c == '"') {
-				if (isQoute) {
-					isQoute = false;
+				if (isQuote) {
+					isQuote = false;
 				} else {
-					isQoute = true;
+					isQuote = true;
 				}
 				sb.append(c);
 			} else if (c == '<') {
@@ -146,13 +146,13 @@ public class TurtleStarReader {
 				}
 				sb.append(c);
 			} else if (c == ';' || c == ',' || c == '.' ){
-				if (!isQoute && !isResource) {
+				if (!isQuote && !isResource) {
 					sb.append(c);
 					triplePatterns.add(sb.toString());
 					sb = new StringBuilder();
 				}
 			} else if (c == '#') {
-				if (!isResource && !isQoute) {
+				if (!isResource && !isQuote) {
 					return triplePatterns;
 				} else {
 					sb.append(c);
