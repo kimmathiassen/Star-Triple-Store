@@ -1,6 +1,8 @@
 package dk.aau.cs.qweb.main;
 
 import org.apache.jena.atlas.io.IndentedWriter;
+import org.apache.jena.atlas.io.PeekReader;
+import org.apache.jena.atlas.web.TypedInputStream;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -12,6 +14,18 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.RiotNotFoundException;
+import org.apache.jena.riot.lang.LabelToNode;
+import org.apache.jena.riot.system.ErrorHandler;
+import org.apache.jena.riot.system.ErrorHandlerFactory;
+import org.apache.jena.riot.system.FactoryRDFCaching;
+import org.apache.jena.riot.system.IRIResolver;
+import org.apache.jena.riot.system.PrefixMapFactory;
+import org.apache.jena.riot.system.Prologue;
+import org.apache.jena.riot.system.StreamRDF;
+import org.apache.jena.riot.system.StreamRDFLib;
+import org.apache.jena.riot.system.SyntaxLabels;
+import org.apache.jena.riot.system.stream.StreamManager;
 import org.apache.jena.vocabulary.DC;
 
 import dk.aau.cs.qweb.graph.Graph;
@@ -19,15 +33,62 @@ import dk.aau.cs.qweb.graph.Graph;
 public class App {
 	static public final String NL = System.getProperty("line.separator") ; 
 	
+	
 	public static void main(String[] args) {
-		//MyQueryEngine.register();
+		Graph g = new Graph();
+		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
+	        // read into the model.
+	        //m.read("data.ttl") ;
+	        
+	        // Alternatively, use the RDFsDataMgr, which reads from the web,
+	        // with content negotiation.  Plain names are assumed to be 
+	        // local files where file extension indicates the syntax.  
+//		RDFDataMgr.read(g,filename,RDFLanguages.TURTLE);
+//	        Model m2 = RDFDataMgr.loadModel("src/test/resources/TurtleStar/spiderman.ttls",RDFLanguages.TURTLE) ;
+//		m2.size();
+//		
+//        Lang lang = LangBuilder.create("SSE", "text/turtle-star").addFileExtensions("ttls").build() ;
+//        // This just registers the name, not the parser.
+//        RDFLanguages.register(lang) ;
+//
+//        // Register the parser factory.
+//        ReaderRIOTFactory factory = new TTLSReaderFactory() ;
+//        RDFParserRegistry.registerLangTriples(lang, factory) ;
+//
+//        // use it ...
+//        
+//        // model.read(filename)
+//        System.out.println("## -- RDFDataMgr.loadModel") ;
+//        
+//        RDFDataMgr.read(g, filename);
+
     	
         // Direct way: Make a TDB-back Jena model in the named directory.
         //String directory = "MyDatabases/DB1" ;
         //Dataset dataset = TDBFactory.createDataset(directory) ;
         
+        ////////////////////////////////////////////////////////////
+        TypedInputStream in = open(filename) ;
+        PeekReader peekReader = PeekReader.makeUTF8(in) ;
+        TokenizerStar tokenizer = new TokenizerStar(peekReader) ;
+//        ParserProfile profile3 = RiotLib.profile(RDFLanguages.TURTLE, filename) ;
         
-        Graph g = new Graph();
+        ErrorHandler handler = ErrorHandlerFactory.getDefaultErrorHandler();
+        
+        LabelToNode labelMapping = SyntaxLabels.createLabelToNode();
+        Prologue prologue = new Prologue(PrefixMapFactory.createForInput(), IRIResolver.create(filename)) ;
+        ParserProfileStar profile = new ParserProfileStar(prologue, handler, new FactoryRDFCaching(FactoryRDFCaching.DftNodeCacheSize, labelMapping)) ;
+        StreamRDF dest = StreamRDFLib.graph(g) ;
+//        ContentType ct = WebContent.determineCT(in.getContentType(), lang, baseUri) ;
+//        ReaderRIOT reader = getReader(ct) ;
+//        reader.read(in, baseUri, ct, destination, null) ;
+//        ReaderRIOT ttlsParser = RDFDataMgr.createReader(lang);
+//        //LangRIOT parser = RiotParsers.createParser(in, lang, baseURI, output) ;
+        LangTurtleStar parser = new LangTurtleStar(tokenizer, profile, dest); 
+        parser.parse();
+        
+        
+        System.exit(0);
         Model test2 = ModelFactory.createModelForGraph(g);
         
         
@@ -94,5 +155,26 @@ public class App {
         r2.addProperty(DC.title, "Advanced techniques for SPARQL") ;
         
         return m ;
+    }
+    
+    public static TypedInputStream open(String filenameOrURI) {
+        StreamManager sMgr = StreamManager.get() ;
+             
+        return open(filenameOrURI, sMgr) ;
+    }
+    
+    /** Open a stream to the destination (URI or filename)
+     * Performs content negotiation, including looking at file extension. 
+     * @param filenameOrURI
+     * @param streamManager
+     * @return TypedInputStream
+     */
+    public static TypedInputStream open(String filenameOrURI, StreamManager streamManager) {
+        TypedInputStream in = streamManager.open(filenameOrURI) ;
+            
+        if ( in == null ) {
+            throw new RiotNotFoundException("Not found: "+filenameOrURI) ;
+        }
+        return in ;
     }
 }
