@@ -1,6 +1,7 @@
 @base <http://example.org/> .
+@prefix ex: <http://example.org/embedded/> .
 
-<:kim :worksAt :aau>  
+<<ex:kim ex:worksAt ex:aau>>  
     :is "true" ;    # in the context of the Marvel universe
     :started "1999-08-16"^^xsd:date .
 
