@@ -10,8 +10,6 @@ import java.util.Iterator;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,10 +24,9 @@ public class TurtleStarReaderEmbeddedTest {
 	@BeforeClass
 	public static void setup() {
 		g = new Graph();
-        Model model = ModelFactory.createModelForGraph(g);
-		TurtleStarReader reader = new TurtleStarReader(model);
+		TurtleStarReader reader = new TurtleStarReader(g);
 		
-		File spiderman = new File("src/test/resources/TurtleStar/david.ttls");
+		File spiderman = new File("src/test/resources/TurtleStar/embedded.ttls");
 		try {
 			reader.read(spiderman);
 		} catch (FileNotFoundException e) {

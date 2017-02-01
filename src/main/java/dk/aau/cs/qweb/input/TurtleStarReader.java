@@ -19,7 +19,7 @@ import dk.aau.cs.qweb.model.NodeFactoryStar;
 
 public class TurtleStarReader {
 
-	private Model model;
+	private Graph g;
 	private Map<String,String> prefix;
 	
 	private enum State {
@@ -27,13 +27,18 @@ public class TurtleStarReader {
 	}
 
 	public TurtleStarReader(Model model) {
-		this.model = model;
+		g = model.getGraph();
+		prefix = new HashMap<String,String>();
+	}
+	
+	public TurtleStarReader(Graph g) {
+		this.g = g;
 		prefix = new HashMap<String,String>();
 	}
 	
 	public void read(File file) throws FileNotFoundException, IOException {
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
-			Graph g = model.getGraph();
+			
 			String subject = null;
 			String predicate = null;
 			String object = null;
@@ -215,20 +220,30 @@ public class TurtleStarReader {
 
 	private List<String> spitLine(String line) {
 		List<String> split = new ArrayList<String>();
-		boolean isQuoute = false;
+		boolean isQuote = false;
+		boolean isOneBracketAlreadyEncountered = false; // used to determine if isEmbeddedTriple
+		boolean isEmbeddedTriple = false;
 		StringBuilder sb = new StringBuilder();
 		
 		for (char character : line.toCharArray()) {
 			if (character == '"') {
-				if (isQuoute) {
-					isQuoute = false;
+				if (isQuote) {
+					isQuote = false;
 					sb.append(character);
 				} else {
-					isQuoute = true;
+					isQuote = true;
 					sb.append(character);
 				}
+			} else if (character == '<') {
+				if (isQuote) { 
+					sb.append(character);
+				} else if (isOneBracketAlreadyEncountered)  {
+					isEmbeddedTriple = true;
+				} else {
+					isOneBracketAlreadyEncountered = true;
+				}
 			} else if (character == ' ') {
-				if (isQuoute) {
+				if (isQuote) {
 					sb.append(character);
 				} else {
 					split.add(sb.toString());
