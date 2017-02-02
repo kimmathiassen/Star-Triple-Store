@@ -5,8 +5,10 @@ import java.util.HashMap;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 
-import dk.aau.cs.qweb.triple.Key;
+import dk.aau.cs.qweb.model.Node_Triple;
 import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.Key;
+import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.TripleBuilder;
 
 public class MyDictionary {
@@ -34,15 +36,27 @@ public class MyDictionary {
 		TripleBuilder builder = new TripleBuilder();
 		
 		if (t.getSubject().isConcrete()) {
-			builder.setSubject(convertNodeToId(t.getSubject()));
+			if (node2Id.containsKey(t.getSubject())) {
+				builder.setSubject(node2Id.get(t.getSubject()));
+			} else {
+				builder.setSubject(registerNode(t.getSubject()));
+			}
 		}
 		
 		if (t.getPredicate().isConcrete()) {
-			builder.setPredicate(convertNodeToId(t.getPredicate()));
+			if (node2Id.containsKey(t.getPredicate())) {
+				builder.setPredicate(node2Id.get(t.getPredicate()));
+			} else {
+				builder.setPredicate(registerNode(t.getPredicate()));
+			}
 		}
 		
 		if (t.getObject().isConcrete()) {
-			builder.setObject(convertNodeToId(t.getObject()));
+			if (node2Id.containsKey(t.getObject())) {
+				builder.setObject(node2Id.get(t.getObject()));
+			} else {
+				builder.setObject(registerNode(t.getObject()));
+			}
 		}
 		
 		return builder.createTriple();
@@ -54,22 +68,42 @@ public class MyDictionary {
 		return id2Node.get(id);
 	}
 	
-	private Key convertNodeToId(Node node){
+	private Key registerNode(Node node){
 		Key tempId;
-		if (node2Id.containsKey(node)) {
-			tempId = node2Id.get(node);
+		if (node instanceof Node_Triple) {
+			tempId = registerEmbeddedKey(node);
 		} else {
-			Key key = new Key(id);
-			id2Node.put(key, node);
-			node2Id.put(node,key);
-			tempId = key;
-			id++;
+			tempId = registerKey(node);
 		}
 		return tempId;
 	}
+
+	private Key registerEmbeddedKey(Node node) {
+		Node_Triple embeddedNode = (Node_Triple) node;
+		KeyFactory kf = new KeyFactory();
+		
+		Key subject = registerKey(embeddedNode.getSubject());
+		Key predicate = registerKey(embeddedNode.getPredicate());
+		Key object = registerKey(embeddedNode.getObject());
+		
+		Key embeddedTriple = kf.createKey(subject.getId(), predicate.getId(), object.getId());
+		id2Node.put(embeddedTriple, node);
+		node2Id.put(node,embeddedTriple);
+		return embeddedTriple;
+	}
+
+	private Key registerKey(Node node) {
+		Key tempId;
+		Key key = new Key(id);
+		id2Node.put(key, node);
+		node2Id.put(node,key);
+		tempId = key;
+		id++;
+		return tempId;
+	}
 	
-	public long size() {
-		return id;
+	public int size() {
+		return id2Node.size();
 	}
 	
 
