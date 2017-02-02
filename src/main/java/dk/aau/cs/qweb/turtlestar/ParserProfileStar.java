@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.main;
+package dk.aau.cs.qweb.turtlestar;
 
 import java.util.Objects;
 

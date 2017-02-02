@@ -1,19 +1,19 @@
-package dk.aau.cs.qweb.main;
+package dk.aau.cs.qweb.turtlestar;
 
-import static dk.aau.cs.qweb.main.TokenTypeStar.COMMA;
-import static dk.aau.cs.qweb.main.TokenTypeStar.DIRECTIVE;
-import static dk.aau.cs.qweb.main.TokenTypeStar.DOT;
-import static dk.aau.cs.qweb.main.TokenTypeStar.EOF;
-import static dk.aau.cs.qweb.main.TokenTypeStar.IRI;
-import static dk.aau.cs.qweb.main.TokenTypeStar.KEYWORD;
-import static dk.aau.cs.qweb.main.TokenTypeStar.LBRACE;
-import static dk.aau.cs.qweb.main.TokenTypeStar.LBRACKET;
-import static dk.aau.cs.qweb.main.TokenTypeStar.LPAREN;
-import static dk.aau.cs.qweb.main.TokenTypeStar.NODE;
-import static dk.aau.cs.qweb.main.TokenTypeStar.PREFIXED_NAME;
-import static dk.aau.cs.qweb.main.TokenTypeStar.RBRACKET;
-import static dk.aau.cs.qweb.main.TokenTypeStar.RPAREN;
-import static dk.aau.cs.qweb.main.TokenTypeStar.SEMICOLON;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.COMMA;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.DIRECTIVE;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.DOT;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.EOF;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.IRI;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.KEYWORD;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.LBRACE;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.LBRACKET;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.LPAREN;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.NODE;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.PREFIXED_NAME;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.RBRACKET;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.RPAREN;
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.SEMICOLON;
 
 import org.apache.jena.atlas.AtlasException;
 import org.apache.jena.atlas.iterator.PeekIterator;

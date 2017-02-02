@@ -1,5 +1,6 @@
-package dk.aau.cs.qweb.main;
+package dk.aau.cs.qweb.turtlestar;
 
+import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.*;
 import static org.apache.jena.atlas.lib.Chars.CH_COMMA;
 import static org.apache.jena.atlas.lib.Chars.CH_DOT;
 import static org.apache.jena.atlas.lib.Chars.CH_LBRACE;
@@ -10,7 +11,6 @@ import static org.apache.jena.atlas.lib.Chars.CH_RBRACKET;
 import static org.apache.jena.atlas.lib.Chars.CH_RPAREN;
 import static org.apache.jena.atlas.lib.Chars.CH_SEMICOLON;
 import static org.apache.jena.atlas.lib.Lib.hashCodeObject;
-import static dk.aau.cs.qweb.main.TokenTypeStar.*;
 
 import java.util.ArrayList;
 import java.util.List;

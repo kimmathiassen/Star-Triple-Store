@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.main;
+package dk.aau.cs.qweb.turtlestar;
 
 import static org.apache.jena.atlas.lib.Chars.BSPACE;
 import static org.apache.jena.atlas.lib.Chars.CH_AT;

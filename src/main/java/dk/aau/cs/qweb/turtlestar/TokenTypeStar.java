@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.main;
+package dk.aau.cs.qweb.turtlestar;
 
 public enum TokenTypeStar {
     NODE, IRI, PREFIXED_NAME, BNODE,EMBEDDED,
