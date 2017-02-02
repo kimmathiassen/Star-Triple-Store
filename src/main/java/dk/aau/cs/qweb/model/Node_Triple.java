@@ -12,14 +12,26 @@ public class Node_Triple extends Node_Concrete {
 	private Node node3;
 
 	protected Node_Triple(Object label) {
-		super("");
+		super(label);
 	}
 	
 	protected Node_Triple(Node node1, Node node2, Node node3) {
-		super("");
+		super("<<"+node1+" "+node2+" "+node3+">>");
 		this.node1 = node1;
 		this.node2 = node2;
 		this.node3 = node3;
+	}
+	
+	public Node getSubject() {
+		return node1;
+	}
+	
+	public Node getPredicate() {
+		return node2;
+	}
+	
+	public Node getObject() {
+		return node3;
 	}
 
 	@Override
@@ -31,6 +43,11 @@ public class Node_Triple extends Node_Concrete {
 	public boolean equals(Object o) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "<<"+node1+" "+node2+" "+node3+">>";
 	}
 
 }
