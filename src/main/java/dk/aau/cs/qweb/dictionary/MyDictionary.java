@@ -106,13 +106,12 @@ public class MyDictionary {
 
 	private Key registerEmbeddedKey(Node node) {
 		Node_Triple embeddedNode = (Node_Triple) node;
-		KeyFactory kf = new KeyFactory();
 		
 		Key subject = registerKey(embeddedNode.getSubject());
 		Key predicate = registerKey(embeddedNode.getPredicate());
 		Key object = registerKey(embeddedNode.getObject());
 		
-		Key embeddedTriple = kf.createKey(subject.getId(), predicate.getId(), object.getId());
+		Key embeddedTriple = KeyFactory.createKey(subject.getId(), predicate.getId(), object.getId());
 		id2Node.put(embeddedTriple, node);
 		node2Id.put(node,embeddedTriple);
 		return embeddedTriple;
