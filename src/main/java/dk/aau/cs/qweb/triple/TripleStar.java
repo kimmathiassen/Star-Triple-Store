@@ -7,7 +7,7 @@ import org.apache.jena.reasoner.IllegalParameterException;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
 //This class is a triple and a triple pattern
-public class IdTriple {
+public class TripleStar {
 	private Key subjectId;
 	private Key predicateId;
 	private Key objectId;
@@ -34,37 +34,37 @@ public class IdTriple {
 		objectIsConcrete = true;
 	}
 
-	public IdTriple(Variable variableA, Variable variableB, Variable variableC) {
+	public TripleStar(Variable variableA, Variable variableB, Variable variableC) {
 	}
 
-	public IdTriple(Variable variableA, Variable variableB, Key object) {
+	public TripleStar(Variable variableA, Variable variableB, Key object) {
 		setObject(object);
 	}
 
-	public IdTriple(Variable subjectVariableName, Key predicate, Variable objectVariableName) {
+	public TripleStar(Variable subjectVariableName, Key predicate, Variable objectVariableName) {
 		setPredicate(predicate);
 	}
 
-	public IdTriple(Variable subjectVariableName, Key predicate, Key object) {
+	public TripleStar(Variable subjectVariableName, Key predicate, Key object) {
 		setPredicate(predicate);
 		setObject(object);
 	}
 
-	public IdTriple(final Key subject, Variable predicateVariableName, Variable objectVariableName) {
+	public TripleStar(final Key subject, Variable predicateVariableName, Variable objectVariableName) {
 		setSubject(subject);
 	}
 
-	public IdTriple(Key subject, Variable predicateVariableName, Key object) {
+	public TripleStar(Key subject, Variable predicateVariableName, Key object) {
 		setSubject(subject);
 		setObject(object);
 	}
 
-	public IdTriple(Key subject, Key predicate, Variable objectVariableName) {
+	public TripleStar(Key subject, Key predicate, Variable objectVariableName) {
 		setPredicate(predicate);
 		setSubject(subject);
 	}
 
-	public IdTriple(Key subject, Key predicate, Key object) {
+	public TripleStar(Key subject, Key predicate, Key object) {
 		setSubject(subject);
 		setPredicate(predicate);
 		setObject(object);
@@ -182,8 +182,8 @@ public class IdTriple {
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof IdTriple) {
-			IdTriple casted = (IdTriple)other;
+		if (other instanceof TripleStar) {
+			TripleStar casted = (TripleStar)other;
 			return (this.hashCode() == casted.hashCode());
 		} else {
 			return super.equals(other);

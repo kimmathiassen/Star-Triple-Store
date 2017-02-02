@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.Key;
 
 public class Index   {
@@ -29,7 +29,7 @@ public class Index   {
 		size = 0;
 	}
 
-	public void add(IdTriple t) {
+	public void add(TripleStar t) {
 		Key firstKey = getFieldKey(field1,t);
 		if (indexMap.containsKey(firstKey)) {
 			indexMap.get(firstKey).put(getFieldKey(field2,t),t);
@@ -41,7 +41,7 @@ public class Index   {
 		size++;
 	}
 
-	private Key getFieldKey(Field field,IdTriple t) {
+	private Key getFieldKey(Field field,TripleStar t) {
 		if (field == Field.S) {
 			return t.getSubject();
 		} else if (field == Field.P) {
@@ -51,7 +51,7 @@ public class Index   {
 		}
 	}
 
-	public boolean remove(IdTriple t) {
+	public boolean remove(TripleStar t) {
 		throw new NotImplementedException("Index.remove");
 	}
 
@@ -68,15 +68,15 @@ public class Index   {
 		return (size == 0 ? true : false);
 	}
 
-	public boolean containsBySameValueAs(IdTriple t) {
+	public boolean containsBySameValueAs(TripleStar t) {
 		throw new NotImplementedException("Index.containsBySameValueAs");
 	}
 
-	public boolean contains(IdTriple t) {
+	public boolean contains(TripleStar t) {
 		throw new NotImplementedException("Index.contains");
 	}
 
-	public Iterator<IdTriple> iterator(IdTriple triple) {
+	public Iterator<TripleStar> iterator(TripleStar triple) {
 		Key firstKey = getFieldKey(field1,triple);
 		if (indexMap.containsKey(firstKey)) {
 			if (triple.isConcrete(field2)) {
@@ -93,7 +93,7 @@ public class Index   {
 		throw new NotImplementedException("Index.removedOneViaIterator");
 	}
 
-	public Iterator<IdTriple> iterateAll() {
+	public Iterator<TripleStar> iterateAll() {
 		throw new NotImplementedException("Index.iterateAll");
 	}
 }

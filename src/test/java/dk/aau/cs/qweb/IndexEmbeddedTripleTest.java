@@ -8,10 +8,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
-import dk.aau.cs.qweb.triple.IdTriple.Variable;
+import dk.aau.cs.qweb.triple.TripleStar.Variable;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
@@ -49,11 +49,11 @@ public class IndexEmbeddedTripleTest {
 	public void lookupEmbeddedTripleSubjectPositionVariable() {
 		
 		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		IdTriple t1 = new IdTriple(embeddedTriple1,kf.createKey(4),kf.createKey(5));
+		TripleStar t1 = new TripleStar(embeddedTriple1,kf.createKey(4),kf.createKey(5));
 		POS.add(t1);
 		
-		IdTriple triplePattern = new IdTriple(Variable.ANY,kf.createKey(4),kf.createKey(5));
-		Iterator<IdTriple> integer = POS.iterator(triplePattern);
+		TripleStar triplePattern = new TripleStar(Variable.ANY,kf.createKey(4),kf.createKey(5));
+		Iterator<TripleStar> integer = POS.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -69,11 +69,11 @@ public class IndexEmbeddedTripleTest {
 	public void lookupEmbeddedTripleObjectPositionVariable() {
 		
 		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		IdTriple t1 = new IdTriple(kf.createKey(5),kf.createKey(4),embeddedTriple1);
+		TripleStar t1 = new TripleStar(kf.createKey(5),kf.createKey(4),embeddedTriple1);
 		SPO.add(t1);
 		
-		IdTriple triplePattern = new IdTriple(kf.createKey(5),kf.createKey(4),Variable.ANY);
-		Iterator<IdTriple> integer = SPO.iterator(triplePattern);
+		TripleStar triplePattern = new TripleStar(kf.createKey(5),kf.createKey(4),Variable.ANY);
+		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -90,11 +90,11 @@ public class IndexEmbeddedTripleTest {
 		
 		Key embeddedTriple1 = kf.createKey(1, 2, 3);
 		Key embeddedTriple2 = kf.createKey(4, 5, 6);
-		IdTriple t1 = new IdTriple(embeddedTriple2,kf.createKey(7),embeddedTriple1);
+		TripleStar t1 = new TripleStar(embeddedTriple2,kf.createKey(7),embeddedTriple1);
 		OSP.add(t1);
 		
-		IdTriple triplePattern = new IdTriple(Variable.ANY,kf.createKey(7),Variable.ANY);
-		Iterator<IdTriple> integer = OSP.iterator(triplePattern);
+		TripleStar triplePattern = new TripleStar(Variable.ANY,kf.createKey(7),Variable.ANY);
+		Iterator<TripleStar> integer = OSP.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -110,18 +110,18 @@ public class IndexEmbeddedTripleTest {
 	public void lookupEmbeddedTripleObjectWithMixedData() {
 		
 		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		IdTriple t1 = new IdTriple(kf.createKey(4),kf.createKey(5),embeddedTriple1);
-		IdTriple t2 = new IdTriple(kf.createKey(4),kf.createKey(6),kf.createKey(7));
-		IdTriple t3 = new IdTriple(kf.createKey(4),kf.createKey(5),kf.createKey(8));
-		IdTriple t4 = new IdTriple(kf.createKey(1),kf.createKey(2),kf.createKey(3));
+		TripleStar t1 = new TripleStar(kf.createKey(4),kf.createKey(5),embeddedTriple1);
+		TripleStar t2 = new TripleStar(kf.createKey(4),kf.createKey(6),kf.createKey(7));
+		TripleStar t3 = new TripleStar(kf.createKey(4),kf.createKey(5),kf.createKey(8));
+		TripleStar t4 = new TripleStar(kf.createKey(1),kf.createKey(2),kf.createKey(3));
 		
 		SPO.add(t1);
 		SPO.add(t2);
 		SPO.add(t3);
 		SPO.add(t4);
 		
-		IdTriple triplePattern = new IdTriple(kf.createKey(4),kf.createKey(5),Variable.ANY);
-		Iterator<IdTriple> integer = SPO.iterator(triplePattern);
+		TripleStar triplePattern = new TripleStar(kf.createKey(4),kf.createKey(5),Variable.ANY);
+		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {

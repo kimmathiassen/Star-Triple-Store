@@ -6,7 +6,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TripleStore {
@@ -32,7 +32,7 @@ public class TripleStore {
      /**
           Add a triple to this triple store.
      */
-    public void add( IdTriple t ) {
+    public void add( TripleStar t ) {
          SPO.add( t );
          POS.add( t );
          OSP.add( t ); 
@@ -41,7 +41,7 @@ public class TripleStore {
      /**
           Remove a triple from this triple store.
      */
-    public void delete( IdTriple t ) {
+    public void delete( TripleStar t ) {
          if (SPO.remove( t ))
              {
              POS.remove( t );
@@ -86,7 +86,7 @@ public class TripleStore {
      /**
           Answer true iff this triple store contains the (concrete) triple <code>t</code>.
      */
-    public boolean contains( IdTriple t ) { 
+    public boolean contains( TripleStar t ) { 
     	return SPO.containsBySameValueAs( t ); 
     }
      
@@ -113,7 +113,7 @@ public class TripleStore {
          (ANY, P, O) searches on largish models with few predicates declined
          dramatically - specifically on the not-galen.owl ontology.
      */
-    public ExtendedIterator<IdTriple> find( IdTriple t ) {
+    public ExtendedIterator<TripleStar> find( TripleStar t ) {
          if (t.isSubjectConcrete() && t.isPredicateConcrete())
              return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
          else if (t.isObjectConcrete() && t.isSubjectConcrete())

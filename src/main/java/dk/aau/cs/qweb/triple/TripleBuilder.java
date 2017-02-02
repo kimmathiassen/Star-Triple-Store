@@ -1,6 +1,6 @@
 package dk.aau.cs.qweb.triple;
 
-import dk.aau.cs.qweb.triple.IdTriple.Variable;
+import dk.aau.cs.qweb.triple.TripleStar.Variable;
 
 public class TripleBuilder {
 
@@ -32,35 +32,35 @@ public class TripleBuilder {
 		objectIsConcrete = true;
 	}
 
-	public IdTriple createTriple() {
-		IdTriple triple;
+	public TripleStar createTriple() {
+		TripleStar triple;
 		
 		if (!subjectIsConcrete) {
 			if (!predicateIsConcrete) {
 				if (!objectIsConcrete) {
-					triple = new IdTriple(Variable.ANY,Variable.ANY,Variable.ANY);
+					triple = new TripleStar(Variable.ANY,Variable.ANY,Variable.ANY);
 				} else {
-					triple = new IdTriple(Variable.ANY, Variable.ANY, object);
+					triple = new TripleStar(Variable.ANY, Variable.ANY, object);
 				}
 			} else {
 				if (!objectIsConcrete) {
-					triple = new IdTriple(Variable.ANY,predicate,Variable.ANY);
+					triple = new TripleStar(Variable.ANY,predicate,Variable.ANY);
 				} else {
-					triple = new IdTriple(Variable.ANY,predicate,object);
+					triple = new TripleStar(Variable.ANY,predicate,object);
 				}
 			}
 		} else {
 			if (!predicateIsConcrete) {
 				if (!objectIsConcrete) {
-					triple = new IdTriple(subject,Variable.ANY,Variable.ANY);
+					triple = new TripleStar(subject,Variable.ANY,Variable.ANY);
 				} else {
-					triple = new IdTriple(subject, Variable.ANY, object);
+					triple = new TripleStar(subject, Variable.ANY, object);
 				}
 			} else {
 				if (!objectIsConcrete) {
-					triple = new IdTriple(subject,predicate,Variable.ANY);
+					triple = new TripleStar(subject,predicate,Variable.ANY);
 				} else {
-					triple = new IdTriple(subject,predicate,object);
+					triple = new TripleStar(subject,predicate,object);
 				}
 			}
 		}

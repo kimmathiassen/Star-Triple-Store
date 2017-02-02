@@ -8,7 +8,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.util.iterator.NiceIterator;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 
 
 
@@ -18,12 +18,12 @@ implements ExtendedIterator<Triple>
 	// members
 	
 	final protected MyDictionary nodeDict;
-	final protected Iterator<IdTriple> inputIterator;
+	final protected Iterator<TripleStar> inputIterator;
 	
 	
 	// initialization
 	
-	public DecodingTriplesIterator (Iterator<IdTriple> inputIterator )
+	public DecodingTriplesIterator (Iterator<TripleStar> inputIterator )
 	{
 		this.nodeDict = MyDictionary.getInstance();
 		this.inputIterator = inputIterator;
@@ -53,7 +53,7 @@ implements ExtendedIterator<Triple>
 	
 	// operations
 	
-	public Triple decode ( IdTriple t )
+	public Triple decode ( TripleStar t )
 	{
 		Node subject = this.nodeDict.getNode(t.getSubject());
 		Node predicate = this.nodeDict.getNode(t.getPredicate());

@@ -6,7 +6,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 
 import dk.aau.cs.qweb.model.Node_Triple;
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.TripleBuilder;
@@ -32,7 +32,7 @@ public class MyDictionary {
 	}
 
 	// This methods seem over complicated but it is in order to be able to handle triple patterns
-	public IdTriple createTriple(Triple t) {
+	public TripleStar createTriple(Triple t) {
 		TripleBuilder builder = new TripleBuilder();
 		
 		if (t.getSubject().isConcrete()) {

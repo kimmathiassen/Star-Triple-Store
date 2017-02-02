@@ -5,27 +5,27 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.Key;
 
 public class TripleBunch  {
-	Map<Key,HashSet<IdTriple>> innerMap;
+	Map<Key,HashSet<TripleStar>> innerMap;
 	
 	public TripleBunch() {
-		innerMap = new HashMap<Key,HashSet<IdTriple>>();
+		innerMap = new HashMap<Key,HashSet<TripleStar>>();
 	}
 
-	public void put(Key field2, IdTriple triple) {
+	public void put(Key field2, TripleStar triple) {
 		if (innerMap.containsKey(field2)) {
 			innerMap.get(field2).add(triple);
 		} else {
-			HashSet<IdTriple> array = new HashSet<IdTriple>();
+			HashSet<TripleStar> array = new HashSet<TripleStar>();
 			array.add(triple);
 			innerMap.put(field2, array);
 		}
 	}
 
-	public Iterator<IdTriple> iterator(Key key) {
+	public Iterator<TripleStar> iterator(Key key) {
 		if (innerMap.containsKey(key)) {
 			return innerMap.get(key).iterator();
 		} else {
@@ -34,7 +34,7 @@ public class TripleBunch  {
 		}
 	}
 	
-	public Iterator<IdTriple> iterator() {
+	public Iterator<TripleStar> iterator() {
 		return new IteratorOfIterators(innerMap.values());
 	}
 }

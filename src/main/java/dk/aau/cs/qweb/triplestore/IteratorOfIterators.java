@@ -8,19 +8,19 @@ import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import dk.aau.cs.qweb.triple.IdTriple;
+import dk.aau.cs.qweb.triple.TripleStar;
 
 
 // maybe replace with Guava (formerly Google Collections) Iterators.concat.
-public class IteratorOfIterators implements Iterator<IdTriple> {
-    private final List<Iterator<IdTriple>> iterators;
-    private Iterator<IdTriple> currentIterator;
-    private Iterator<Iterator<IdTriple>> listIterator;
+public class IteratorOfIterators implements Iterator<TripleStar> {
+    private final List<Iterator<TripleStar>> iterators;
+    private Iterator<TripleStar> currentIterator;
+    private Iterator<Iterator<TripleStar>> listIterator;
 
 
-    public IteratorOfIterators(Collection<HashSet<IdTriple>> collection) {
-    	iterators = new ArrayList<Iterator<IdTriple>>();
-    	for (Collection<IdTriple> container : collection) {
+    public IteratorOfIterators(Collection<HashSet<TripleStar>> collection) {
+    	iterators = new ArrayList<Iterator<TripleStar>>();
+    	for (Collection<TripleStar> container : collection) {
 			iterators.add(container.iterator());
 		}
     	listIterator = iterators.iterator();
@@ -42,7 +42,7 @@ public class IteratorOfIterators implements Iterator<IdTriple> {
 		}
 	}
 
-    public IdTriple next() {
+    public TripleStar next() {
     	return currentIterator.next();
     }
 
