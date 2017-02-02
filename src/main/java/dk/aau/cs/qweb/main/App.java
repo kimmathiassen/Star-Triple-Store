@@ -43,25 +43,6 @@ public class App {
     	
         RDFDataMgr.read(g, filename);
         
-        // Direct way: Make a TDB-back Jena model in the named directory.
-        //String directory = "MyDatabases/DB1" ;
-        //Dataset dataset = TDBFactory.createDataset(directory) ;
-        
-        ////////////////////////////////////////////////////////////
-//        TypedInputStream in = open(filename) ;
-//        PeekReader peekReader = PeekReader.makeUTF8(in) ;
-//        TokenizerStar tokenizer = new TokenizerStar(peekReader) ;
-//        
-//        ErrorHandler handler = ErrorHandlerFactory.getDefaultErrorHandler();
-//        
-//        LabelToNode labelMapping = SyntaxLabels.createLabelToNode();
-//        Prologue prologue = new Prologue(PrefixMapFactory.createForInput(), IRIResolver.create(filename)) ;
-//        ParserProfileStar profile = new ParserProfileStar(prologue, handler, new FactoryRDFCaching(FactoryRDFCaching.DftNodeCacheSize, labelMapping)) ;
-//        StreamRDF dest = StreamRDFLib.graph(g) ;
-//        LangTurtleStar parser = new LangTurtleStar(tokenizer, profile, dest); 
-//        parser.parse();
-        
-        
 		Node subject = Node.ANY;
 		Node predicate = NodeFactory.createURI("http://example.org/embedded/is");
 		Node object = Node.ANY;
