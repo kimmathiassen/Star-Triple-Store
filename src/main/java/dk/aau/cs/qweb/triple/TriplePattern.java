@@ -200,4 +200,11 @@ public class TriplePattern {
 		}
 		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
+
+	public boolean doesAllKeysExistInDictionary() {
+		if (subjectId.equals(0) || predicateId.equals(0) || objectId.equals(0)) {
+			return false;
+		}
+		return true;
+	}
 }
