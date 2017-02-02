@@ -1,0 +1,6 @@
+ @base <http://example.org/> .
+ 
+ <#rdf-syntax-grammar>
+   <title> "RDF/XML Syntax Specification (Revised)" ;
+   <editor> "Dave Beckett" ;
+   <homePage> <http://purl.org/net/dajobe/> .
