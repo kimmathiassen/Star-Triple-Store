@@ -1,5 +1,4 @@
-@base <http://example.org/> .
-@prefix ex: <http://example.org/embedded/> .
+@prefix ex: <http://example.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <<ex:kim ex:worksAt ex:aau>> ex:is "Not a lie" ;    # in the context of the Marvel universe
