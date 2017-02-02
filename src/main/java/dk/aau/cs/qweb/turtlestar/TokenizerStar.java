@@ -279,7 +279,6 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 if ( Checking )
                     checkString(token.getImage()) ;
             }
-            System.out.println(token);
             return token ;
         }
 
