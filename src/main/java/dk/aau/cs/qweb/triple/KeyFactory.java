@@ -9,12 +9,12 @@ public class KeyFactory {
 	private static final long EMBEDDED_BIT = Long.MIN_VALUE;
 	//private static final long EMBEDDED_IDENTIFIER_TO_LARGE_BIT = Long.MIN_VALUE >>> 1;
 
-	public Key createKey(final Key subject,final Key predicate,final Key object) {
+	public static Key createKey(final Key subject,final Key predicate,final Key object) {
 	
 		return createKey(subject.getId(),predicate.getId(),object.getId());
 	}
 	
-	public Key createKey(long subject, long predicate, long object) {
+	public static Key createKey(long subject, long predicate, long object) {
 		
 		if (subject < 0 || 
 				predicate < 0 ||
@@ -45,7 +45,7 @@ public class KeyFactory {
 		return new Key(key);
 	}
 	
-	public Key createKey(long key) {
+	public static Key createKey(long key) {
 		if (key < 0) {
 			throw new IllegalArgumentException("identifier must not be negative, (MSB is set)");
 		}
