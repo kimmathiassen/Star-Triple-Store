@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.model;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeVisitor;
@@ -40,10 +42,19 @@ public class Node_Triple extends Node_Concrete {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean equals(Object other) {
+		if (other instanceof Node_Triple) {
+			Node_Triple casted = (Node_Triple)other;
+			return node1.equals(casted.getSubject()) && node2.equals(casted.getPredicate()) && node3.equals(casted.getObject()); 
+		} else {
+			return this.hashCode() == other.hashCode();
+		}
 	}
+	
+	@Override
+    public int hashCode() {
+        return Objects.hash(node1,node2,node3);
+    }
 	
 	@Override
 	public String toString() {
