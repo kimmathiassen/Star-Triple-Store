@@ -2,21 +2,17 @@ package dk.aau.cs.qweb;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.graph.Graph;
-import dk.aau.cs.qweb.input.TurtleStarReader;
+import dk.aau.cs.qweb.main.App;
 
 public class TurtleStarReaderSpidermanTest {
 	static Graph g;
@@ -24,17 +20,11 @@ public class TurtleStarReaderSpidermanTest {
 	@BeforeClass
 	public static void setup() {
 		g = new Graph();
-        Model model = ModelFactory.createModelForGraph(g);
-		TurtleStarReader reader = new TurtleStarReader(model);
-		
-		File spiderman = new File("src/test/resources/TurtleStar/spiderman.ttls");
-		try {
-			reader.read(spiderman);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String filename = "src/test/resources/TurtleStar/spiderman.ttls" ;
+
+        App.registerTTLS();
+    	
+        RDFDataMgr.read(g, filename);
 	}
 	
 
