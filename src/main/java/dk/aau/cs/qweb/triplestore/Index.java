@@ -42,11 +42,11 @@ public class Index   {
 
 	private Key getFieldKey(Field field,TripleStar t) {
 		if (field == Field.S) {
-			return t.getSubject();
+			return t.subjectId;
 		} else if (field == Field.P) {
-			return t.getPredicate();
+			return t.predicateId;
 		} else {
-			return t.getObject();
+			return t.objectId;
 		}
 	}
 

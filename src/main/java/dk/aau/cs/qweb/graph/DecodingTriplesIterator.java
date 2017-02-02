@@ -55,9 +55,9 @@ implements ExtendedIterator<Triple>
 	
 	public Triple decode ( TripleStar t )
 	{
-		Node subject = this.nodeDict.getNode(t.getSubject());
-		Node predicate = this.nodeDict.getNode(t.getPredicate());
-		Node object = this.nodeDict.getNode(t.getObject());
+		Node subject = this.nodeDict.getNode(t.subjectId);
+		Node predicate = this.nodeDict.getNode(t.predicateId);
+		Node object = this.nodeDict.getNode(t.objectId);
 		
 		return Triple.create( subject, predicate, object );
 	}
