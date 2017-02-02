@@ -30,7 +30,7 @@ public class TurtleStarReaderSeventiesShowTest {
 	
 
 	@Test
-	public void multiplesLabes() {
+	public void singleLabel() {
 		Node subject = NodeFactory.createURI("http://example.org/vocab/show/218");
 		Node predicate = NodeFactory.createURI("http://www.w3.org/2000/01/rdf-schema#label");
 		Node object = Node.ANY;
@@ -45,7 +45,7 @@ public class TurtleStarReaderSeventiesShowTest {
 			count++;
 		}
 		
-		assertEquals(3,count);
+		assertEquals(1,count);
 	}
 	
 	@Test
@@ -69,9 +69,9 @@ public class TurtleStarReaderSeventiesShowTest {
 	
 	@Test
 	public void multilineQuote() {
-		Node subject = Node.ANY;
-		Node predicate = NodeFactory.createURI("http://example.org/vocab/show/218");
-		Node object = NodeFactory.createURI("http://example.org/vocab/show/blurb");
+		Node object = Node.ANY;
+		Node subject = NodeFactory.createURI("http://example.org/vocab/show/218");
+		Node predicate = NodeFactory.createURI("http://example.org/vocab/show/blurb");
 		
 		Triple triplePattern = new Triple(subject,predicate,object );
 		
