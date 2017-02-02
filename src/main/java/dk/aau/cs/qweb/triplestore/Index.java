@@ -1,5 +1,6 @@
 package dk.aau.cs.qweb.triplestore;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -85,7 +86,7 @@ public class Index   {
 			}
 			
 		}
-		throw new NotImplementedException("no match for "+triple+" an iterator over the empty set should have been returned");
+		return Collections.emptyIterator();
 	}
 
 	public void removedOneViaIterator() {
