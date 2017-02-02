@@ -14,7 +14,8 @@ public class Key {
 	
 	@Override
 	public String toString() {
-		return String.valueOf(id);
+		//return String.valueOf(id);
+		return Long.toBinaryString(id);
 	}
 
 	private final long id;
