@@ -45,7 +45,7 @@ public class TurtleStarReaderMultipleLabels {
 			iterator.next();
 			count++;
 		}
-		
+		//Maybe only 2 because literals are default strings.
 		assertEquals(3,count);
 	}
 	
