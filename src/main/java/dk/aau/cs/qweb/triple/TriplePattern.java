@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.apache.jena.reasoner.IllegalParameterException;
 
+import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TriplePattern {
@@ -204,6 +205,14 @@ public class TriplePattern {
 	public boolean doesAllKeysExistInDictionary() {
 		if (subjectId.equals(0) || predicateId.equals(0) || objectId.equals(0)) {
 			return false;
+		} else if (BitHelper.isIdAnEmbeddedTriple(subjectId)) { // check if any elements in an embedded triple is zero.
+			if (BitHelper.isThereAnyKeysSetToZeroInEmbeddedId(subjectId)) {
+				return false;
+			}
+		} else if (BitHelper.isIdAnEmbeddedTriple(objectId)) {
+			if (BitHelper.isThereAnyKeysSetToZeroInEmbeddedId(objectId)) {
+				return false;
+			}
 		}
 		return true;
 	}
