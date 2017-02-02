@@ -17,6 +17,8 @@ import org.apache.jena.riot.system.Prologue;
 import org.apache.jena.riot.system.RiotLib;
 import org.apache.jena.sparql.core.Quad;
 
+import dk.aau.cs.qweb.model.NodeFactoryStar;
+
 public class ParserProfileStar {
 	protected ErrorHandler errorHandler ;
     protected Prologue     prologue ;
@@ -120,6 +122,8 @@ public class ParserProfileStar {
                 return pp.createBlankNode(currentGraph, str, line, col) ;
             case IRI :
                 return pp.createURI(str, line, col) ;
+            case EMBEDDED :
+                return pp.createEmbedded(pp, currentGraph, token) ;
             case PREFIXED_NAME : {
                 String prefix = str ;
                 String suffix = token.getImage2() ;
@@ -174,7 +178,15 @@ public class ParserProfileStar {
         }
     }
 
-    private static String expandPrefixedName(ParserProfileStar pp, String prefix, String localPart, TokenStar token) {
+    public Node createEmbedded(ParserProfileStar pp, Node currentGraph, TokenStar token) {
+    	Node subject = create(pp, currentGraph, token.getEmbeddedToken1());
+    	Node predicate = create(pp, currentGraph, token.getEmbeddedToken2());
+    	Node object = create(pp, currentGraph, token.getEmbeddedToken3());
+    	
+    	return NodeFactoryStar.createEmbeddedNode(subject,predicate,object);
+	}
+
+	private static String expandPrefixedName(ParserProfileStar pp, String prefix, String localPart, TokenStar token) {
         String expansion = pp.getPrologue().getPrefixMap().expand(prefix, localPart) ;
         if (expansion == null) {
             if ( ARQ.isTrue(ARQ.fixupUndefinedPrefixes) )

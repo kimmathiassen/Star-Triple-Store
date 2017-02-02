@@ -42,41 +42,45 @@ public class TokenStar {
     //   A prefixed name is two strings. 
     //     It uses tokenImage and tokenImage2
     
-	private TokenTypeStar tokenEmbedded1Type = null ;
-	private TokenTypeStar tokenEmbedded2Type = null ;
-	private TokenTypeStar tokenEmbedded3Type = null ;
-	private String tokenEmbedded1Image = null ;
-    private String tokenEmbedded1Image2 = null ;         // Used for language tag and second part of prefix name
-    private String tokenEmbedded2Image = null ;
-    private String tokenEmbedded2Image2 = null ;         // Used for language tag and second part of prefix name
-    private String tokenEmbedded3Image = null ;
-    private String tokenEmbedded3Image2 = null ;         // Used for language tag and second part of prefix name
+//	private TokenTypeStar tokenEmbedded1Type = null ;
+//	private TokenTypeStar tokenEmbedded2Type = null ;
+//	private TokenTypeStar tokenEmbedded3Type = null ;
+//	private String tokenEmbedded1Image = null ;
+//    private String tokenEmbedded1Image2 = null ;         // Used for language tag and second part of prefix name
+//    private String tokenEmbedded2Image = null ;
+//    private String tokenEmbedded2Image2 = null ;         // Used for language tag and second part of prefix name
+//    private String tokenEmbedded3Image = null ;
+//    private String tokenEmbedded3Image2 = null ;         // Used for language tag and second part of prefix name
+//	
+//    public final TokenStar setEmbedded1Type(TokenTypeStar tokenType) { this.tokenEmbedded1Type = tokenType ; return this ; }
+//    public final TokenStar setEmbedded1Image(String tokenImage)      { this.tokenEmbedded1Image = tokenImage ; return this ; }
+//    public final TokenStar setEmbedded1Image2(String tokenImage2)    { this.tokenEmbedded1Image2 = tokenImage2 ; return this ; }
+//	
+//    public final TokenStar setEmbedded2Type(TokenTypeStar tokenType) { this.tokenEmbedded2Type = tokenType ; return this ; }
+//    public final TokenStar setEmbedded2Image(String tokenImage)      { this.tokenEmbedded2Image = tokenImage ; return this ; }
+//    public final TokenStar setEmbedded2Image2(String tokenImage2)    { this.tokenEmbedded2Image2 = tokenImage2 ; return this ; }
+//   
+//    public final TokenStar setEmbedded3Type(TokenTypeStar tokenType) { this.tokenEmbedded3Type = tokenType ; return this ; }
+//    public final TokenStar setEmbedded3Image(String tokenImage)      { this.tokenEmbedded3Image = tokenImage ; return this ; }
+//    public final TokenStar setEmbedded3Image2(String tokenImage2)    { this.tokenEmbedded3Image2 = tokenImage2 ; return this ; }
+//    
+//	public final TokenTypeStar getEmbedded1Type()   { return tokenEmbedded1Type ; }
+//    public final String getEmbedded1Image()      	{ return tokenEmbedded1Image ; }
+//    public final String getEmbedded1Image2()     	{ return tokenEmbedded1Image2 ; }
+//    
+//	public final TokenTypeStar getEmbedded2Type()   { return tokenEmbedded2Type ; }
+//    public final String getEmbedded2Image()      	{ return tokenEmbedded2Image ; }
+//    public final String getEmbedded2Image2()     	{ return tokenEmbedded2Image2 ; }
+//    
+//	public final TokenTypeStar getEmbedded3Type()   { return tokenEmbedded3Type ; }
+//    public final String getEmbedded3Image()      	{ return tokenEmbedded3Image ; }
+//    public final String getEmbedded3Image2()     	{ return tokenEmbedded3Image2 ; }
+//    
+    
+	private TokenStar embeddedToken1 = null;
+	private TokenStar embeddedToken2 = null;
+	private TokenStar embeddedToken3 = null;
 	
-    public final TokenStar setEmbedded1Type(TokenTypeStar tokenType) { this.tokenEmbedded1Type = tokenType ; return this ; }
-    public final TokenStar setEmbedded1Image(String tokenImage)      { this.tokenEmbedded1Image = tokenImage ; return this ; }
-    public final TokenStar setEmbedded1Image2(String tokenImage2)    { this.tokenEmbedded1Image2 = tokenImage2 ; return this ; }
-	
-    public final TokenStar setEmbedded2Type(TokenTypeStar tokenType) { this.tokenEmbedded2Type = tokenType ; return this ; }
-    public final TokenStar setEmbedded2Image(String tokenImage)      { this.tokenEmbedded2Image = tokenImage ; return this ; }
-    public final TokenStar setEmbedded2Image2(String tokenImage2)    { this.tokenEmbedded2Image2 = tokenImage2 ; return this ; }
-   
-    public final TokenStar setEmbedded3Type(TokenTypeStar tokenType) { this.tokenEmbedded3Type = tokenType ; return this ; }
-    public final TokenStar setEmbedded3Image(String tokenImage)      { this.tokenEmbedded3Image = tokenImage ; return this ; }
-    public final TokenStar setEmbedded3Image2(String tokenImage2)    { this.tokenEmbedded3Image2 = tokenImage2 ; return this ; }
-    
-	public final TokenTypeStar getEmbedded1Type()   { return tokenEmbedded1Type ; }
-    public final String getEmbedded1Image()      	{ return tokenEmbedded1Image ; }
-    public final String getEmbedded1Image2()     	{ return tokenEmbedded1Image2 ; }
-    
-	public final TokenTypeStar getEmbedded2Type()   { return tokenEmbedded2Type ; }
-    public final String getEmbedded2Image()      	{ return tokenEmbedded2Image ; }
-    public final String getEmbedded2Image2()     	{ return tokenEmbedded2Image2 ; }
-    
-	public final TokenTypeStar getEmbedded3Type()   { return tokenEmbedded3Type ; }
-    public final String getEmbedded3Image()      	{ return tokenEmbedded3Image ; }
-    public final String getEmbedded3Image2()     	{ return tokenEmbedded3Image2 ; }
-    
-    
     private TokenTypeStar tokenType = null ;
     
     private String tokenImage = null ;
@@ -124,6 +128,10 @@ public class TokenStar {
         if ( tt.hasNext() )
             throw new RiotException("Extraneous charcaters") ;
         return t ;
+    }
+    
+    static TokenStar createEmbedded() {
+    	return new TokenStar();
     }
 
     static Iter<TokenStar> createN(String s)
@@ -192,6 +200,9 @@ public class TokenStar {
         this.cntrlCode      = token.cntrlCode ;
         this.line           = token.line ; 
         this.column         = token.column ;
+        this.embeddedToken1 = token.embeddedToken1;
+        this.embeddedToken2 = token.embeddedToken2;
+        this.embeddedToken3 = token.embeddedToken3;
     }
     
     // Convenience operations for accessing tokens. 
@@ -651,4 +662,22 @@ public class TokenStar {
 
         throw new IllegalArgumentException() ;
     }
+	public TokenStar getEmbeddedToken1() {
+		return embeddedToken1;
+	}
+	public void setEmbeddedToken1(TokenStar embeddedToken1) {
+		this.embeddedToken1 = embeddedToken1;
+	}
+	public TokenStar getEmbeddedToken2() {
+		return embeddedToken2;
+	}
+	public void setEmbeddedToken2(TokenStar embeddedToken2) {
+		this.embeddedToken2 = embeddedToken2;
+	}
+	public TokenStar getEmbeddedToken3() {
+		return embeddedToken3;
+	}
+	public void setEmbeddedToken3(TokenStar embeddedToken3) {
+		this.embeddedToken3 = embeddedToken3;
+	}
 }

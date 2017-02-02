@@ -222,6 +222,9 @@ public class LangTurtleStar {
         if ( lookingAt(NODE) ) {
             triples() ;
             return ;
+        } else if  ( lookingAt(TokenTypeStar.EMBEDDED) ) {
+            triples() ;
+            return ;
         }
 
         boolean maybeList = lookingAt(LPAREN) ;

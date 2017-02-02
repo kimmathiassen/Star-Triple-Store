@@ -102,7 +102,6 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 return false ;
             }
             token = parseToken() ;
-            System.out.println(token);
             if ( token == null ) {
                 // close() ;
                 finished = true ;
@@ -453,55 +452,60 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
 
     
     private String readEmbeddedTriple() {
-    	System.out.println();
+    	String image = "<<";
     	int ch = reader.readChar() ; //Consumers "<"
-    	String imagePart1 = "";
-    	String imagePart2 = "";
-    	String imagePart3 = "";
     	
-        for (;;) {
-            long posn = reader.getPosition() ;
-            String prefixPart = readPrefixPart() ; // Prefix part or keyword
-            imagePart1 +=prefixPart+":";
-            ch = reader.peekChar() ;
-            if ( ch == SPC) { //space
-            	ch = reader.readChar() ; //Consumers "<"
-            	break;
-            } else if ( ch == CH_COLON ) {
-                reader.readChar() ;
-                imagePart1 +=readLocalPart();
-            }
-
-            // If we made no progress, nothing found, not even a keyword -- it's an
-            // error.
-            if ( posn == reader.getPosition() )
-                exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;
+        long posn = reader.getPosition() ;
+        String prefixPart = readPrefixPart() ; // Prefix part or keyword
+        TokenStar embedded1 = TokenStar.createEmbedded();
+        embedded1.setImage(prefixPart) ;
+        image += prefixPart;
+        embedded1.setType(TokenTypeStar.KEYWORD) ;
+        ch = reader.peekChar() ;
+        if ( ch == CH_COLON ) {
+            reader.readChar() ;
+            embedded1.setType(TokenTypeStar.PREFIXED_NAME) ;
+            String ln = readLocalPart() ; // Local part
+            embedded1.setImage2(ln) ;
+            image += ":"+ln+" ";
         }
+
+        // If we made no progress, nothing found, not even a keyword -- it's an
+        // error.
+        if ( posn == reader.getPosition() )
+            {exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;}
+        
+        token.setEmbeddedToken1(embedded1);
         
         skip() ;
         
-        for (;;) {
-            long posn = reader.getPosition() ;
-            String prefixPart = readPrefixPart() ; // Prefix part or keyword
-            imagePart2 +=prefixPart;
-            ch = reader.peekChar() ;
-            if ( ch == SPC) { //space
-            	break;
-            } else if ( ch == CH_COLON ) {
-                reader.readChar() ;
-                imagePart2 +=readLocalPart();
-            }
-
-            // If we made no progress, nothing found, not even a keyword -- it's an
-            // error.
-            if ( posn == reader.getPosition() )
-                exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;
+    	posn = reader.getPosition() ;
+        prefixPart = readPrefixPart() ; // Prefix part or keyword
+        image += prefixPart;
+        TokenStar embedded2 = TokenStar.createEmbedded();
+        embedded2.setImage(prefixPart) ;
+        embedded2.setType(TokenTypeStar.KEYWORD) ;
+        ch = reader.peekChar() ;
+        if ( ch == CH_COLON ) {
+            reader.readChar() ;
+            embedded2.setType(TokenTypeStar.PREFIXED_NAME) ;
+            String ln = readLocalPart() ; // Local part
+            embedded2.setImage2(ln) ;
+            image += ":"+ln+" ";
         }
+
+        // If we made no progress, nothing found, not even a keyword -- it's an
+        // error.
+        if ( posn == reader.getPosition() )
+            exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;
     	
+        token.setEmbeddedToken2(embedded2);
+        
         skip() ;
         
         // ---- Literal
         if ( ch == CH_QUOTE1 || ch == CH_QUOTE2 ) {
+        	TokenStar embedded3 = TokenStar.createEmbedded();
             reader.readChar() ;
             int ch2 = reader.peekChar() ;
             if ( ch2 == ch ) {
@@ -509,9 +513,11 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 int ch3 = reader.peekChar() ;
                 if ( ch3 == ch ) {
                     reader.readChar() ;
-                    token.setImage(readLongString(ch, false)) ;
+                    String longString = readLongString(ch, false);
+                    embedded3.setImage(longString) ;
+                    image += longString;
                     TokenTypeStar tt = (ch == CH_QUOTE1) ? TokenTypeStar.LONG_STRING1 : TokenTypeStar.LONG_STRING2 ;
-                    token.setType(tt) ;
+                    embedded3.setType(tt) ;
                 } else {
                     // Two quotes then a non-quote.
                     // Must be '' or ""
@@ -520,14 +526,17 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                     // if ( ch2 != EOF ) reader.pushbackChar(ch2) ;
                     // if ( ch1 != EOF ) reader.pushbackChar(ch1) ; // Must be
                     // '' or ""
-                    token.setImage("") ;
-                    token.setType((ch == CH_QUOTE1) ? TokenTypeStar.STRING1 : TokenTypeStar.STRING2) ;
+                	embedded3.setImage("") ;
+                	image += "\"\"";
+                	embedded3.setType((ch == CH_QUOTE1) ? TokenTypeStar.STRING1 : TokenTypeStar.STRING2) ;
                 }
             } else {
                 // Single quote character.
-                token.setImage(readString(ch, ch)) ;
+            	String normalStirng = readString(ch, ch);
+            	embedded3.setImage(normalStirng) ;
+            	image += normalStirng;
                 // Single quoted string.
-                token.setType((ch == CH_QUOTE1) ? TokenTypeStar.STRING1 : TokenTypeStar.STRING2) ;
+            	embedded3.setType((ch == CH_QUOTE1) ? TokenTypeStar.STRING1 : TokenTypeStar.STRING2) ;
             }
 
             // Whte space after lexical part of a literal.
@@ -538,13 +547,12 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 reader.readChar() ;
                 // White space is not legal here.
                 // The Turtle spec terminal is "LANGTAG" which includes the '@'.
-                TokenStar mainToken = new TokenStar(token) ;
+                TokenStar mainToken = new TokenStar(embedded3) ;
                 mainToken.setType(TokenTypeStar.LITERAL_LANG) ;
                 mainToken.setSubToken1(token) ;
                 mainToken.setImage2(langTag()) ;
-                token = mainToken ;
-                if ( Checking )
-                    checkLiteralLang(token.getImage(), token.getImage2()) ;
+                image += langTag();
+                embedded3 = mainToken ;
             } else if ( reader.peekChar() == '^' ) {
                 expect("^^") ;
                 // White space is legal after a ^^. 
@@ -556,9 +564,9 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 skip() ;
                 
                 // Stash current token.
-                TokenStar mainToken = new TokenStar(token) ;
-                mainToken.setSubToken1(token) ;
-                mainToken.setImage(token.getImage()) ;
+                TokenStar mainToken = new TokenStar(embedded3) ;
+                mainToken.setSubToken1(embedded3) ;
+                mainToken.setImage(embedded3.getImage()) ;
 
                 TokenStar subToken = parseToken() ;
                 if ( !subToken.isIRI() )
@@ -567,39 +575,43 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 mainToken.setSubToken2(subToken) ;
                 mainToken.setType(TokenTypeStar.LITERAL_DT) ;
 
-                token = mainToken ;
-                if ( Checking )
-                    checkLiteralDT(token.getImage(), subToken) ;
-            } else {
-                // Was a simple string.
-                if ( Checking )
-                    checkString(token.getImage()) ;
-            }
-            System.out.println(token);
-            return token ;
+                embedded3 = mainToken ;
+            } 
+            token.setEmbeddedToken3(embedded3);
         } else {
-        	for (;;) {
-                long posn = reader.getPosition() ;
-                String prefixPart = readPrefixPart() ; // Prefix part or keyword
-                imagePart2 +=prefixPart;
-                ch = reader.peekChar() ;
-                if ( ch == SPC) { //space
-                	ch = reader.readChar() ; //Consumers "<"
-                	break;
-                } else if ( ch == CH_COLON ) {
-                    reader.readChar() ;
-                    imagePart2 +=readLocalPart();
-                }
-
-                // If we made no progress, nothing found, not even a keyword -- it's an
-                // error.
-                if ( posn == reader.getPosition() )
-                    exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;
+        	posn = reader.getPosition() ;
+            prefixPart = readPrefixPart() ; // Prefix part or keyword
+            TokenStar embedded3 = TokenStar.createEmbedded();
+            embedded3.setImage(prefixPart) ;
+            image += prefixPart;
+            embedded3.setType(TokenTypeStar.KEYWORD) ;
+            ch = reader.peekChar() ;
+            if ( ch == CH_COLON ) {
+                reader.readChar() ;
+                embedded3.setType(TokenTypeStar.PREFIXED_NAME) ;
+                String ln = readLocalPart() ; // Local part
+                embedded3.setImage2(ln) ;
+                image+=":"+ln;
             }
+
+            // If we made no progress, nothing found, not even a keyword -- it's an error.
+            if ( posn == reader.getPosition() )
+                exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;
+            
+            token.setEmbeddedToken3(embedded3);
         }
     	
     	
-    	return null;
+        ch = reader.peekChar() ;
+        if ( ch == CH_GT  ) {
+            reader.readChar() ;
+            ch = reader.peekChar() ;
+            if (ch == CH_GT) {
+            	reader.readChar() ;
+			} else exception("Expected \">\"");
+        } else exception("Expected \">\"");
+        
+    	return image+">>";
 	}
 
 

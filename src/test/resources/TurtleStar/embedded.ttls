@@ -1,7 +1,7 @@
 @base <http://example.org/> .
 @prefix ex: <http://example.org/embedded/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<<ex:kim ex:worksAt ex:aau>>  
-    :is "true" ;    # in the context of the Marvel universe
-    :started "1999-08-16"^^xsd:date .
+<<ex:kim ex:worksAt ex:aau>> ex:is "Not a lie" ;    # in the context of the Marvel universe
+    ex:started "1999-08-16"^^xsd:date .
 
