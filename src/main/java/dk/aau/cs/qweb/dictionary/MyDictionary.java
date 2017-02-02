@@ -40,7 +40,7 @@ public class MyDictionary {
 			if (node2Id.containsKey(t.getSubject())) {
 				builder.setSubject(node2Id.get(t.getSubject()));
 			} else {
-				builder.setSubject(registerNode(t.getSubject()));
+				builder.setSubject(new Key(0));
 			}
 		}
 		
@@ -48,7 +48,7 @@ public class MyDictionary {
 			if (node2Id.containsKey(t.getPredicate())) {
 				builder.setPredicate(node2Id.get(t.getPredicate()));
 			} else {
-				builder.setPredicate(registerNode(t.getPredicate()));
+				builder.setPredicate(new Key(0));
 			}
 		}
 		
@@ -56,7 +56,7 @@ public class MyDictionary {
 			if (node2Id.containsKey(t.getObject())) {
 				builder.setObject(node2Id.get(t.getObject()));
 			} else {
-				builder.setObject(registerNode(t.getObject()));
+				builder.setObject(new Key(0));
 			}
 		}
 		
