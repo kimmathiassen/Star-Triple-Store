@@ -30,7 +30,29 @@ public class TurtleStarReaderEmbeddedTest {
 	}
 	
 	@Test
-	public void blankNodeObject() {
+	public void subjectEmbeddedNode() {
+		Node s1 = NodeFactory.createURI("http://example.org/kim");
+		Node p1 = NodeFactory.createURI("http://example.org/worksAt"); 
+		Node o1 = NodeFactory.createURI("http://example.org/aau");
+		Node subject = NodeFactoryStar.createEmbeddedNode(s1, p1, o1);
+		Node predicate = Node.ANY;
+		Node object = Node.ANY;
+		
+		Triple triplePattern = new Triple(subject,predicate,object );
+		
+		Iterator<Triple> iterator = g.graphBaseFind(triplePattern);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			iterator.next();
+			count++;
+		}
+		
+		assertEquals(2,count);
+	}
+	
+	@Test
+	public void subjectEmbeddedNodePredicate() {
 		Node s1 = NodeFactory.createURI("http://example.org/kim");
 		Node p1 = NodeFactory.createURI("http://example.org/worksAt"); 
 		Node o1 = NodeFactory.createURI("http://example.org/aau");
@@ -48,7 +70,28 @@ public class TurtleStarReaderEmbeddedTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
+	
+	@Test
+	public void findEmbeddedNode() {
+		
+		Node subject = Node.ANY;
+		Node predicate = NodeFactory.createURI("http://example.org/is");
+		Node object = NodeFactory.createLiteral("Not a lie");;
+		
+		Triple triplePattern = new Triple(subject,predicate,object );
+		
+		Iterator<Triple> iterator = g.graphBaseFind(triplePattern);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			iterator.next();
+			count++;
+		}
+		
+		assertEquals(1,count);
+	}
+	
 	
 }
