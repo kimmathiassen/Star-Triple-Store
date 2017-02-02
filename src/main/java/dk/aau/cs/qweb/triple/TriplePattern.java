@@ -6,14 +6,18 @@ import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
-//This class is a triple and a triple pattern
-public class TripleStar {
+public class TriplePattern {
+
 	private Key subjectId;
 	private Key predicateId;
 	private Key objectId;
 	private boolean subjectIsConcrete = false;
 	private boolean predicateIsConcrete = false;
 	private boolean objectIsConcrete = false;
+	
+	public enum Variable {
+		ANY;
+	}
 	
 	private final void setSubject(final Key key) {
 		subjectId = key;
@@ -30,7 +34,37 @@ public class TripleStar {
 		objectIsConcrete = true;
 	}
 
-	public TripleStar(Key subject, Key predicate, Key object) {
+	public TriplePattern(Variable variableA, Variable variableB, Variable variableC) {
+	}
+
+	public TriplePattern(Variable variableA, Variable variableB, Key object) {
+		setObject(object);
+	}
+
+	public TriplePattern(Variable subjectVariableName, Key predicate, Variable objectVariableName) {
+		setPredicate(predicate);
+	}
+
+	public TriplePattern(Variable subjectVariableName, Key predicate, Key object) {
+		setPredicate(predicate);
+		setObject(object);
+	}
+
+	public TriplePattern(final Key subject, Variable predicateVariableName, Variable objectVariableName) {
+		setSubject(subject);
+	}
+
+	public TriplePattern(Key subject, Variable predicateVariableName, Key object) {
+		setSubject(subject);
+		setObject(object);
+	}
+
+	public TriplePattern(Key subject, Key predicate, Variable objectVariableName) {
+		setPredicate(predicate);
+		setSubject(subject);
+	}
+
+	public TriplePattern(Key subject, Key predicate, Key object) {
 		setSubject(subject);
 		setPredicate(predicate);
 		setObject(object);
@@ -154,5 +188,16 @@ public class TripleStar {
 		} else {
 			return super.equals(other);
 		}
+	}
+
+	public Key getKey(Field field) {
+		if (field == Field.S) {
+			return subjectId;
+		} else if (field == Field.P) {
+			return predicateId;
+		} else if (field == Field.O) {
+			return objectId;
+		}
+		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
 }

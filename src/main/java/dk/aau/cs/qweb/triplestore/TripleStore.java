@@ -6,6 +6,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
+import dk.aau.cs.qweb.triple.TriplePattern;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
@@ -113,7 +114,7 @@ public class TripleStore {
          (ANY, P, O) searches on largish models with few predicates declined
          dramatically - specifically on the not-galen.owl ontology.
      */
-    public ExtendedIterator<TripleStar> find( TripleStar t ) {
+    public ExtendedIterator<TripleStar> find( TriplePattern t ) {
          if (t.isSubjectConcrete() && t.isPredicateConcrete())
              return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
          else if (t.isObjectConcrete() && t.isSubjectConcrete())

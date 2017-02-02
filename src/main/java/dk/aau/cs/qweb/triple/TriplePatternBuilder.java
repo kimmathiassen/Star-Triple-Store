@@ -1,8 +1,8 @@
 package dk.aau.cs.qweb.triple;
 
-import dk.aau.cs.qweb.triple.TripleStar.Variable;
+import dk.aau.cs.qweb.triple.TriplePattern.Variable;
 
-public class TripleBuilder {
+public class TriplePatternBuilder {
 
 	private Key subject;
 	private Key predicate;
@@ -11,7 +11,7 @@ public class TripleBuilder {
 	private boolean predicateIsConcrete;
 	private boolean objectIsConcrete;
 
-	public TripleBuilder() {
+	public TriplePatternBuilder() {
 		subjectIsConcrete = false;
 		predicateIsConcrete = false;
 		objectIsConcrete = false;
@@ -32,35 +32,35 @@ public class TripleBuilder {
 		objectIsConcrete = true;
 	}
 
-	public TripleStar createTriple() {
-		TripleStar triple;
+	public TriplePattern createTriplePatter() {
+		TriplePattern triple;
 		
 		if (!subjectIsConcrete) {
 			if (!predicateIsConcrete) {
 				if (!objectIsConcrete) {
-					triple = new TripleStar(Variable.ANY,Variable.ANY,Variable.ANY);
+					triple = new TriplePattern(Variable.ANY,Variable.ANY,Variable.ANY);
 				} else {
-					triple = new TripleStar(Variable.ANY, Variable.ANY, object);
+					triple = new TriplePattern(Variable.ANY, Variable.ANY, object);
 				}
 			} else {
 				if (!objectIsConcrete) {
-					triple = new TripleStar(Variable.ANY,predicate,Variable.ANY);
+					triple = new TriplePattern(Variable.ANY,predicate,Variable.ANY);
 				} else {
-					triple = new TripleStar(Variable.ANY,predicate,object);
+					triple = new TriplePattern(Variable.ANY,predicate,object);
 				}
 			}
 		} else {
 			if (!predicateIsConcrete) {
 				if (!objectIsConcrete) {
-					triple = new TripleStar(subject,Variable.ANY,Variable.ANY);
+					triple = new TriplePattern(subject,Variable.ANY,Variable.ANY);
 				} else {
-					triple = new TripleStar(subject, Variable.ANY, object);
+					triple = new TriplePattern(subject, Variable.ANY, object);
 				}
 			} else {
 				if (!objectIsConcrete) {
-					triple = new TripleStar(subject,predicate,Variable.ANY);
+					triple = new TriplePattern(subject,predicate,Variable.ANY);
 				} else {
-					triple = new TripleStar(subject,predicate,object);
+					triple = new TriplePattern(subject,predicate,object);
 				}
 			}
 		}
