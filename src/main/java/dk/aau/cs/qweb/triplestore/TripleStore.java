@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.triplestore;
 
+import java.util.Collections;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -115,18 +117,22 @@ public class TripleStore {
          dramatically - specifically on the not-galen.owl ontology.
      */
     public ExtendedIterator<TripleStar> find( TriplePattern t ) {
-         if (t.isSubjectConcrete() && t.isPredicateConcrete())
-             return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
-         else if (t.isObjectConcrete() && t.isSubjectConcrete())
-             return new TripleStoreIterator( parent, OSP.iterator( t ), OSP, SPO, POS );
-         else if (t.isPredicateConcrete() && t.isObjectConcrete())
-             return new TripleStoreIterator( parent, POS.iterator( t ), POS, SPO, OSP );
-         else if (t.isSubjectConcrete()) 
-        	 return new TripleStoreIterator( parent, SPO.iterator( t ), SPO, POS, OSP );
-         else if (t.isObjectConcrete()) 
-        	 return new TripleStoreIterator( parent, OSP.iterator( t ), OSP, SPO, POS );
-         else if (t.isPredicateConcrete()) 
-        	 return new TripleStoreIterator( parent, POS.iterator( t ), POS, SPO, OSP );
-         else return new TripleStoreIterator( parent, SPO.iterateAll(), SPO, POS, OSP );
+    	if (!t.doesAllKeysExistInDictionary()) {
+			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
+		}
+    	
+		if (t.isSubjectConcrete() && t.isPredicateConcrete())
+		    return new TripleStoreIterator( parent, SPO.iterator( t ));
+		else if (t.isObjectConcrete() && t.isSubjectConcrete())
+		    return new TripleStoreIterator( parent, OSP.iterator( t ));
+		else if (t.isPredicateConcrete() && t.isObjectConcrete())
+		    return new TripleStoreIterator( parent, POS.iterator( t ));
+		else if (t.isSubjectConcrete()) 
+			return new TripleStoreIterator( parent, SPO.iterator( t ));
+		else if (t.isObjectConcrete()) 
+			return new TripleStoreIterator( parent, OSP.iterator( t ));
+		else if (t.isPredicateConcrete()) 
+			return new TripleStoreIterator( parent, POS.iterator( t ));
+		else return new TripleStoreIterator( parent, SPO.iterateAll());
     }
 }
