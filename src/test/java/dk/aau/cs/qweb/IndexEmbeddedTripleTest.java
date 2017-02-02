@@ -28,7 +28,6 @@ public class IndexEmbeddedTripleTest {
     	SPO = new Index(Field.S,Field.P,Field.O);
     	POS = new Index(Field.P,Field.O,Field.S);
     	OSP = new Index(Field.P,Field.O,Field.S);
-    	kf = new KeyFactory();
     	
 //    	KeyFactory kf = new KeyFactory();
 //		Key embeddedTriple1 = kf.createKey(1, 2, 3);
@@ -49,11 +48,11 @@ public class IndexEmbeddedTripleTest {
 	@Test
 	public void lookupEmbeddedTripleSubjectPositionVariable() {
 		
-		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		TripleStar t1 = new TripleStar(embeddedTriple1,kf.createKey(4),kf.createKey(5));
+		Key embeddedTriple1 = KeyFactory.createKey(1, 2, 3);
+		TripleStar t1 = new TripleStar(embeddedTriple1,KeyFactory.createKey(4),KeyFactory.createKey(5));
 		POS.add(t1);
 		
-		TriplePattern triplePattern = new TriplePattern(Variable.ANY,kf.createKey(4),kf.createKey(5));
+		TriplePattern triplePattern = new TriplePattern(Variable.ANY,KeyFactory.createKey(4),KeyFactory.createKey(5));
 		Iterator<TripleStar> integer = POS.iterator(triplePattern);
 		int count = 0;
 		
@@ -69,11 +68,11 @@ public class IndexEmbeddedTripleTest {
 	@Test
 	public void lookupEmbeddedTripleObjectPositionVariable() {
 		
-		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		TripleStar t1 = new TripleStar(kf.createKey(5),kf.createKey(4),embeddedTriple1);
+		Key embeddedTriple1 = KeyFactory.createKey(1, 2, 3);
+		TripleStar t1 = new TripleStar(KeyFactory.createKey(5),KeyFactory.createKey(4),embeddedTriple1);
 		SPO.add(t1);
 		
-		TriplePattern triplePattern = new TriplePattern(kf.createKey(5),kf.createKey(4),Variable.ANY);
+		TriplePattern triplePattern = new TriplePattern(KeyFactory.createKey(5),KeyFactory.createKey(4),Variable.ANY);
 		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
@@ -89,12 +88,12 @@ public class IndexEmbeddedTripleTest {
 	@Test
 	public void lookupEmbeddedTripleSubjectObjectPositionVariable() {
 		
-		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		Key embeddedTriple2 = kf.createKey(4, 5, 6);
-		TripleStar t1 = new TripleStar(embeddedTriple2,kf.createKey(7),embeddedTriple1);
+		Key embeddedTriple1 = KeyFactory.createKey(1, 2, 3);
+		Key embeddedTriple2 = KeyFactory.createKey(4, 5, 6);
+		TripleStar t1 = new TripleStar(embeddedTriple2,KeyFactory.createKey(7),embeddedTriple1);
 		OSP.add(t1);
 		
-		TriplePattern triplePattern = new TriplePattern(Variable.ANY,kf.createKey(7),Variable.ANY);
+		TriplePattern triplePattern = new TriplePattern(Variable.ANY,KeyFactory.createKey(7),Variable.ANY);
 		Iterator<TripleStar> integer = OSP.iterator(triplePattern);
 		int count = 0;
 		
@@ -110,18 +109,18 @@ public class IndexEmbeddedTripleTest {
 	@Test
 	public void lookupEmbeddedTripleObjectWithMixedData() {
 		
-		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-		TripleStar t1 = new TripleStar(kf.createKey(4),kf.createKey(5),embeddedTriple1);
-		TripleStar t2 = new TripleStar(kf.createKey(4),kf.createKey(6),kf.createKey(7));
-		TripleStar t3 = new TripleStar(kf.createKey(4),kf.createKey(5),kf.createKey(8));
-		TripleStar t4 = new TripleStar(kf.createKey(1),kf.createKey(2),kf.createKey(3));
+		Key embeddedTriple1 = KeyFactory.createKey(1, 2, 3);
+		TripleStar t1 = new TripleStar(KeyFactory.createKey(4),KeyFactory.createKey(5),embeddedTriple1);
+		TripleStar t2 = new TripleStar(KeyFactory.createKey(4),KeyFactory.createKey(6),KeyFactory.createKey(7));
+		TripleStar t3 = new TripleStar(KeyFactory.createKey(4),KeyFactory.createKey(5),KeyFactory.createKey(8));
+		TripleStar t4 = new TripleStar(KeyFactory.createKey(1),KeyFactory.createKey(2),KeyFactory.createKey(3));
 		
 		SPO.add(t1);
 		SPO.add(t2);
 		SPO.add(t3);
 		SPO.add(t4);
 		
-		TriplePattern triplePattern = new TriplePattern(kf.createKey(4),kf.createKey(5),Variable.ANY);
+		TriplePattern triplePattern = new TriplePattern(KeyFactory.createKey(4),KeyFactory.createKey(5),Variable.ANY);
 		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
