@@ -45,7 +45,7 @@ public class TurtleStarReaderSeventiesShowTest {
 			count++;
 		}
 		
-		assertEquals(count,3);
+		assertEquals(3,count);
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ public class TurtleStarReaderSeventiesShowTest {
 			count++;
 		}
 		
-		assertEquals(count,3);
+		assertEquals(3,count);
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class TurtleStarReaderSeventiesShowTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 
 }

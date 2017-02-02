@@ -44,7 +44,7 @@ public class TurtleStarReaderSpidermanTest {
 			count++;
 		}
 		
-		assertEquals(count,2);
+		assertEquals(2,count);
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class TurtleStarReaderSpidermanTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 	
 	@Test
@@ -82,7 +82,7 @@ public class TurtleStarReaderSpidermanTest {
 			count++;
 		}
 		
-		assertEquals(count,2);
+		assertEquals(2,count);
 	}
 
 }

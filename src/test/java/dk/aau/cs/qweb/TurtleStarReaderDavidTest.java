@@ -45,7 +45,7 @@ public class TurtleStarReaderDavidTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 	
 	@Test
@@ -64,6 +64,6 @@ public class TurtleStarReaderDavidTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 }
