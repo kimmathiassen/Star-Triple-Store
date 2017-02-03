@@ -8,7 +8,7 @@ import org.apache.jena.graph.Triple;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
-import dk.aau.cs.qweb.triple.TriplePattern;
+import dk.aau.cs.qweb.triple.TripleStar;
 
 public class DictionaryTest {
 
@@ -20,11 +20,11 @@ public class DictionaryTest {
 		Triple original = Triple.create(subject, predicate, object);
 		
 		MyDictionary dict = MyDictionary.getInstance();
-		TriplePattern idTriple = dict.createTriplePattern(original);
+		TripleStar idTriple = dict.createTriple(original);
 		
-		Node subjectNode = dict.getNode(idTriple.getSubjectKey());
-		Node predicateNode = dict.getNode(idTriple.getPredicateKey());
-		Node objectNode = dict.getNode(idTriple.getObjectKey());
+		Node subjectNode = dict.getNode(idTriple.subjectId);
+		Node predicateNode = dict.getNode(idTriple.predicateId);
+		Node objectNode = dict.getNode(idTriple.objectId);
 		
 		assertEquals(subject, subjectNode);
 		assertEquals(predicate, predicateNode);
