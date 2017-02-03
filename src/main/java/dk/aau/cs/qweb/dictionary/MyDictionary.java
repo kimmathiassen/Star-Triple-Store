@@ -112,8 +112,8 @@ public class MyDictionary {
 		Key object = registerKey(embeddedNode.getObject());
 		
 		Key embeddedTriple = KeyFactory.createKey(subject.getId(), predicate.getId(), object.getId());
-		id2Node.put(embeddedTriple, node);
-		node2Id.put(node,embeddedTriple);
+//		id2Node.put(embeddedTriple, node);
+//		node2Id.put(node,embeddedTriple);
 		return embeddedTriple;
 	}
 
