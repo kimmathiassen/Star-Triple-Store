@@ -9,7 +9,7 @@ public class TripleStar {
 	public Key objectId;
 	
 	public TripleStar(Key subject, Key predicate, Key object) {
-		objectId = subject;
+		subjectId = subject;
 		predicateId = predicate;
 		objectId = object;
 	}
