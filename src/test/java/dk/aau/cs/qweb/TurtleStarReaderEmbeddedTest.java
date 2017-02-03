@@ -92,4 +92,23 @@ public class TurtleStarReaderEmbeddedTest {
 		
 		assertEquals(1,count);
 	}
+	
+	@Test
+	public void embeddedTriplesAreAddedAsNormalTriples() {
+		Node s1 = NodeFactory.createURI("http://example.org/kim");
+		Node p1 = NodeFactory.createURI("http://example.org/worksAt"); 
+		Node o1 = NodeFactory.createURI("http://example.org/aau");
+		
+		Triple triplePattern = new Triple(s1,p1,o1 );
+		
+		Iterator<Triple> iterator = g.graphBaseFind(triplePattern);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			iterator.next();
+			count++;
+		}
+		
+		assertEquals(1,count);
+	}
 }

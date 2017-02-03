@@ -2,6 +2,8 @@ package dk.aau.cs.qweb;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -20,7 +22,8 @@ public class DictionaryTest {
 		Triple original = Triple.create(subject, predicate, object);
 		
 		MyDictionary dict = MyDictionary.getInstance();
-		TripleStar idTriple = dict.createTriple(original);
+		List<TripleStar> idTriples = dict.createTriple(original);
+		TripleStar idTriple = idTriples.get(0);
 		
 		Node subjectNode = dict.getNode(idTriple.subjectId);
 		Node predicateNode = dict.getNode(idTriple.predicateId);

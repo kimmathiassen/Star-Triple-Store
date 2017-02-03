@@ -1,6 +1,8 @@
 package dk.aau.cs.qweb.dictionary;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -89,13 +91,29 @@ public class MyDictionary {
 		}
 	}
 
-
-	public TripleStar createTriple(Triple t) {
+	public List<TripleStar> createTriple(Triple t) {
+		List<TripleStar> triples = new ArrayList<TripleStar>();
 		Key subject = nodeToKey(t.getSubject());
 		Key predicate = nodeToKey(t.getPredicate());
 		Key object = nodeToKey(t.getObject());
-				
-		return new TripleStar(subject,predicate,object);
+		
+		if (BitHelper.isIdAnEmbeddedTriple(subject)) {
+			Key s1 = new Key(BitHelper.getEmbeddedSubject(subject));
+			Key p1 = new Key(BitHelper.getEmbeddedSubject(subject));
+			Key o1 = new Key(BitHelper.getEmbeddedSubject(subject));
+			triples.add(new TripleStar(s1,p1,o1));
+		}
+		
+		if (BitHelper.isIdAnEmbeddedTriple(object)) {
+			Key s2 = new Key(BitHelper.getEmbeddedSubject(object));
+			Key p2 = new Key(BitHelper.getEmbeddedSubject(object));
+			Key o2 = new Key(BitHelper.getEmbeddedSubject(object));
+			triples.add(new TripleStar(s2,p2,o2));
+		}
+		
+		triples.add(new TripleStar(subject,predicate,object));
+		
+		return triples;
 	}
 
 	private Key nodeToKey(Node node) {

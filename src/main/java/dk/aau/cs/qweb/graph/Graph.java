@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.graph;
 
+import java.util.List;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.GraphEventManager;
 import org.apache.jena.graph.GraphEvents;
@@ -11,6 +13,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
 import dk.aau.cs.qweb.triple.TriplePattern;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.TripleStore;
 
 public class Graph extends GraphBase {
@@ -60,7 +63,10 @@ public class Graph extends GraphBase {
     public void performAdd( Triple t )
     { 
     	MyDictionary dict = MyDictionary.getInstance();
-    	store.add( dict.createTriple(t) ); 
+    	List<TripleStar> triples = dict.createTriple(t);
+    	for (TripleStar tripleStar : triples) {
+    		store.add( tripleStar ); 
+		}
     }
     
     public void performDelete( Triple t )
