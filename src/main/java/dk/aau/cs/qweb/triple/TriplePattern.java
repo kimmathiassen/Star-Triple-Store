@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import org.apache.jena.reasoner.IllegalParameterException;
 
-import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TriplePattern {
@@ -333,11 +332,19 @@ public class TriplePattern {
 
 	public Key getKey(Field field) {
 		if (field == Field.S) {
-			return subjectId;
+			if (subjectIsTriplePattern) {
+				return KeyFactory.createKey(subjectTriplePattern.getSubjectKey(), subjectTriplePattern.getPredicateKey(), subjectTriplePattern.getObjectKey());
+			} else {
+				return subjectId;
+			}
 		} else if (field == Field.P) {
 			return predicateId;
 		} else if (field == Field.O) {
-			return objectId;
+			if (subjectIsTriplePattern) {
+				return KeyFactory.createKey(objectTriplePattern.getSubjectKey(), objectTriplePattern.getPredicateKey(), objectTriplePattern.getObjectKey());
+			} else {
+				return objectId;
+			}
 		}
 		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}

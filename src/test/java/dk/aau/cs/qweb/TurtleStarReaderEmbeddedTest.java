@@ -92,6 +92,4 @@ public class TurtleStarReaderEmbeddedTest {
 		
 		assertEquals(1,count);
 	}
-	
-	
 }
