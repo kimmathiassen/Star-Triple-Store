@@ -22,9 +22,9 @@ public class DictionaryTest {
 		MyDictionary dict = MyDictionary.getInstance();
 		TriplePattern idTriple = dict.createTriplePattern(original);
 		
-		Node subjectNode = dict.getNode(idTriple.getSubject());
-		Node predicateNode = dict.getNode(idTriple.getPredicate());
-		Node objectNode = dict.getNode(idTriple.getObject());
+		Node subjectNode = dict.getNode(idTriple.getSubjectKey());
+		Node predicateNode = dict.getNode(idTriple.getPredicateKey());
+		Node objectNode = dict.getNode(idTriple.getObjectKey());
 		
 		assertEquals(subject, subjectNode);
 		assertEquals(predicate, predicateNode);

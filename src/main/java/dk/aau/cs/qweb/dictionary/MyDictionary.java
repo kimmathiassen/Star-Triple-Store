@@ -37,31 +37,58 @@ public class MyDictionary {
 		TriplePatternBuilder builder = new TriplePatternBuilder();
 		
 		if (t.getSubject().isConcrete()) {
-			if (node2Id.containsKey(t.getSubject())) {
-				builder.setSubject(node2Id.get(t.getSubject()));
+			if (t.getSubject() instanceof Node_Triple) {
+				builder.setSubject(convertEmbeddedTriplePatternNode(t.getSubject()));
 			} else {
-				builder.setSubject(new Key(0));
+				builder.setSubject(getKey(t.getSubject()));
 			}
 		}
 		
 		if (t.getPredicate().isConcrete()) {
-			if (node2Id.containsKey(t.getPredicate())) {
-				builder.setPredicate(node2Id.get(t.getPredicate()));
-			} else {
-				builder.setPredicate(new Key(0));
-			}
+			builder.setPredicate(getKey(t.getPredicate()));
 		}
 		
 		if (t.getObject().isConcrete()) {
-			if (node2Id.containsKey(t.getObject())) {
-				builder.setObject(node2Id.get(t.getObject()));
+			if (t.getObject() instanceof Node_Triple) {
+				builder.setObject(convertEmbeddedTriplePatternNode(t.getObject()));
 			} else {
-				builder.setObject(new Key(0));
+				builder.setObject(getKey(t.getObject()));
 			}
 		}
 		
 		return builder.createTriplePatter();
 	}
+
+	private TriplePattern convertEmbeddedTriplePatternNode(Node embeddedNode) {
+		Node_Triple embedded = (Node_Triple) embeddedNode ;
+		Node subjectNode = embedded.getSubject();
+		Node predicateNode = embedded.getPredicate();
+		Node objectNode = embedded.getObject();
+		TriplePatternBuilder builder = new TriplePatternBuilder();
+		
+		if (subjectNode.isConcrete()) {
+			builder.setSubject(getKey(subjectNode));
+		} 
+		
+		if (subjectNode.isConcrete()) {
+			builder.setPredicate(getKey(predicateNode));
+		} 
+		
+		if (subjectNode.isConcrete()) {
+			builder.setObject(getKey(objectNode));
+		} 
+		
+		return builder.createTriplePatter();
+	}
+
+	private Key getKey(Node node) {
+		if (node2Id.containsKey(node)) {
+			return node2Id.get(node);
+		} else {
+			return  new Key(0);
+		}
+	}
+
 
 	public TripleStar createTriple(Triple t) {
 		Key subject;
