@@ -51,28 +51,25 @@ public class TriplePatternBuilder {
 	}
 
 	public TriplePattern createTriplePatter() {
-		TriplePattern triple;
-		
 		if (!subjectIsConcrete) {
 			if (!predicateIsConcrete) {
 				if (!objectIsConcrete) {
-					triple = new TriplePattern(Variable.ANY,Variable.ANY,Variable.ANY);
+					return new TriplePattern(Variable.ANY,Variable.ANY,Variable.ANY);
 				} else {
 					if (objectIsTriplePattern) {
-						triple = new TriplePattern(Variable.ANY, Variable.ANY, objectTriplePattern);
+						return new TriplePattern(Variable.ANY, Variable.ANY, objectTriplePattern);
 					} else {
-						triple = new TriplePattern(Variable.ANY, Variable.ANY, object);
+						return new TriplePattern(Variable.ANY, Variable.ANY, object);
 					}
 				}
 			} else {
 				if (!objectIsConcrete) {
-					triple = new TriplePattern(Variable.ANY,predicate,Variable.ANY);
+					return new TriplePattern(Variable.ANY,predicate,Variable.ANY);
 				} else {
 					if (objectIsTriplePattern) {
-						triple = new TriplePattern(Variable.ANY,predicate,objectTriplePattern);
+						return new TriplePattern(Variable.ANY,predicate,objectTriplePattern);
 					} else {
-						triple = new TriplePattern(Variable.ANY,predicate,object);
-						
+						return new TriplePattern(Variable.ANY,predicate,object);
 					}
 				}
 			}
@@ -80,72 +77,41 @@ public class TriplePatternBuilder {
 			if (!predicateIsConcrete) {
 				if (!objectIsConcrete) {
 					if (subjectIsTriplePattern) {
-						triple = new TriplePattern(subjectTriplePattern,Variable.ANY,Variable.ANY);
+						return new TriplePattern(subjectTriplePattern,Variable.ANY,Variable.ANY);
 					} else {
-						triple = new TriplePattern(subject,Variable.ANY,Variable.ANY);
+						return new TriplePattern(subject,Variable.ANY,Variable.ANY);
 					}
 					
 				} else {
 					if (objectIsTriplePattern && subjectIsTriplePattern) {
-						triple = new TriplePattern(subjectTriplePattern, Variable.ANY, objectTriplePattern);
+						return new TriplePattern(subjectTriplePattern, Variable.ANY, objectTriplePattern);
 					} else if (subjectIsTriplePattern) {
-						triple = new TriplePattern(subjectTriplePattern, Variable.ANY, object);
+						return new TriplePattern(subjectTriplePattern, Variable.ANY, object);
 					} else if (objectIsTriplePattern) {
-						triple = new TriplePattern(subject, Variable.ANY, objectTriplePattern);
+						return new TriplePattern(subject, Variable.ANY, objectTriplePattern);
 					} else {
-						triple = new TriplePattern(subject, Variable.ANY, object);
+						return new TriplePattern(subject, Variable.ANY, object);
 					}
 				}
 			} else {
 				if (!objectIsConcrete) {
 					if (subjectIsTriplePattern) {
-						triple = new TriplePattern(subjectTriplePattern,predicate,Variable.ANY);
+						return new TriplePattern(subjectTriplePattern,predicate,Variable.ANY);
 					} else {
-						triple = new TriplePattern(subject,predicate,Variable.ANY);
+						return new TriplePattern(subject,predicate,Variable.ANY);
 					}
 				} else {
 					if (objectIsTriplePattern && subjectIsTriplePattern) {
-						triple = new TriplePattern(subjectTriplePattern,predicate,objectTriplePattern);
+						return new TriplePattern(subjectTriplePattern,predicate,objectTriplePattern);
 					} else if (subjectIsTriplePattern) {
-						triple = new TriplePattern(subjectTriplePattern,predicate,object);
+						return new TriplePattern(subjectTriplePattern,predicate,object);
 					} else if (objectIsTriplePattern) {
-						triple = new TriplePattern(subject,predicate,objectTriplePattern);
+						return new TriplePattern(subject,predicate,objectTriplePattern);
 					} else {
-						triple = new TriplePattern(subject,predicate,object);
+						return new TriplePattern(subject,predicate,object);
 					}
 				}
 			}
 		}
-		
-		if (!subjectIsConcrete) {
-			if (!predicateIsConcrete) {
-				if (!objectIsConcrete) {
-					triple = new TriplePattern(Variable.ANY,Variable.ANY,Variable.ANY);
-				} else {
-					triple = new TriplePattern(Variable.ANY, Variable.ANY, object);
-				}
-			} else {
-				if (!objectIsConcrete) {
-					triple = new TriplePattern(Variable.ANY,predicate,Variable.ANY);
-				} else {
-					triple = new TriplePattern(Variable.ANY,predicate,object);
-				}
-			}
-		} else {
-			if (!predicateIsConcrete) {
-				if (!objectIsConcrete) {
-					triple = new TriplePattern(subject,Variable.ANY,Variable.ANY);
-				} else {
-					triple = new TriplePattern(subject, Variable.ANY, object);
-				}
-			} else {
-				if (!objectIsConcrete) {
-					triple = new TriplePattern(subject,predicate,Variable.ANY);
-				} else {
-					triple = new TriplePattern(subject,predicate,object);
-				}
-			}
-		}
-		return triple;
 	}
 }
