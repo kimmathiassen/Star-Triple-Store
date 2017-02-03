@@ -57,7 +57,6 @@ public class MyDictionary {
 				builder.setObject(getKey(t.getObject()));
 			}
 		}
-		
 		return builder.createTriplePatter();
 	}
 
@@ -72,14 +71,13 @@ public class MyDictionary {
 			builder.setSubject(getKey(subjectNode));
 		} 
 		
-		if (subjectNode.isConcrete()) {
+		if (predicateNode.isConcrete()) {
 			builder.setPredicate(getKey(predicateNode));
 		} 
 		
-		if (subjectNode.isConcrete()) {
+		if (objectNode.isConcrete()) {
 			builder.setObject(getKey(objectNode));
 		} 
-		
 		return builder.createTriplePatter();
 	}
 
@@ -105,7 +103,7 @@ public class MyDictionary {
 			Node_Triple embeddedNode = (Node_Triple) node;
 			Key s1 = registerOrGetNode(embeddedNode.getSubject());
 			Key p1 = registerOrGetNode(embeddedNode.getPredicate());
-			Key o1 = registerOrGetNode(embeddedNode.getSubject());
+			Key o1 = registerOrGetNode(embeddedNode.getObject());
 			
 			return KeyFactory.createKey(s1, p1, o1);
 		} else {
