@@ -27,7 +27,7 @@ public class TripleStar {
 	public boolean equals(Object other) {
 		if (other instanceof TripleStar) {
 			TripleStar casted = (TripleStar)other;
-			return (this.subjectId == casted.subjectId && this.predicateId == casted.predicateId && this.objectId == casted.objectId);
+			return (this.subjectId.equals(casted.subjectId) && this.predicateId.equals(casted.predicateId) && this.objectId.equals(casted.objectId));
 		} else {
 			return super.equals(other);
 		}
