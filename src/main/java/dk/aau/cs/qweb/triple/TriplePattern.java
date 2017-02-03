@@ -343,20 +343,32 @@ public class TriplePattern {
 	}
 
 	public boolean doesAllKeysExistInDictionary() {
-		if (subjectId.equals(0) || predicateId.equals(0) || objectId.equals(0)) {
-			return false;
-		} else if (BitHelper.isIdAnEmbeddedTriple(subjectId)) { // check if any elements in an embedded triple is zero.
-			if (BitHelper.isThereAnyKeysSetToZeroInEmbeddedId(subjectId)) {
-				return false;
-			}
-		} else if (BitHelper.isIdAnEmbeddedTriple(objectId)) {
-			if (BitHelper.isThereAnyKeysSetToZeroInEmbeddedId(objectId)) {
-				return false;
-			}
-		}
-		return true;
+		return !check(this);
 	}
 
+	private boolean check(TriplePattern triplePattern) {
+		boolean subjectExistInDict = false;
+		boolean predicateExistInDict = false;
+		boolean objectExistInDict = false;
+		if (triplePattern.subjectIsConcrete) {
+			if (triplePattern.subjectIsTriplePattern) {
+				subjectExistInDict = check(triplePattern.subjectTriplePattern);
+			} else {
+				subjectExistInDict = triplePattern.subjectId.getId() == 0 ? true : false;
+			}
+		}
+		if (triplePattern.predicateIsConcrete) {
+			predicateExistInDict = triplePattern.predicateId.getId() == 0 ? true : false;
+		}
+		if (triplePattern.objectIsConcrete) {
+			if (triplePattern.objectIsTriplePattern) {
+				objectExistInDict = check(triplePattern.objectTriplePattern);
+			} else {
+				objectExistInDict = triplePattern.objectId.getId() == 0 ? true : false;
+			}
+		}
+		return subjectExistInDict && predicateExistInDict && objectExistInDict;
+	}
 
 	public void setSubjectTriplePattern(TriplePattern subjectTriplePattern) {
 		this.subjectTriplePattern = subjectTriplePattern;
