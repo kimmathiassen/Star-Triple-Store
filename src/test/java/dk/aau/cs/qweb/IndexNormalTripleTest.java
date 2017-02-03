@@ -72,7 +72,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,2);
+		assertEquals(2,count);
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,2);
+		assertEquals(2,count);
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,4);
+		assertEquals(4,count);
 	}
 	
 	@Test
@@ -117,7 +117,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,2);
+		assertEquals(2,count);
 	}
 	
 	@Test
@@ -132,7 +132,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 	
 	@Test
@@ -147,7 +147,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 	
 	@Test
@@ -162,7 +162,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,0);
+		assertEquals(0,count);
 	}
 	
 	@Test
@@ -177,7 +177,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,0);
+		assertEquals(0,count);
 	}
 	
 	@Test
@@ -198,7 +198,7 @@ public class IndexNormalTripleTest {
 			count++;
 		}
 		
-		assertEquals(count,1);
+		assertEquals(1,count);
 	}
 	
 	
