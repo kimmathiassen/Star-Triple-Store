@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.main.queryparser;
+package dk.aau.cs.qweb.main.queryserializer;
 
 import java.io.OutputStream;
 import java.util.List;

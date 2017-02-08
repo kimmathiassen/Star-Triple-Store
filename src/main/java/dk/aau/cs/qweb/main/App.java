@@ -23,9 +23,9 @@ import org.apache.jena.sparql.serializer.SerializerRegistry;
 import org.apache.jena.vocabulary.DC;
 
 import dk.aau.cs.qweb.graph.Graph;
-import dk.aau.cs.qweb.main.queryparser.QuerySerializerFactoryStar;
 import dk.aau.cs.qweb.main.queryparser.SPARQLParserFactoryStar;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
+import dk.aau.cs.qweb.main.queryserializer.QuerySerializerFactoryStar;
 import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
@@ -62,11 +62,6 @@ public class App {
         Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
         
         
-        
-    
-        
-        
-        query.toString();
         
         try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
             // Or QueryExecutionFactory.create(queryString, model) ;

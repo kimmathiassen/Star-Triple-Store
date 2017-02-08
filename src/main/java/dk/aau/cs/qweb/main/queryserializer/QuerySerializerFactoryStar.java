@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.main.queryparser;
+package dk.aau.cs.qweb.main.queryserializer;
 
 import org.apache.jena.atlas.io.IndentedWriter;
 import org.apache.jena.query.QueryVisitor;
@@ -9,6 +9,8 @@ import org.apache.jena.sparql.serializer.FmtTemplate;
 import org.apache.jena.sparql.serializer.QuerySerializerFactory;
 import org.apache.jena.sparql.serializer.SerializationContext;
 import org.apache.jena.sparql.util.NodeToLabelMapBNode;
+
+import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
 
 public class QuerySerializerFactoryStar implements QuerySerializerFactory {
 
