@@ -1,5 +1,10 @@
 package dk.aau.cs.qweb.triple;
 
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.core.Var;
+
+import dk.aau.cs.qweb.dictionary.MyDictionary;
+import dk.aau.cs.qweb.model.Node_Triple;
 import dk.aau.cs.qweb.triple.TripleStarPattern.Variable;
 
 public class TriplePatternBuilder {
@@ -111,6 +116,47 @@ public class TriplePatternBuilder {
 						return new TripleStarPattern(subject,predicate,object);
 					}
 				}
+			}
+		}
+	}
+
+	public void setSubject(final Node subject) {
+		if (!Var.isVar(subject)) {
+			if (subject instanceof Node_Triple) {
+				subjectIsTriplePattern = true;
+				subjectTriplePattern = createEmbeddedTriplePattern(subject);
+			} else {
+				MyDictionary dict = MyDictionary.getInstance();
+				this.subject = dict.getKey(subject);
+			}
+		}
+	}
+
+	private TripleStarPattern createEmbeddedTriplePattern(final Node node) {
+		Node_Triple embeddedNode = (Node_Triple) node;
+		
+		TriplePatternBuilder builder = new TriplePatternBuilder();
+		builder.setSubject(embeddedNode.getSubject());
+		builder.setSubject(embeddedNode.getPredicate());
+		builder.setSubject(embeddedNode.getObject());
+		return builder.createTriplePatter();
+	}
+
+	public void setPredicate(final Node predicate) {
+		if (!Var.isVar(predicate)) {
+			MyDictionary dict = MyDictionary.getInstance();
+			this.predicate = dict.getKey(predicate);
+		}
+	}
+
+	public void setObject(final Node object) {
+		if (!Var.isVar(object)) {
+			if (object instanceof Node_Triple) {
+				objectIsTriplePattern = true;
+				objectTriplePattern = createEmbeddedTriplePattern(object);
+			} else {
+				MyDictionary dict = MyDictionary.getInstance();
+				this.object = dict.getKey(object);
 			}
 		}
 	}
