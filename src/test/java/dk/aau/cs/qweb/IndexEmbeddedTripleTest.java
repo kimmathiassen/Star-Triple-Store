@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
-import dk.aau.cs.qweb.triple.TriplePattern;
-import dk.aau.cs.qweb.triple.TriplePattern.Variable;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triple.TripleStarPattern.Variable;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.Index.Field;
@@ -52,7 +52,7 @@ public class IndexEmbeddedTripleTest {
 		TripleStar t1 = new TripleStar(embeddedTriple1,KeyFactory.createKey(4),KeyFactory.createKey(5));
 		POS.add(t1);
 		
-		TriplePattern triplePattern = new TriplePattern(Variable.ANY,KeyFactory.createKey(4),KeyFactory.createKey(5));
+		TripleStarPattern triplePattern = new TripleStarPattern(Variable.ANY,KeyFactory.createKey(4),KeyFactory.createKey(5));
 		Iterator<TripleStar> integer = POS.iterator(triplePattern);
 		int count = 0;
 		
@@ -72,7 +72,7 @@ public class IndexEmbeddedTripleTest {
 		TripleStar t1 = new TripleStar(KeyFactory.createKey(5),KeyFactory.createKey(4),embeddedTriple1);
 		SPO.add(t1);
 		
-		TriplePattern triplePattern = new TriplePattern(KeyFactory.createKey(5),KeyFactory.createKey(4),Variable.ANY);
+		TripleStarPattern triplePattern = new TripleStarPattern(KeyFactory.createKey(5),KeyFactory.createKey(4),Variable.ANY);
 		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
@@ -93,7 +93,7 @@ public class IndexEmbeddedTripleTest {
 		TripleStar t1 = new TripleStar(embeddedTriple2,KeyFactory.createKey(7),embeddedTriple1);
 		OSP.add(t1);
 		
-		TriplePattern triplePattern = new TriplePattern(Variable.ANY,KeyFactory.createKey(7),Variable.ANY);
+		TripleStarPattern triplePattern = new TripleStarPattern(Variable.ANY,KeyFactory.createKey(7),Variable.ANY);
 		Iterator<TripleStar> integer = OSP.iterator(triplePattern);
 		int count = 0;
 		
@@ -120,7 +120,7 @@ public class IndexEmbeddedTripleTest {
 		SPO.add(t3);
 		SPO.add(t4);
 		
-		TriplePattern triplePattern = new TriplePattern(KeyFactory.createKey(4),KeyFactory.createKey(5),Variable.ANY);
+		TripleStarPattern triplePattern = new TripleStarPattern(KeyFactory.createKey(4),KeyFactory.createKey(5),Variable.ANY);
 		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		

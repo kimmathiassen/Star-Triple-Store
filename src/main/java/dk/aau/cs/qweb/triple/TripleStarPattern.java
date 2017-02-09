@@ -6,13 +6,13 @@ import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
-public class TriplePattern {
+public class TripleStarPattern {
 
 	private Key subjectId;
 	private Key predicateId;
 	private Key objectId;
-	private TriplePattern subjectTriplePattern;
-	private TriplePattern objectTriplePattern;
+	private TripleStarPattern subjectTriplePattern;
+	private TripleStarPattern objectTriplePattern;
 	private boolean subjectIsConcrete = false;
 	private boolean predicateIsConcrete = false;
 	private boolean objectIsConcrete = false;
@@ -38,88 +38,88 @@ public class TriplePattern {
 		objectIsConcrete = true;
 	}
 
-	public TriplePattern(Variable variableA, Variable variableB, Variable variableC) {
+	public TripleStarPattern(Variable variableA, Variable variableB, Variable variableC) {
 	}
 
-	public TriplePattern(Variable variableA, Variable variableB, Key object) {
+	public TripleStarPattern(Variable variableA, Variable variableB, Key object) {
 		setObject(object);
 	}
 
-	public TriplePattern(Variable subjectVariableName, Key predicate, Variable objectVariableName) {
+	public TripleStarPattern(Variable subjectVariableName, Key predicate, Variable objectVariableName) {
 		setPredicate(predicate);
 	}
 
-	public TriplePattern(Variable subjectVariableName, Key predicate, Key object) {
+	public TripleStarPattern(Variable subjectVariableName, Key predicate, Key object) {
 		setPredicate(predicate);
 		setObject(object);
 	}
 
-	public TriplePattern(final Key subject, Variable predicateVariableName, Variable objectVariableName) {
+	public TripleStarPattern(final Key subject, Variable predicateVariableName, Variable objectVariableName) {
 		setSubject(subject);
 	}
 
-	public TriplePattern(Key subject, Variable predicateVariableName, Key object) {
+	public TripleStarPattern(Key subject, Variable predicateVariableName, Key object) {
 		setSubject(subject);
 		setObject(object);
 	}
 
-	public TriplePattern(Key subject, Key predicate, Variable objectVariableName) {
+	public TripleStarPattern(Key subject, Key predicate, Variable objectVariableName) {
 		setPredicate(predicate);
 		setSubject(subject);
 	}
 
-	public TriplePattern(Key subject, Key predicate, Key object) {
+	public TripleStarPattern(Key subject, Key predicate, Key object) {
 		setSubject(subject);
 		setPredicate(predicate);
 		setObject(object);
 	}
 	
-	public TriplePattern(TriplePattern subject, Key predicate, Key object) {
+	public TripleStarPattern(TripleStarPattern subject, Key predicate, Key object) {
 		setSubjectTriplePattern(subject);
 		setPredicate(predicate);
 		setObject(object);
 	}
 	
-	public TriplePattern(TriplePattern subject, Key predicate, Variable objectVariableName) {
+	public TripleStarPattern(TripleStarPattern subject, Key predicate, Variable objectVariableName) {
 		setSubjectTriplePattern(subject);
 		setPredicate(predicate);
 	}
 	
-	public TriplePattern(TriplePattern subject, Variable predicateVariableName, Variable objectVariableName) {
+	public TripleStarPattern(TripleStarPattern subject, Variable predicateVariableName, Variable objectVariableName) {
 		setSubjectTriplePattern(subject);
 	}
 	
-	public TriplePattern(TriplePattern subject, Variable predicateVariableNam, Key object) {
+	public TripleStarPattern(TripleStarPattern subject, Variable predicateVariableNam, Key object) {
 		setSubjectTriplePattern(subject);
 		setObject(object);
 	}
 	
-	public TriplePattern(TriplePattern subject, Key predicate, TriplePattern object) {
+	public TripleStarPattern(TripleStarPattern subject, Key predicate, TripleStarPattern object) {
 		setSubjectTriplePattern(subject);
 		setPredicate(predicate);
 		setObjectTriplePattern(object);
 	}
-	public TriplePattern(TriplePattern subject, Variable any, TriplePattern object) {
+	public TripleStarPattern(TripleStarPattern subject, Variable any, TripleStarPattern object) {
 		setSubjectTriplePattern(subject);
 		setObjectTriplePattern(object);
 	}
 	
-	public TriplePattern(Key subject, Key predicate, TriplePattern object) {
+	public TripleStarPattern(Key subject, Key predicate, TripleStarPattern object) {
 		setSubject(subject);
 		setPredicate(predicate);
 		setObjectTriplePattern(object);
 	}
 	
-	public TriplePattern(Variable subject, Key predicate, TriplePattern object) {
+	public TripleStarPattern(Variable subject, Key predicate, TripleStarPattern object) {
 		setPredicate(predicate);
 		setObjectTriplePattern(object);
 	}
 	
-	public TriplePattern(Variable subject, Variable predicate, TriplePattern object) {
+	public TripleStarPattern(Variable subject, Variable predicate, TripleStarPattern object) {
 		setObjectTriplePattern(object);
 	}
 	
-	public TriplePattern(Key subject, Variable predicate, TriplePattern object) {
+	public TripleStarPattern(Key subject, Variable predicate, TripleStarPattern object) {
 		setSubject(subject);
 		setObjectTriplePattern(object);
 	}
@@ -145,7 +145,7 @@ public class TriplePattern {
 		throw new UnsupportedOperationException("Subject is not concrete");
 	}
 	
-	public TriplePattern getObjectTriplePattern() {
+	public TripleStarPattern getObjectTriplePattern() {
 		if (objectIsConcrete) {
 			if (objectIsTriplePattern) {
 				return objectTriplePattern;
@@ -155,7 +155,7 @@ public class TriplePattern {
 		throw new UnsupportedOperationException("Object is not concrete");
 	}
 
-	public TriplePattern getSubjectTriplePattern() {
+	public TripleStarPattern getSubjectTriplePattern() {
 		if (subjectIsConcrete) {
 			if (subjectIsTriplePattern) {
 				return subjectTriplePattern;
@@ -353,7 +353,7 @@ public class TriplePattern {
 		return !check(this);
 	}
 
-	private boolean check(TriplePattern triplePattern) {
+	private boolean check(TripleStarPattern triplePattern) {
 		boolean subjectExistInDict = false;
 		boolean predicateExistInDict = false;
 		boolean objectExistInDict = false;
@@ -377,13 +377,13 @@ public class TriplePattern {
 		return subjectExistInDict && predicateExistInDict && objectExistInDict;
 	}
 
-	public void setSubjectTriplePattern(TriplePattern subjectTriplePattern) {
+	public void setSubjectTriplePattern(TripleStarPattern subjectTriplePattern) {
 		this.subjectTriplePattern = subjectTriplePattern;
 		subjectIsConcrete = true;
 		subjectIsTriplePattern = true;
 	}
 
-	public void setObjectTriplePattern(TriplePattern objectTriplePattern) {
+	public void setObjectTriplePattern(TripleStarPattern objectTriplePattern) {
 		this.objectTriplePattern = objectTriplePattern;
 		objectIsConcrete = true;
 		objectIsTriplePattern = true;

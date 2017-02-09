@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.NotImplementedException;
 
 import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triple.TriplePattern;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.TripleStar;
 
 public class Index   {
@@ -75,7 +75,7 @@ public class Index   {
 		throw new NotImplementedException("Index.contains");
 	}
 
-	public Iterator<TripleStar> iterator(TriplePattern triple) {
+	public Iterator<TripleStar> iterator(TripleStarPattern triple) {
 		Key firstKey = triple.getKey(field1);
 		if (indexMap.containsKey(firstKey)) {
 			if (triple.isConcrete(field2)) {

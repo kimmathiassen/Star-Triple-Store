@@ -8,7 +8,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.triple.TriplePattern;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
@@ -116,7 +116,7 @@ public class TripleStore {
          (ANY, P, O) searches on largish models with few predicates declined
          dramatically - specifically on the not-galen.owl ontology.
      */
-    public ExtendedIterator<TripleStar> find( TriplePattern t ) {
+    public ExtendedIterator<TripleStar> find( TripleStarPattern t ) {
     	if (!t.doesAllKeysExistInDictionary()) {
 			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
 		}

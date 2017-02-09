@@ -12,7 +12,7 @@ import dk.aau.cs.qweb.model.NodeFactoryStar;
 import dk.aau.cs.qweb.model.Node_Triple;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
-import dk.aau.cs.qweb.triple.TriplePattern;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStar;
 
@@ -35,34 +35,38 @@ public class MyDictionary {
 	    }
 	    return instance;
 	}
+	
+	
 
+	
 	// This methods seem over complicated but it is in order to be able to handle triple patterns
-	public TriplePattern createTriplePattern(Triple t) {
+	public TripleStarPattern createTriplePattern(Triple t) {
 		TriplePatternBuilder builder = new TriplePatternBuilder();
 		
 		if (t.getSubject().isConcrete()) {
 			if (t.getSubject() instanceof Node_Triple) {
 				builder.setSubject(convertEmbeddedTriplePatternNode(t.getSubject()));
 			} else {
-				builder.setSubject(getKey(t.getSubject()));
+				builder.setSubject(lookupKeyOrCreateNew(t.getSubject()));
 			}
 		}
 		
 		if (t.getPredicate().isConcrete()) {
-			builder.setPredicate(getKey(t.getPredicate()));
+			builder.setPredicate(lookupKeyOrCreateNew(t.getPredicate()));
 		}
 		
 		if (t.getObject().isConcrete()) {
 			if (t.getObject() instanceof Node_Triple) {
 				builder.setObject(convertEmbeddedTriplePatternNode(t.getObject()));
 			} else {
-				builder.setObject(getKey(t.getObject()));
+				builder.setObject(lookupKeyOrCreateNew(t.getObject()));
 			}
 		}
 		return builder.createTriplePatter();
 	}
+	
 
-	private TriplePattern convertEmbeddedTriplePatternNode(Node embeddedNode) {
+	private TripleStarPattern convertEmbeddedTriplePatternNode(Node embeddedNode) {
 		Node_Triple embedded = (Node_Triple) embeddedNode ;
 		Node subjectNode = embedded.getSubject();
 		Node predicateNode = embedded.getPredicate();
@@ -70,20 +74,20 @@ public class MyDictionary {
 		TriplePatternBuilder builder = new TriplePatternBuilder();
 		
 		if (subjectNode.isConcrete()) {
-			builder.setSubject(getKey(subjectNode));
+			builder.setSubject(lookupKeyOrCreateNew(subjectNode));
 		} 
 		
 		if (predicateNode.isConcrete()) {
-			builder.setPredicate(getKey(predicateNode));
+			builder.setPredicate(lookupKeyOrCreateNew(predicateNode));
 		} 
 		
 		if (objectNode.isConcrete()) {
-			builder.setObject(getKey(objectNode));
+			builder.setObject(lookupKeyOrCreateNew(objectNode));
 		} 
 		return builder.createTriplePatter();
 	}
 
-	private Key getKey(Node node) { //Only used in triple patterns 
+	private Key lookupKeyOrCreateNew(Node node) { //Only used in triple patterns 
 		if (node2Id.containsKey(node)) {
 			return node2Id.get(node);
 		} else {
