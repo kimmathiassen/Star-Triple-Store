@@ -36,9 +36,6 @@ public class MyDictionary {
 	    return instance;
 	}
 	
-	
-
-	
 	// This methods seem over complicated but it is in order to be able to handle triple patterns
 	public TripleStarPattern createTriplePattern(Triple t) {
 		TriplePatternBuilder builder = new TriplePatternBuilder();
@@ -165,6 +162,8 @@ public class MyDictionary {
 	public int size() {
 		return id2Node.size();
 	}
-	
 
+	public Key getKey(Node node) {
+		return nodeToKey(node);
+	}
 }
