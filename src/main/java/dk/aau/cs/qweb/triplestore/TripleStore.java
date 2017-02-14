@@ -121,17 +121,17 @@ public class TripleStore {
 			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
 		}
     	
-		if (t.isSubjectConcrete() && t.isPredicateConcrete())
+		if (t.getSubject().isConcreate() && t.getPredicate().isConcreate())
 		    return new TripleStoreIterator( parent, SPO.iterator( t ));
-		else if (t.isObjectConcrete() && t.isSubjectConcrete())
+		else if (t.getObject().isConcreate() && t.getSubject().isConcreate())
 		    return new TripleStoreIterator( parent, OSP.iterator( t ));
-		else if (t.isPredicateConcrete() && t.isObjectConcrete())
+		else if (t.getPredicate().isConcreate() && t.getObject().isConcreate())
 		    return new TripleStoreIterator( parent, POS.iterator( t ));
-		else if (t.isSubjectConcrete()) 
+		else if (t.getSubject().isConcreate()) 
 			return new TripleStoreIterator( parent, SPO.iterator( t ));
-		else if (t.isObjectConcrete()) 
+		else if (t.getObject().isConcreate()) 
 			return new TripleStoreIterator( parent, OSP.iterator( t ));
-		else if (t.isPredicateConcrete()) 
+		else if (t.getPredicate().isConcreate()) 
 			return new TripleStoreIterator( parent, POS.iterator( t ));
 		else return new TripleStoreIterator( parent, SPO.iterateAll());
     }

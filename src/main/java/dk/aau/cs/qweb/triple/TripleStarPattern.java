@@ -6,10 +6,14 @@ import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TripleStarPattern implements StarNode{
 	
-	public final StarNode subject;
-	public final StarNode predicate;
-	public final StarNode object;
+	private final StarNode subject;
+	private final StarNode predicate;
+	private final StarNode object;
 
+	public StarNode getSubject() { return subject;}
+	public StarNode getPredicate() { return predicate;}
+	public StarNode getObject() { return object;}
+	
 //	private Key subjectId;
 //	private Key predicateId;
 //	private Key objectId;
@@ -358,33 +362,33 @@ public class TripleStarPattern implements StarNode{
 		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
 
-//	public boolean doesAllKeysExistInDictionary() {
-//		return !check(this);
-//	}
-//
-//	private boolean check(TripleStarPattern triplePattern) {
-//		boolean subjectExistInDict = false;
-//		boolean predicateExistInDict = false;
-//		boolean objectExistInDict = false;
-//		if (triplePattern.subjectIsConcrete) {
-//			if (triplePattern.subjectIsTriplePattern) {
-//				subjectExistInDict = check(triplePattern.subjectTriplePattern);
-//			} else {
-//				subjectExistInDict = triplePattern.subjectId.getId() == 0 ? true : false;
-//			}
-//		}
-//		if (triplePattern.predicateIsConcrete) {
-//			predicateExistInDict = triplePattern.predicateId.getId() == 0 ? true : false;
-//		}
-//		if (triplePattern.objectIsConcrete) {
-//			if (triplePattern.objectIsTriplePattern) {
-//				objectExistInDict = check(triplePattern.objectTriplePattern);
-//			} else {
-//				objectExistInDict = triplePattern.objectId.getId() == 0 ? true : false;
-//			}
-//		}
-//		return subjectExistInDict && predicateExistInDict && objectExistInDict;
-//	}
+	public boolean doesAllKeysExistInDictionary() {
+		return !check();
+	}
+
+	private boolean check() {
+		boolean subjectExistInDict = false;
+		boolean predicateExistInDict = false;
+		boolean objectExistInDict = false;
+		if (subject.isConcreate()) {
+			if (subject.isEmbeddedTriplePattern()) {
+				subjectExistInDict = subject.getTriplePattern().check();
+			} else {
+				subjectExistInDict = subject.getKey().getId() == 0 ? true : false;
+			}
+		}
+		if (predicate.isConcreate()) {
+			predicateExistInDict = predicate.getKey().getId() == 0 ? true : false;
+		}
+		if (object.isConcreate()) {
+			if (object.isEmbeddedTriplePattern()) {
+				objectExistInDict = object.getTriplePattern().check();
+			} else {
+				objectExistInDict = object.getKey().getId() == 0 ? true : false;
+			}
+		}
+		return subjectExistInDict && predicateExistInDict && objectExistInDict;
+	}
 
 //	public void setSubjectTriplePattern(TripleStarPattern subjectTriplePattern) {
 //		this.subjectTriplePattern = subjectTriplePattern;

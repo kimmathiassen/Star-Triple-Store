@@ -9,9 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triple.TripleStarPattern.Variable;
 import dk.aau.cs.qweb.triple.TripleStar;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triple.Variable;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
@@ -19,10 +19,11 @@ public class IndexNormalTripleTest {
 	static Index SPO;
 	static Index POS;
 	static Index OSP;
+	static Variable var;
 
     @BeforeClass
     public static void runOnceBeforeClass() {
-    	
+    	var = new Variable(2);
     	
     	SPO = new Index(Field.S,Field.P,Field.O);
     	POS = new Index(Field.P,Field.O,Field.S);
@@ -63,7 +64,8 @@ public class IndexNormalTripleTest {
 	@Test
 	public void subjectLookup() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),Variable.ANY,Variable.ANY);
+		
+		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),var,var);
 		Iterator<TripleStar> spoIterator = SPO.iterator(triplePattern);
 		int count = 0;
 		
@@ -78,7 +80,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void subjectPredicateLookup() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),new Key(2),Variable.ANY);
+		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),new Key(2),var);
 		Iterator<TripleStar> spoIterator = SPO.iterator(triplePattern);
 		int count = 0;
 		
@@ -93,7 +95,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void predicateLookup() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(Variable.ANY,new Key(2),Variable.ANY);
+		TripleStarPattern triplePattern = new TripleStarPattern(var,new Key(2),var);
 		Iterator<TripleStar> posIterator = POS.iterator(triplePattern);
 		int count = 0;
 		
@@ -108,7 +110,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void predicateObjectLookup() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(Variable.ANY,new Key(2),new Key(3));
+		TripleStarPattern triplePattern = new TripleStarPattern(var,new Key(2),new Key(3));
 		Iterator<TripleStar> posIterator = POS.iterator(triplePattern);
 		int count = 0;
 		
@@ -123,7 +125,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void objectLookup() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(Variable.ANY,Variable.ANY,new Key(7));
+		TripleStarPattern triplePattern = new TripleStarPattern(var,var,new Key(7));
 		Iterator<TripleStar> ospIterator = OSP.iterator(triplePattern);
 		int count = 0;
 		
@@ -138,7 +140,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void objectSubjectLookup() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(new Key(8),Variable.ANY,new Key(5));
+		TripleStarPattern triplePattern = new TripleStarPattern(new Key(8),var,new Key(5));
 		Iterator<TripleStar> ospIterator = OSP.iterator(triplePattern);
 		int count = 0;
 		
@@ -153,7 +155,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void objectLookupNoMatches() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(Variable.ANY,Variable.ANY,new Key(6));
+		TripleStarPattern triplePattern = new TripleStarPattern(var,var,new Key(6));
 		Iterator<TripleStar> ospIterator = OSP.iterator(triplePattern);
 		int count = 0;
 		
@@ -168,7 +170,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void objectSubjectLookupNoMatches() 
 	{
-		TripleStarPattern triplePattern = new TripleStarPattern(new Key(8),Variable.ANY,new Key(6));
+		TripleStarPattern triplePattern = new TripleStarPattern(new Key(8),var,new Key(6));
 		Iterator<TripleStar> ospIterator = OSP.iterator(triplePattern);
 		int count = 0;
 		
@@ -189,7 +191,7 @@ public class IndexNormalTripleTest {
 		test.add(t1);
 		test.add(t2);
 		
-		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),Variable.ANY,Variable.ANY);
+		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),var,var);
 		Iterator<TripleStar> iterator = test.iterator(triplePattern);
 		int count = 0;
 		
@@ -197,9 +199,7 @@ public class IndexNormalTripleTest {
 			System.out.println(iterator.next());
 			count++;
 		}
-		
+
 		assertEquals(1,count);
 	}
-	
-	
 }

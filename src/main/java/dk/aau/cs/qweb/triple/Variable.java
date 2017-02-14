@@ -2,10 +2,10 @@ package dk.aau.cs.qweb.triple;
 
 public class Variable implements StarNode {
 
-	public final String label;
+	private final int id;
 	
-	public Variable (String label) {
-		this.label = label;
+	public Variable (int id) {
+		this.id = id;
 	}
 	
 	@Override
@@ -41,6 +41,10 @@ public class Variable implements StarNode {
 	@Override
 	public boolean isConcreate() {
 		return false;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 }
