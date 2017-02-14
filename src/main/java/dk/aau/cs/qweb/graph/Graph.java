@@ -180,6 +180,10 @@ public class Graph extends GraphBase {
 		
 		return new DecodingTriplesIterator(store.find(triple) );
     }
+    
+    public ExtendedIterator<TripleStar> graphBaseFind( TripleStarPattern triplePattern ) {
+		return store.find(triplePattern);
+    }
 
     /**
          Answer true iff this graph contains <code>t</code>. If <code>t</code>
