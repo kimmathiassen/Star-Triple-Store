@@ -4,131 +4,30 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Var;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
+import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.model.Node_Triple;
-import dk.aau.cs.qweb.triple.TripleStarPattern.Variable;
 
 public class TriplePatternBuilder {
 
-	private Key subject;
-	private Key predicate;
-	private Key object;
-	private TripleStarPattern subjectTriplePattern;
-	private TripleStarPattern objectTriplePattern;
-	private boolean subjectIsConcrete;
-	private boolean predicateIsConcrete;
-	private boolean objectIsConcrete;
-	private boolean subjectIsTriplePattern;
-	private boolean objectIsTriplePattern;
-
-	public TriplePatternBuilder() {
-		subjectIsConcrete = false;
-		predicateIsConcrete = false;
-		objectIsConcrete = false;
-		subjectIsTriplePattern = false;
-		objectIsTriplePattern = false;
-	}
-
-	public void setSubject(Key i) {
-		subject = i;
-		subjectIsConcrete = true;
-	}
-	
-	public void setSubject(TripleStarPattern i) {
-		subjectTriplePattern = i;
-		subjectIsConcrete = true;
-		subjectIsTriplePattern = true;
-	}
-
-	public void setPredicate(Key i) {
-		predicate = i;
-		predicateIsConcrete = true;
-	}
-
-	public void setObject(Key i) {
-		object = i;
-		objectIsConcrete = true;
-	}
-	
-	public void setObject(TripleStarPattern i) {
-		objectTriplePattern = i;
-		objectIsConcrete = true;
-		objectIsTriplePattern = true;
-	}
+	private StarNode subject;
+	private StarNode predicate;
+	private StarNode object;
 
 	public TripleStarPattern createTriplePatter() {
-		if (!subjectIsConcrete) {
-			if (!predicateIsConcrete) {
-				if (!objectIsConcrete) {
-					return new TripleStarPattern(Variable.ANY,Variable.ANY,Variable.ANY);
-				} else {
-					if (objectIsTriplePattern) {
-						return new TripleStarPattern(Variable.ANY, Variable.ANY, objectTriplePattern);
-					} else {
-						return new TripleStarPattern(Variable.ANY, Variable.ANY, object);
-					}
-				}
-			} else {
-				if (!objectIsConcrete) {
-					return new TripleStarPattern(Variable.ANY,predicate,Variable.ANY);
-				} else {
-					if (objectIsTriplePattern) {
-						return new TripleStarPattern(Variable.ANY,predicate,objectTriplePattern);
-					} else {
-						return new TripleStarPattern(Variable.ANY,predicate,object);
-					}
-				}
-			}
-		} else {
-			if (!predicateIsConcrete) {
-				if (!objectIsConcrete) {
-					if (subjectIsTriplePattern) {
-						return new TripleStarPattern(subjectTriplePattern,Variable.ANY,Variable.ANY);
-					} else {
-						return new TripleStarPattern(subject,Variable.ANY,Variable.ANY);
-					}
-					
-				} else {
-					if (objectIsTriplePattern && subjectIsTriplePattern) {
-						return new TripleStarPattern(subjectTriplePattern, Variable.ANY, objectTriplePattern);
-					} else if (subjectIsTriplePattern) {
-						return new TripleStarPattern(subjectTriplePattern, Variable.ANY, object);
-					} else if (objectIsTriplePattern) {
-						return new TripleStarPattern(subject, Variable.ANY, objectTriplePattern);
-					} else {
-						return new TripleStarPattern(subject, Variable.ANY, object);
-					}
-				}
-			} else {
-				if (!objectIsConcrete) {
-					if (subjectIsTriplePattern) {
-						return new TripleStarPattern(subjectTriplePattern,predicate,Variable.ANY);
-					} else {
-						return new TripleStarPattern(subject,predicate,Variable.ANY);
-					}
-				} else {
-					if (objectIsTriplePattern && subjectIsTriplePattern) {
-						return new TripleStarPattern(subjectTriplePattern,predicate,objectTriplePattern);
-					} else if (subjectIsTriplePattern) {
-						return new TripleStarPattern(subjectTriplePattern,predicate,object);
-					} else if (objectIsTriplePattern) {
-						return new TripleStarPattern(subject,predicate,objectTriplePattern);
-					} else {
-						return new TripleStarPattern(subject,predicate,object);
-					}
-				}
-			}
-		}
+		return new TripleStarPattern(subject, predicate, object);
 	}
 
-	public void setSubject(final Node subject) {
-		if (!Var.isVar(subject)) {
-			if (subject instanceof Node_Triple) {
-				subjectIsTriplePattern = true;
-				subjectTriplePattern = createEmbeddedTriplePattern(subject);
+	public void setSubject(final Node node) {
+		if (!Var.isVar(node)) {
+			if (node instanceof Node_Triple) {
+				this.subject = createEmbeddedTriplePattern(node);
 			} else {
 				MyDictionary dict = MyDictionary.getInstance();
-				this.subject = dict.createKey(subject);
+				this.subject = dict.createKey(node);
 			}
+		} else {
+			VarDictionary varDict = VarDictionary.getInstance();
+			this.subject = varDict.createVariable((Var)node);
 		}
 	}
 
@@ -149,15 +48,17 @@ public class TriplePatternBuilder {
 		}
 	}
 
-	public void setObject(final Node object) {
-		if (!Var.isVar(object)) {
-			if (object instanceof Node_Triple) {
-				objectIsTriplePattern = true;
-				objectTriplePattern = createEmbeddedTriplePattern(object);
+	public void setObject(final Node node) {
+		if (!Var.isVar(node)) {
+			if (node instanceof Node_Triple) {
+				this.object = createEmbeddedTriplePattern(node);
 			} else {
 				MyDictionary dict = MyDictionary.getInstance();
-				this.object = dict.createKey(object);
+				this.object = dict.createKey(node);
 			}
+		} else {
+			VarDictionary varDict = VarDictionary.getInstance();
+			this.object = varDict.createVariable((Var)node);
 		}
 	}
 }
