@@ -26,6 +26,7 @@ import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.queryparser.SPARQLParserFactoryStar;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
 import dk.aau.cs.qweb.main.queryserializer.QuerySerializerFactoryStar;
+import dk.aau.cs.qweb.queryengine.QueryEngineStar;
 import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
@@ -48,9 +49,11 @@ public class App {
         		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
         
         // Query string.
+//        String queryString = prolog +
+//            "SELECT ?p ?o WHERE {<<ex:spiderman ex:spiderman1 ex:spiderman2>> ?p ?o .}" ; 
         String queryString = prolog +
-            "SELECT ?p ?o WHERE {<<ex:spiderman ex:spiderman1 ex:spiderman2>> ?p ?o .}" ; 
-        
+        		"SELECT ?p ?o WHERE {<http://example.org/spiderman> ?p ?o .}" ; 
+       
         SPARQLParserFactoryStar f = new SPARQLParserFactoryStar();
         
         SPARQLParserRegistry.addFactory(SyntaxStar.syntaxSPARQL_Star, f);
@@ -61,7 +64,7 @@ public class App {
         
         Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
         
-        
+        QueryEngineStar.register();
         
         try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
             // Or QueryExecutionFactory.create(queryString, model) ;
