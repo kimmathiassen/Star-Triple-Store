@@ -76,10 +76,10 @@ public class Index   {
 	}
 
 	public Iterator<TripleStar> iterator(TripleStarPattern triple) {
-		Key firstKey = triple.getKey(field1);
+		Key firstKey = triple.getField(field1).getKey();
 		if (indexMap.containsKey(firstKey)) {
-			if (triple.isConcrete(field2)) {
-				return indexMap.get(firstKey).iterator(triple.getKey(field2));
+			if (triple.isFieldConcrete(field2)) {
+				return indexMap.get(firstKey).iterator(triple.getField(field2).getKey());
 			} else {
 				return indexMap.get(firstKey).iterator();
 			}

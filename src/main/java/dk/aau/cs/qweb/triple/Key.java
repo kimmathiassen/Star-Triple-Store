@@ -64,4 +64,9 @@ public class Key implements StarNode{
 	public Variable getVariable() {
 		throw new IllegalArgumentException("Is not of the type Variable");
 	}
+
+	@Override
+	public boolean isConcreate() {
+		return true;
+	}
 }

@@ -10,4 +10,7 @@ public interface StarNode {
 	
 	boolean isVariable();
 	Variable getVariable();
+	
+	// Does the triple pattern contain any variables?
+	boolean isConcreate();
 }
