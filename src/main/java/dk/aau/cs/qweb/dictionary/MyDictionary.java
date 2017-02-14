@@ -163,7 +163,7 @@ public class MyDictionary {
 		return id2Node.size();
 	}
 
-	public Key getKey(Node node) {
+	public Key createKey(Node node) {
 		return nodeToKey(node);
 	}
 }

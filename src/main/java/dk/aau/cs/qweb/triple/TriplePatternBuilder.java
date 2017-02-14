@@ -127,7 +127,7 @@ public class TriplePatternBuilder {
 				subjectTriplePattern = createEmbeddedTriplePattern(subject);
 			} else {
 				MyDictionary dict = MyDictionary.getInstance();
-				this.subject = dict.getKey(subject);
+				this.subject = dict.createKey(subject);
 			}
 		}
 	}
@@ -145,7 +145,7 @@ public class TriplePatternBuilder {
 	public void setPredicate(final Node predicate) {
 		if (!Var.isVar(predicate)) {
 			MyDictionary dict = MyDictionary.getInstance();
-			this.predicate = dict.getKey(predicate);
+			this.predicate = dict.createKey(predicate);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class TriplePatternBuilder {
 				objectTriplePattern = createEmbeddedTriplePattern(object);
 			} else {
 				MyDictionary dict = MyDictionary.getInstance();
-				this.object = dict.getKey(object);
+				this.object = dict.createKey(object);
 			}
 		}
 	}
