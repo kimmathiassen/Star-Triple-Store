@@ -6,7 +6,7 @@ import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
-public class TripleStarPattern {
+public class TripleStarPattern implements StarNode{
 
 	private Key subjectId;
 	private Key predicateId;
@@ -403,5 +403,41 @@ public class TripleStarPattern {
 
 	public void setObjectIsTriplePattern(boolean objectIsTriplePattern) {
 		this.objectIsTriplePattern = objectIsTriplePattern;
+	}
+
+	@Override
+	public boolean isKey() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Key getKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isEmbeddedTriplePattern() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public TripleStarPattern getTriplePattern() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isVariable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public dk.aau.cs.qweb.triple.Variable getVariable() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -2,7 +2,7 @@ package dk.aau.cs.qweb.triple;
 
 import java.util.Objects;
 
-public class Key {
+public class Key implements StarNode{
 	
 	public Key(long id) {
 		this.id=id;
@@ -21,7 +21,7 @@ public class Key {
 	private final long id;
 	
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(final Object other) {
 		if (other instanceof Key) {
 			Key casted = (Key)other;
 			return (this.id == casted.id);
@@ -34,4 +34,34 @@ public class Key {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+	@Override
+	public boolean isKey() {
+		return true;
+	}
+
+	@Override
+	public Key getKey() {
+		return this;
+	}
+
+	@Override
+	public boolean isEmbeddedTriplePattern() {
+		return false;
+	}
+
+	@Override
+	public TripleStarPattern getTriplePattern() {
+		throw new IllegalArgumentException("Is not of the type TripleStarPattern");
+	}
+
+	@Override
+	public boolean isVariable() {
+		return false;
+	}
+
+	@Override
+	public Variable getVariable() {
+		throw new IllegalArgumentException("Is not of the type Variable");
+	}
 }
