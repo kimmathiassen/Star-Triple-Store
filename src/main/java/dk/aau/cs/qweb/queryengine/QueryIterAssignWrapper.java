@@ -5,7 +5,7 @@ import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
 import org.apache.jena.sparql.engine.iterator.QueryIterProcessBinding;
 
-
+@Deprecated
 public class QueryIterAssignWrapper extends QueryIterProcessBinding
 {
 	public QueryIterAssignWrapper( QueryIterAssign input, ExecutionContext execCxt )
