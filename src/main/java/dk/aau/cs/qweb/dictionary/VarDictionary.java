@@ -109,4 +109,9 @@ public class VarDictionary
 		}
 		return sb.toString();
 	}
+
+	public void clear() {
+		dictId2Var.clear();
+		dictVarName2Id.clear();
+	}
 }
