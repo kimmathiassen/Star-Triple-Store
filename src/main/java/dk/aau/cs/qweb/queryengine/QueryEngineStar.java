@@ -91,6 +91,7 @@ public class QueryEngineStar extends QueryEngineMain {
 	@Override
 	public QueryIterator eval ( Op op, DatasetGraph dsg, Binding input, Context context )
 	{
+		//TODO when is SUBSTITUDE suppose to be true 
 		boolean SUBSTITUE = true;
 		if ( SUBSTITUE && ! input.isEmpty() ) {
 			op = Substitute.substitute( op, input );
