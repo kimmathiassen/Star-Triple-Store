@@ -14,7 +14,6 @@ public class Key implements StarNode{
 	
 	@Override
 	public String toString() {
-		//return String.valueOf(id);
 		return Long.toBinaryString(id);
 	}
 

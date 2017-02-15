@@ -1,6 +1,7 @@
 package dk.aau.cs.qweb.dictionary;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.apache.jena.graph.Node;
 
@@ -30,31 +31,12 @@ public class MyDictionary {
 	    return instance;
 	}
 	
-//	// This methods seem over complicated but it is in order to be able to handle triple patterns
+	// This methods seem over complicated but it is in order to be able to handle triple patterns
 //	public TripleStarPattern createTriplePattern(Triple t) {
-//		StarNode subject;
-//		StarNode predicate;
-//		StarNode object;
+//		StarNode subject = nodeToKey(t.getSubject());
+//		StarNode predicate = nodeToKey(t.getPredicate());
+//		StarNode object = nodeToKey(t.getObject());
 //		
-//		if (t.getSubject().isConcrete()) {
-//			if (t.getSubject() instanceof Node_Triple) {
-//				subject = convertEmbeddedTriplePatternNode(t.getSubject());
-//			} else {
-//				subject = (lookupKeyOrCreateNew(t.getSubject()));
-//			}
-//		}
-//		
-//		if (t.getPredicate().isConcrete()) {
-//			predicate = (lookupKeyOrCreateNew(t.getPredicate()));
-//		}
-//		
-//		if (t.getObject().isConcrete()) {
-//			if (t.getObject() instanceof Node_Triple) {
-//				object = (convertEmbeddedTriplePatternNode(t.getObject()));
-//			} else {
-//				object = (lookupKeyOrCreateNew(t.getObject()));
-//			}
-//		}
 //		return new TripleStarPattern(subject, predicate, object);
 //	}
 //	
@@ -138,5 +120,14 @@ public class MyDictionary {
 
 	public Key createKey(Node node) {
 		return nodeToKey(node);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Entry<Key, Node> iterable_element : id2Node.entrySet()) {
+			sb.append(iterable_element.getKey()+": "+ iterable_element.getValue()+"\n");
+		}
+		return sb.toString();
 	}
 }

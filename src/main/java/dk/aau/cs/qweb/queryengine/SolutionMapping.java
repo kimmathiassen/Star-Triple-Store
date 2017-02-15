@@ -66,7 +66,7 @@ public class SolutionMapping {
 		for ( int i = 0; i < size; ++i )
 		{
 			if ( map[i] != SolutionMapping.UNBOUND ) {
-				s += String.valueOf(i) + "->" + String.valueOf(map[i]) + " ";
+				s += "#"+String.valueOf(i) + "->" + Long.toBinaryString(map[i]) + " ";
 			}
 		}
 

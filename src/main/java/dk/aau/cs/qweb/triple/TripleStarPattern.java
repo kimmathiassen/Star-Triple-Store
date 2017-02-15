@@ -201,70 +201,9 @@ public class TripleStarPattern implements StarNode{
 		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
 	
-//	public String toString () {
-//		if (!subjectIsConcrete) {
-//			if (!predicateIsConcrete) {
-//				if (!objectIsConcrete) {
-//					return "(ANY,ANY,ANY)";
-//				} else {
-//					if (objectIsTriplePattern) {
-//						return "(ANY,ANY,"+getObjectTriplePattern()+")";
-//					} else {
-//						return "(ANY,ANY,"+getObjectKey()+")";
-//					}
-//				}
-//			} else {
-//				if (!objectIsConcrete) {
-//					return "(ANY,"+getPredicateKey()+",ANY)";
-//				} else {
-//					if (objectIsTriplePattern) {
-//						return "(ANY,"+getPredicateKey()+","+getObjectTriplePattern()+")";
-//					} else {
-//						return "(ANY,"+getPredicateKey()+","+getObjectKey()+")";
-//					}
-//				}
-//			}
-//		} else {
-//			if (!predicateIsConcrete) {
-//				if (!objectIsConcrete) {
-//					if (subjectIsTriplePattern) {
-//						return "("+getSubjectTriplePattern()+",ANY,ANY)";
-//					} else {
-//						return "("+getSubjectKey()+",ANY,ANY)";
-//					}
-//					
-//				} else {
-//					if (objectIsTriplePattern && subjectIsTriplePattern) {
-//						return "("+getSubjectTriplePattern()+",ANY,"+getObjectTriplePattern()+")";
-//					} else if (subjectIsTriplePattern) {
-//						return "("+getSubjectTriplePattern()+",ANY,"+getObjectKey()+")";
-//					} else if (objectIsTriplePattern) {
-//						return "("+getSubjectKey()+",ANY,"+getObjectTriplePattern()+")";
-//					} else {
-//						return "("+getSubjectKey()+",ANY,"+getObjectKey()+")";
-//					}
-//				}
-//			} else {
-//				if (!objectIsConcrete) {
-//					if (subjectIsTriplePattern) {
-//						return "("+getSubjectTriplePattern()+","+getPredicateKey()+",ANY)";
-//					} else {
-//						return "("+getSubjectKey()+","+getPredicateKey()+",ANY)";
-//					}
-//				} else {
-//					if (objectIsTriplePattern && subjectIsTriplePattern) {
-//						return "("+getSubjectTriplePattern()+","+getPredicateKey()+","+getObjectTriplePattern()+")";
-//					} else if (subjectIsTriplePattern) {
-//						return "("+getSubjectTriplePattern()+","+getPredicateKey()+","+getObjectKey()+")";
-//					} else if (objectIsTriplePattern) {
-//						return "("+getSubjectKey()+","+getPredicateKey()+","+getObjectTriplePattern()+")";
-//					} else {
-//						return "("+getSubjectKey()+","+getPredicateKey()+","+getObjectKey()+")";
-//					}
-//				}
-//			}
-//		}
-//	}
+	public String toString () {
+		return "("+subject + ", " + predicate + ", " + object+")";
+	}
 	
 
 	
