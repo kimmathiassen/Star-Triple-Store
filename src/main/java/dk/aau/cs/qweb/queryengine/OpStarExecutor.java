@@ -3,11 +3,9 @@ package dk.aau.cs.qweb.queryengine;
 import java.util.Iterator;
 
 import org.apache.jena.graph.Triple;
-import org.apache.jena.sparql.algebra.op.OpAssign;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 
@@ -53,13 +51,6 @@ public class OpStarExecutor extends OpExecutor{
 		return new DecodeBindingsIterator( qIt, execCxt );
 	}
 	
-	@Override
-	protected QueryIterator execute ( OpAssign opAssign, QueryIterator input )
-	{
-		QueryIterAssign in = (QueryIterAssign) super.execute( opAssign, input );
-		return new QueryIterAssignWrapper( in, execCxt );
-	}
-
 	// helper methods
 
 	final protected TripleStarPattern encode ( Triple tp) {
