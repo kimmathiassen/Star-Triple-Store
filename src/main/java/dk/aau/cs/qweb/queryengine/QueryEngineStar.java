@@ -130,7 +130,7 @@ public class QueryEngineStar extends QueryEngineMain {
 		}
 
 		VarDictionary varDict = VarDictionary.getInstance();
-		for ( Var v : OpVars.visibleVars(tmp) ) { //TODO This call might need to be changed to FixedVars
+		for ( Var v : OpVars.visibleVars(tmp) ) { 
 			varDict.createId( v );
 		}
 	}
