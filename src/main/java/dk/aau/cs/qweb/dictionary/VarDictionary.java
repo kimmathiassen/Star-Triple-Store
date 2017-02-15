@@ -100,4 +100,13 @@ public class VarDictionary
 	public Variable createVariable (Var v) {
 		return new Variable(createId(v));
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < dictId2Var.size(); i++) {
+			sb.append("#"+i+": "+ dictId2Var.get(i)+"\n");
+		}
+		return sb.toString();
+	}
 }
