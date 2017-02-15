@@ -6,7 +6,6 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVars;
 import org.apache.jena.sparql.algebra.op.OpModifier;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.Substitute;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.Plan;
@@ -91,12 +90,6 @@ public class QueryEngineStar extends QueryEngineMain {
 	@Override
 	public QueryIterator eval ( Op op, DatasetGraph dsg, Binding input, Context context )
 	{
-		//TODO when is SUBSTITUDE suppose to be true 
-		boolean SUBSTITUE = true;
-		if ( SUBSTITUE && ! input.isEmpty() ) {
-			op = Substitute.substitute( op, input );
-		}
-
 		ExecutionContext execCxt = createExecutionContext ( op, dsg, context );
 		return createIteratorChain( op, input, execCxt );
 	}
@@ -137,7 +130,7 @@ public class QueryEngineStar extends QueryEngineMain {
 		}
 
 		VarDictionary varDict = VarDictionary.getInstance();
-		for ( Var v : OpVars.visibleVars(tmp) ) { //This call might need to be changed to FixedVars
+		for ( Var v : OpVars.visibleVars(tmp) ) { //TODO This call might need to be changed to FixedVars
 			varDict.createId( v );
 		}
 	}
