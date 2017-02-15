@@ -125,7 +125,6 @@ import org.apache.jena.sparql.syntax.TripleCollectorMark;
 import org.apache.jena.update.Update;
 
 import dk.aau.cs.qweb.model.NodeFactoryStar;
-import dk.aau.cs.qweb.model.Node_Triple;
 
 public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser11Constants {
 	 final public void QueryUnit() throws ParseException {
@@ -1797,7 +1796,6 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
             Element el = null ;
 	        ElementGroup elg = new ElementGroup() ;
 	        startGroup(elg) ;
-	        System.out.println(token);
 		    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
 		    case IRIref:
 		    case LT: //Embedded triple
@@ -1834,7 +1832,6 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		      jj_la1[64] = jj_gen;
 		      ;
 		    }
-		    System.out.println(token);
 		    label_14:
 		    while (true) {
 		      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -3393,7 +3390,6 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		    case STRING_LITERAL_LONG2:
 		    case NIL:
 		    case ANON:
-		    	System.out.println(token.next);
 		      n = GraphTerm();
 		      break;
 		    default:
