@@ -18,7 +18,7 @@ public class TriplePatternBuilder {
 	}
 
 	public void setSubject(final Node node) {
-		if (!Var.isVar(node)) {
+		if (node.isConcrete()) {
 			if (node instanceof Node_Triple) {
 				this.subject = createEmbeddedTriplePattern(node);
 			} else {
@@ -41,15 +41,18 @@ public class TriplePatternBuilder {
 		return builder.createTriplePatter();
 	}
 
-	public void setPredicate(final Node predicate) {
-		if (!Var.isVar(predicate)) {
+	public void setPredicate(final Node node) {
+		if (node.isConcrete()) {
 			MyDictionary dict = MyDictionary.getInstance();
-			this.predicate = dict.createKey(predicate);
+			this.predicate = dict.createKey(node);
+		} else {
+			VarDictionary varDict = VarDictionary.getInstance();
+			this.predicate = varDict.createVariable((Var)node);
 		}
 	}
 
 	public void setObject(final Node node) {
-		if (!Var.isVar(node)) {
+		if (node.isConcrete()) {
 			if (node instanceof Node_Triple) {
 				this.object = createEmbeddedTriplePattern(node);
 			} else {

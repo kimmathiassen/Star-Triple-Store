@@ -11,9 +11,10 @@ import org.apache.jena.graph.impl.GraphBase;
 import org.apache.jena.graph.impl.SimpleEventManager;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.dictionary.MyDictionary;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStar;
+import dk.aau.cs.qweb.triple.TripleStarBuilder;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.TripleStore;
 
 public class Graph extends GraphBase {
@@ -60,10 +61,9 @@ public class Graph extends GraphBase {
     protected void destroy()
     { store.close(); }
 
-    public void performAdd( Triple t )
-    { 
-    	MyDictionary dict = MyDictionary.getInstance();
-    	List<TripleStar> triples = dict.createTriple(t);
+    public void performAdd( Triple t ) { 
+    	TripleStarBuilder builder = new TripleStarBuilder();
+    	List<TripleStar> triples = builder.createTriple(t);
     	for (TripleStar tripleStar : triples) {
     		store.add( tripleStar ); 
 		}
@@ -175,10 +175,14 @@ public class Graph extends GraphBase {
      */
     @Override 
     public ExtendedIterator<Triple> graphBaseFind( Triple triplePattern ) {
-    	MyDictionary dict = MyDictionary.getInstance();
-    	TripleStarPattern triple = dict.createTriplePattern(triplePattern);
+    	TriplePatternBuilder builder = new TriplePatternBuilder();
+    	builder.setSubject(triplePattern.getSubject());
+    	builder.setPredicate(triplePattern.getPredicate());
+    	builder.setObject(triplePattern.getObject());
+    	
+    	TripleStarPattern tripleStarPattern = builder.createTriplePatter();
 		
-		return new DecodingTriplesIterator(store.find(triple) );
+		return new DecodingTriplesIterator(store.find(tripleStarPattern) );
     }
     
     public ExtendedIterator<TripleStar> graphBaseFind( TripleStarPattern triplePattern ) {

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import dk.aau.cs.qweb.dictionary.MyDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
+import dk.aau.cs.qweb.triple.TripleStarBuilder;
 
 public class DictionaryTest {
 
@@ -21,10 +22,11 @@ public class DictionaryTest {
 		Node object = NodeFactory.createLiteral("Eclipse");
 		Triple original = Triple.create(subject, predicate, object);
 		
-		MyDictionary dict = MyDictionary.getInstance();
-		List<TripleStar> idTriples = dict.createTriple(original);
+		TripleStarBuilder builder = new TripleStarBuilder();
+		List<TripleStar> idTriples = builder.createTriple(original);
 		TripleStar idTriple = idTriples.get(0);
 		
+		MyDictionary dict = MyDictionary.getInstance();
 		Node subjectNode = dict.getNode(idTriple.subjectId);
 		Node predicateNode = dict.getNode(idTriple.predicateId);
 		Node objectNode = dict.getNode(idTriple.objectId);
@@ -33,5 +35,4 @@ public class DictionaryTest {
 		assertEquals(predicate, predicateNode);
 		assertEquals(object, objectNode);
 	}
-
 }
