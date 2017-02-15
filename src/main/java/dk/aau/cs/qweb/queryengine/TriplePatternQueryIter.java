@@ -87,15 +87,15 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 		SolutionMapping result = new SolutionMapping( currentInputMapping );
 
 		if ( !currentQueryPattern.getSubject().isConcreate() ) {
-			result.set( currentQueryPattern.getVariable().getId(), currentMatch.subjectId );
+			result.set( currentQueryPattern.getSubject().getVariable().getId(), currentMatch.subjectId );
 		}
 
 		if ( !currentQueryPattern.getPredicate().isConcreate() ) {
-			result.set( currentQueryPattern.getVariable().getId(), currentMatch.predicateId );
+			result.set( currentQueryPattern.getPredicate().getVariable().getId(), currentMatch.predicateId );
 		}
 
 		if ( !currentQueryPattern.getObject().isConcreate() ) {
-			result.set( currentQueryPattern.getVariable().getId(), currentMatch.objectId );
+			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
 
 		return result;
