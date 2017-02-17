@@ -4,6 +4,7 @@ package dk.aau.cs.qweb.queryengine;
 import org.apache.jena.query.Query;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVars;
+import org.apache.jena.sparql.algebra.Transformer;
 import org.apache.jena.sparql.algebra.op.OpModifier;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Var;
@@ -19,6 +20,7 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.engine.main.QueryEngineMain;
 import org.apache.jena.sparql.util.Context ;
 
+import dk.aau.cs.qweb.Transform.MyTransform;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 
@@ -90,10 +92,12 @@ public class QueryEngineStar extends QueryEngineMain {
 	@Override
 	public QueryIterator eval ( Op op, DatasetGraph dsg, Binding input, Context context )
 	{
+		System.out.println(op);
+	    op = Transformer.transform(new MyTransform(), op) ;
+		System.out.println(op);
 		ExecutionContext execCxt = createExecutionContext ( op, dsg, context );
 		return createIteratorChain( op, input, execCxt );
 	}
-
 
 	// helpers
 
