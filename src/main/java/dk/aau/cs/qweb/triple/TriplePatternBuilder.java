@@ -36,8 +36,8 @@ public class TriplePatternBuilder {
 		
 		TriplePatternBuilder builder = new TriplePatternBuilder();
 		builder.setSubject(embeddedNode.getSubject());
-		builder.setSubject(embeddedNode.getPredicate());
-		builder.setSubject(embeddedNode.getObject());
+		builder.setPredicate(embeddedNode.getPredicate());
+		builder.setObject(embeddedNode.getObject());
 		return builder.createTriplePatter();
 	}
 
