@@ -19,15 +19,15 @@ public class TripleStarBuilder {
 		
 		if (BitHelper.isIdAnEmbeddedTriple(subject)) {
 			Key s1 = new Key(BitHelper.getEmbeddedSubject(subject));
-			Key p1 = new Key(BitHelper.getEmbeddedSubject(subject));
-			Key o1 = new Key(BitHelper.getEmbeddedSubject(subject));
+			Key p1 = new Key(BitHelper.getEmbeddedPredicate(subject));
+			Key o1 = new Key(BitHelper.getEmbeddedObject(subject));
 			triples.add(new TripleStar(s1,p1,o1));
 		}
 		
 		if (BitHelper.isIdAnEmbeddedTriple(object)) {
 			Key s2 = new Key(BitHelper.getEmbeddedSubject(object));
-			Key p2 = new Key(BitHelper.getEmbeddedSubject(object));
-			Key o2 = new Key(BitHelper.getEmbeddedSubject(object));
+			Key p2 = new Key(BitHelper.getEmbeddedPredicate(object));
+			Key o2 = new Key(BitHelper.getEmbeddedObject(object));
 			triples.add(new TripleStar(s2,p2,o2));
 		}
 		
