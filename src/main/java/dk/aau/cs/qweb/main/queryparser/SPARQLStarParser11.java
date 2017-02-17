@@ -2023,7 +2023,22 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		                   Var v ; Expr expr ;
 		    jj_consume_token(BIND);
 		    jj_consume_token(LPAREN);
-		    expr = Expression();
+		    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+		    case LT:
+		    	jj_consume_token(LT);
+		        token = token.next = token_source.getNextToken();
+		        Node s = VarOrTerm();
+		        Node p = VarOrTerm();
+		        Node o = VarOrTerm();
+		        jj_consume_token(GT);
+		        token = token.next = token_source.getNextToken();
+		       
+		        expr = asExpr(NodeFactoryStar.createEmbeddedNode(s, p, o));
+		        break;
+		    default:
+		    	expr = Expression();
+		    }
+		 
 		    jj_consume_token(AS);
 		    v = Var();
 		    jj_consume_token(RPAREN);
