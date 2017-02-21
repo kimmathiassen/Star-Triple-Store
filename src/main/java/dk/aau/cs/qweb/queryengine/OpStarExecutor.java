@@ -2,18 +2,23 @@ package dk.aau.cs.qweb.queryengine;
 
 import java.util.Iterator;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.sparql.algebra.op.OpAssign;
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
 import org.apache.jena.sparql.algebra.op.OpTriple;
+import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
+import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
 import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
+import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
+import dk.aau.cs.qweb.dictionary.VarDictionary;
+import dk.aau.cs.qweb.model.Node_Triple;
 import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 
@@ -37,6 +42,38 @@ public class OpStarExecutor extends OpExecutor{
 	}
 
 	// operations
+
+	
+	@Override
+	protected QueryIterator execute(OpExtend opExtend, QueryIterator input) {
+		System.out.println();
+		if (opExtend.getVarExprList().getExprs().values().size() != 1) {
+			throw new IllegalStateException("Did not expect "+opExtend+ " to have multiple expressions, this state is not handled");
+		}
+		
+		//This for loop can only run once.
+		for (Expr iterable_element : opExtend.getVarExprList().getExprs().values()) {
+			if (iterable_element instanceof NodeValueNode) {
+				NodeValueNode temp = (NodeValueNode)iterable_element;
+				Node_Triple node = (Node_Triple)temp.asNode();
+				Var var = opExtend.getVarExprList().getVars().get(0);
+				
+				Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
+				qIt = new ExtendWithEmbeddedTriplePatternQueryIter(encode(var),encode(node) ,qIt, execCxt) ;
+		        return new DecodeBindingsIterator(qIt,execCxt);
+			}
+		}
+		//If contain embedded create custom queryiterator
+		//else use defualt.
+		
+        // We know (parse time checking) the variable is unused so far in
+        // the query so we can use QueryIterAssign knowing that it behaves
+        // the same as extend. The boolean should only be a check.
+        QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
+        qIter = new QueryIterAssign(qIter, opExtend.getVarExprList(), execCxt, true) ;
+        return qIter ;
+    }
+	
 	@Override
 	public QueryIterator execute ( OpBGP opBGP, QueryIterator input )
 	{
@@ -66,11 +103,6 @@ public class OpStarExecutor extends OpExecutor{
 		return new DecodeBindingsIterator( qIt, execCxt );
 	}
 	
-	@Override
-	public QueryIterator execute ( OpAssign opAssign, QueryIterator input )
-	{
-		throw new NotImplementedException("OpStarExecutor.execute(OpAssign) not implemented ");
-	}
 	
 	@Override
 	public QueryIterator execute ( OpJoin opJoin, QueryIterator input )
@@ -96,5 +128,19 @@ public class OpStarExecutor extends OpExecutor{
 		builder.setObject(tp.getObject());
 		
 		return builder.createTriplePatter();
+	}
+	
+	final protected TripleStarPattern encode (Node_Triple tp) {
+		TriplePatternBuilder builder = new TriplePatternBuilder();
+		builder.setSubject(tp.getSubject());
+		builder.setPredicate(tp.getPredicate());
+		builder.setObject(tp.getObject());
+		
+		return builder.createTriplePatter();
+	}
+	
+	final protected int encode (Var var) {
+		VarDictionary varDict = VarDictionary.getInstance();
+		return varDict.createId(var);
 	}
 }
