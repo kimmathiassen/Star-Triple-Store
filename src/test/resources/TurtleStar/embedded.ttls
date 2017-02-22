@@ -3,4 +3,5 @@
 
 <<ex:kim ex:worksAt ex:aau>> ex:is "Not a lie" ;    # in the context of the Marvel universe
     ex:started "1999-08-16"^^xsd:date .
+ex:kim ex:worksAt ex:LiU . 
 

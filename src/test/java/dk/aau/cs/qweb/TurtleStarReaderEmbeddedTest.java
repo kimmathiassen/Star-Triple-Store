@@ -44,7 +44,7 @@ public class TurtleStarReaderEmbeddedTest {
 	@Test
 	public void subjectEmbeddedNode() {
 		String queryString = prolog +
-	        		"SELECT ?p ?o WHERE {<< ex:kim ex:worksAt ex:aau>> ?p ?o .}" ; 
+	        		"SELECT ?p ?o WHERE {<<ex:kim ex:worksAt ex:aau>> ?p ?o .}" ; 
 	       
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
@@ -64,7 +64,7 @@ public class TurtleStarReaderEmbeddedTest {
 	@Test
 	public void subjectEmbeddedNodePredicate() {
 		String queryString = prolog +
-        		"SELECT ?o WHERE {<< ex:kim ex:worksAt ex:aau>> ex:is ?o .}" ; 
+        		"SELECT ?o WHERE {<<ex:kim ex:worksAt ex:aau>> ex:is ?o .}" ; 
        
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
@@ -118,6 +118,6 @@ public class TurtleStarReaderEmbeddedTest {
 	        }
 	    }
 		
-		assertEquals(1,count);
+		assertEquals(2,count);
 	}
 }
