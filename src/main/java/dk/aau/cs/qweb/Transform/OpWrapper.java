@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpAssign;
+import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.core.Var;
@@ -58,8 +58,8 @@ public class OpWrapper {
 			extractVariables((OpJoin) left);
 		} else if (left instanceof OpTriple) {
 			extractVariables((OpTriple) left);
-		} else if (left instanceof OpAssign) {
-			throw new NotImplementedException("support for OpAssin not yet implemebnted");
+		} else if (left instanceof OpExtend) {
+			throw new NotImplementedException("support for OpExtend not yet implemebnted");
 			//extractVariables((OpAssign) left);
 		} else {
 			throw new NotImplementedException("support of op "+left.getClass()+" has not been implemented");
