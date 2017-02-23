@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.TurtleStar;
+package dk.aau.cs.qweb.turtlestar;
 
 import static org.junit.Assert.assertEquals;
 
