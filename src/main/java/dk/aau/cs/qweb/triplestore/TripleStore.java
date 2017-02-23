@@ -121,7 +121,7 @@ public class TripleStore {
 			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
 		}
     	
-		if (t.getSubject().isConcreate() && t.getPredicate().isConcreate())
+    	if (t.getSubject().isConcreate() && t.getPredicate().isConcreate())
 		    return new TripleStoreIterator( parent, SPO.iterator( t ));
 		else if (t.getObject().isConcreate() && t.getSubject().isConcreate())
 		    return new TripleStoreIterator( parent, OSP.iterator( t ));

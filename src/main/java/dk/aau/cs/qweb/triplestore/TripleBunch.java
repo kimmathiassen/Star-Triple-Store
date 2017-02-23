@@ -1,11 +1,13 @@
 package dk.aau.cs.qweb.triplestore;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
 import dk.aau.cs.qweb.triple.TripleStar;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Key;
 
 public class TripleBunch  {
@@ -36,5 +38,15 @@ public class TripleBunch  {
 	
 	public Iterator<TripleStar> iterator() {
 		return new IteratorOfIterators(innerMap.values());
+	}
+
+	public Iterator<TripleStar> iterator(Key key, TripleStarPattern triple) {
+		TripleStar ts = new TripleStar(triple.getSubject().getKey(),triple.getPredicate().getKey(),triple.getObject().getKey());
+		if (innerMap.get(key).contains(ts)) {
+			HashSet<TripleStar> set = new HashSet<TripleStar>();
+			set.add(ts);
+			return set.iterator();
+		}
+		return Collections.emptyIterator();
 	}
 }
