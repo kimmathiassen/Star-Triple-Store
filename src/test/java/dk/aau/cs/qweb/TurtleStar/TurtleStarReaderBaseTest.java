@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb;
+package dk.aau.cs.qweb.TurtleStar;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
