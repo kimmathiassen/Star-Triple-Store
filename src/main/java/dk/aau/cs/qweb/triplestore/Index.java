@@ -20,10 +20,12 @@ public class Index   {
 	private long size;
 	private Field field1;
 	private Field field2;
+	private Field field3;
 	
 	public Index(Field field1,Field field2,Field field3) {
 		this.field1 = field1;
 		this.field2 = field2;
+		this.field3 = field3;
 		indexMap = new HashMap<Key,TripleBunch>();
 		size = 0;
 	}
@@ -78,7 +80,9 @@ public class Index   {
 	public Iterator<TripleStar> iterator(TripleStarPattern triple) {
 		Key firstKey = triple.getField(field1).getKey();
 		if (indexMap.containsKey(firstKey)) {
-			if (triple.isFieldConcrete(field2)) {
+			if (triple.isFieldConcrete(field2) && triple.isFieldConcrete(field3)) {
+				return indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),triple);
+			} else if (triple.isFieldConcrete(field2)) {
 				return indexMap.get(firstKey).iterator(triple.getField(field2).getKey());
 			} else {
 				return indexMap.get(firstKey).iterator();
@@ -92,6 +96,7 @@ public class Index   {
 	}
 
 	public Iterator<TripleStar> iterateAll() {
+		
 		throw new NotImplementedException("Index.iterateAll");
 	}
 }
