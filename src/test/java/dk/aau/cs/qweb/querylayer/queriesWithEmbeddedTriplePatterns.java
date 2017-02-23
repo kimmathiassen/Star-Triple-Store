@@ -175,7 +175,6 @@ public class queriesWithEmbeddedTriplePatterns {
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
 	    RDFNode s = null;
-	    
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
 	        
@@ -196,15 +195,11 @@ public class queriesWithEmbeddedTriplePatterns {
        
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
-	    RDFNode t = null;
-	    RDFNode date = null;
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
 	        
 	        while ( results.hasNext() ) {
-	        	 QuerySolution solution = results.next();
-	        	 t  = solution.get("t");
-	        	 date  = solution.get("date");
+	        	results.next();
 	            count++;
 	        }
 	    }
