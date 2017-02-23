@@ -8,10 +8,9 @@ import org.apache.jena.sparql.core.Var;
 
 import dk.aau.cs.qweb.triple.Variable;
 
-
-
 public class VarDictionary
 {
+	private int freshVariableCounter = 1;
 	private VarDictionary() {}
 	private static VarDictionary instance;
 	public static VarDictionary getInstance() {
@@ -51,6 +50,9 @@ public class VarDictionary
 	 */
 	final public int getId ( Var v ) throws IllegalArgumentException
 	{
+		if (v.getVarName().startsWith("_")) {
+			throw new IllegalArgumentException("Illegal variable name, must not start with _");
+		}
 		Integer i = dictVarName2Id.get( v.getVarName() );
 
 		if ( i == null ) {
@@ -67,7 +69,6 @@ public class VarDictionary
 	{
 		return dictId2Var.size();
 	}
-
 
 	// operations
 
@@ -113,5 +114,11 @@ public class VarDictionary
 	public void clear() {
 		dictId2Var.clear();
 		dictVarName2Id.clear();
+	}
+
+	public Var getFreshVariable() {
+		Var var = Var.alloc("_"+freshVariableCounter);
+		createId(var);
+		return var;
 	}
 }
