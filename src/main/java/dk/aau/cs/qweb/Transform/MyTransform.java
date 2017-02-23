@@ -4,21 +4,123 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.TransformCopy;
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
+import org.apache.jena.sparql.algebra.op.OpTable;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
+
+import dk.aau.cs.qweb.dictionary.VarDictionary;
+import dk.aau.cs.qweb.model.Node_Triple;
 
 public class MyTransform extends TransformCopy {
 
 	@Override
 	public Op transform(OpBGP opBGP) {
+		System.out.println(opBGP);
 		Op op = createJoinTree(opBGP);
+		System.out.println(op);
 		return op;
 	}
+	
+//	@Override
+//	public Op transform(OpTriple optriple) {
+//		Op op = optriple;
+//		
+//		if (containsEmbeddedTriple(optriple)) {
+//			List<OpWrapper> elements = splitTripleWithEmbeddedTriple(optriple);
+//			OpWrapper tree = getOpWithHighestSelectivity(elements);
+//			while (elements.size()>0) {
+//				OpWrapper rightJoin = getOpWithHighestSelectivityThatJoins(tree,elements);
+//				tree = opJoin(tree, rightJoin);
+//			}
+//			return tree.asOp();
+//		}
+//		return op;
+//	}
+	
+//	@Override
+//    public Op transform(OpSequence opSequence, List<Op> elts) {
+//		
+//		
+//		OpWrapper opExtend = null;
+//		for (Op op : opSequence.getElements()) {
+//			if (op instanceof OpExtend) {
+//				if (opExtend == null) {
+//					opExtend = new OpWrapper(op);
+//				} else { 
+//					OpWrapper temp = new OpWrapper(op);
+//					opExtend = temp.getSelectivity() > opExtend.getSelectivity() ? temp : opExtend;
+//					
+//				}
+//				return mergeExtendAndBGP(opExtend,opSequence);
+//			}
+//		}
+//		return opSequence;
+//    }
+	
+//	@Override
+//    public Op transform(OpExtend opExtend, Op subOp) {
+//		System.out.println(opExtend);
+//		System.out.println(subOp);
+//		return null;
+//	}
+
+	private List<Op> splitTripleWithEmbeddedTriple(Triple triple) {
+		List<Op> split = new ArrayList<>();
+		Node subject = triple.getSubject();
+		Node predicate = triple.getPredicate();
+		Node object = triple.getObject();
+		if (triple.getSubject() instanceof Node_Triple) {
+			
+			Node_Triple s = (Node_Triple)triple.getSubject();
+			NodeValueNode exp = new NodeValueNode(s);
+			VarDictionary varDict = VarDictionary.getInstance();
+			
+			subject = varDict.getFreshVariable();
+			split.add(OpExtend.create(OpTable.empty() , (Var) subject, exp));
+		} 
+		if (triple.getObject() instanceof Node_Triple) {
+			Node_Triple o = (Node_Triple)triple.getObject();
+			NodeValueNode exp = new NodeValueNode(o);
+			VarDictionary varDict = VarDictionary.getInstance();
+			
+			object = varDict.getFreshVariable();
+			split.add(OpExtend.create(OpTable.empty() , (Var) object, exp));
+		}
+		split.add(new OpTriple(new Triple(subject,predicate,object)));
+		
+		return split;
+	}
+
+	private boolean containsEmbeddedTriple(Triple triple) {
+		if (triple.getSubject() instanceof Node_Triple) {
+			return true;
+		} else if (triple.getObject() instanceof Node_Triple) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+//	private OpSequence mergeExtendAndBGP(OpExtend opExtend, OpSequence opSequence) {
+//		System.out.println(opExtend.getVarExprList());
+//		for (Op op : opSequence.getElements()) {
+//			if (op instanceof OpBGP) {
+//				List<OpWrapper> opWrappers = addToList(op);
+//			}
+//		}
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+
 
 	private Op createJoinTree(Op op) {
 		List<OpWrapper> triplePatterns = addToList(op);
@@ -79,7 +181,11 @@ public class MyTransform extends TransformCopy {
 		List<Op> result = new ArrayList<Op>();
 		OpBGP bgp = (OpBGP)op;
 		for (Triple triple : bgp.getPattern()) {
-			result.add(new OpTriple(triple));
+			if (containsEmbeddedTriple(triple)) {
+				result.addAll(splitTripleWithEmbeddedTriple(triple));
+			} else {
+				result.add(new OpTriple(triple));
+			}
 		}
 		return result;
 	}
