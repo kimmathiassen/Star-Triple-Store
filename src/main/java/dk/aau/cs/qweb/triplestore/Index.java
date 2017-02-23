@@ -96,7 +96,6 @@ public class Index   {
 	}
 
 	public Iterator<TripleStar> iterateAll() {
-		
 		throw new NotImplementedException("Index.iterateAll");
 	}
 }
