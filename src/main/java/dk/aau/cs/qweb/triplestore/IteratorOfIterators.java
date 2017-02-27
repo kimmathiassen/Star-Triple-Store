@@ -27,6 +27,18 @@ public class IteratorOfIterators implements Iterator<TripleStar> {
     	currentIterator = listIterator.next();
 	}
 
+	public IteratorOfIterators(Iterator<TripleBunch> iterator) {
+		iterators = new ArrayList<Iterator<TripleStar>>();
+		while (iterator.hasNext()) {
+			TripleBunch tripleBunch = iterator.next();
+			iterators.add(tripleBunch.iterator());
+		}
+			
+    	listIterator = iterators.iterator();
+    	currentIterator = listIterator.next();
+	}
+
+
 
 	public boolean hasNext() {
 		if (currentIterator.hasNext()) {
