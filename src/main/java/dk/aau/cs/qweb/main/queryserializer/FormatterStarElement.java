@@ -478,7 +478,6 @@ protected void formatTriples(BasicPattern triples) {
 
     boolean first = true ; // Print newlines between blocks.
 
-    int indent = -1 ;
     for ( Triple t : triples ) {
         if ( subj != null && t.getSubject().equals(subj) ) {
             subjAcc.add(t) ;

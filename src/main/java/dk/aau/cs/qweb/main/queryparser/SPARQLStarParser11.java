@@ -126,6 +126,7 @@ import org.apache.jena.update.Update;
 
 import dk.aau.cs.qweb.model.NodeFactoryStar;
 
+@SuppressWarnings("unused")
 public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser11Constants {
 	 final public void QueryUnit() throws ParseException {
 		    ByteOrderMark();
@@ -1374,7 +1375,8 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		    throw new Error("Missing return statement in function");
 		  }
 
-		  final public Update Copy() throws ParseException {
+		  
+		final public Update Copy() throws ParseException {
 		                  Target src ; Target dest ; boolean silent = false ;
 		    jj_consume_token(COPY);
 		    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
