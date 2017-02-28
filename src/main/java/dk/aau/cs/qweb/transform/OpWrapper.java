@@ -14,6 +14,8 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
+import dk.aau.cs.qweb.dictionary.MyDictionary;
+import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.model.Node_Triple;
 
 public class OpWrapper {
@@ -21,6 +23,7 @@ public class OpWrapper {
 	private List<Var> variables = new ArrayList<Var>();
 	private int selectivity = 0;
 	private Op op;
+	private boolean isOpExtend= false;
 
 	public Op asOp() {
 		return op;
@@ -37,15 +40,58 @@ public class OpWrapper {
 		} else if (op instanceof OpExtend) {
 			calculateSelectivity((OpExtend) op);
 			extractVariables((OpExtend) op);
+			isOpExtend = true;
 		} else {
 			throw new NotImplementedException("support of op "+op.getClass()+" has not been implemented");
+		}
+	}
+	
+	public boolean isTripleOverflown() {
+		Triple triple =  getTriple(op);
+		MyDictionary dict = MyDictionary.getInstance();
+		if (triple != null) {
+			if(triple.getSubject() instanceof Node_Triple) {
+				if (BitHelper.isOverflownEmbeddedTriple(dict.createKey(triple.getSubject()))) {
+					return true;
+				}
+			}
+			
+			if(triple.getObject() instanceof Node_Triple) {
+				if (BitHelper.isOverflownEmbeddedTriple(dict.createKey(triple.getObject()))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private Triple getTriple(Op op) {
+		if (op instanceof OpTriple) {
+			OpTriple triple = (OpTriple)op;
+			return triple.getTriple();
+		} else if (op instanceof OpJoin) {
+			return null;
+		} else if (op instanceof OpExtend) {
+			OpExtend bind = (OpExtend)op;
+			Collection<Expr> expressions = bind.getVarExprList().getExprs().values();
+			if (expressions.size() != 1) {
+				throw new IllegalArgumentException("OpExtend contains multiple or zero expressions, expected one: "+op);
+			}
+			for (Expr expr : expressions) {
+				//This only works for embedded triples
+				NodeValueNode node = (NodeValueNode) expr;
+				Node_Triple t = (Node_Triple) node.getNode();
+				return new Triple(t.getSubject(),t.getPredicate(),t.getObject());
+			}
+			return null; //Can never be called
+		} else {
+			return null;
 		}
 	}
 
 	private void calculateSelectivity(OpTriple op) {
 		selectivity = SelectivityMap.getSelectivityScore(op.getTriple());
 	}
-	
 
 	private void calculateSelectivity(OpExtend op) {
 		Collection<Expr> expressions = op.getVarExprList().getExprs().values();
@@ -73,7 +119,6 @@ public class OpWrapper {
 	}
 	
 	private void extractVariables(OpExtend op) {
-		System.out.println(op.getVarExprList().getVars());
 		variables.addAll(op.getVarExprList().getVars());
 	}
 
@@ -103,5 +148,13 @@ public class OpWrapper {
 	@Override
 	public String toString() {
 		return op.toString();
+	}
+
+	public boolean onlyContainsVariables() {
+		return variables.size() == 3 ? true : false;
+	}
+
+	public boolean isOpExtend() {
+		return isOpExtend;
 	}
 }

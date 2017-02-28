@@ -145,7 +145,7 @@ public class MyTransform extends TransformCopy {
 				if (highestSelectivity == null) {
 					highestSelectivity = opWrapper;
 				}
-				if (opWrapper.getSelectivity() > highestSelectivity.getSelectivity()) {
+				if (compareSelectivity(highestSelectivity, opWrapper)) {
 					highestSelectivity = opWrapper;
 				}
 			}
@@ -157,12 +157,31 @@ public class MyTransform extends TransformCopy {
 	private OpWrapper getOpWithHighestSelectivity(List<OpWrapper> triplePatterns) {
 		OpWrapper highestSelectivity = triplePatterns.get(0);
 		for (OpWrapper opWrapper : triplePatterns) {
-			if (opWrapper.getSelectivity() > highestSelectivity.getSelectivity()) {
+			if (compareSelectivity(highestSelectivity, opWrapper)) {
 				highestSelectivity = opWrapper;
 			}
 		}
 		triplePatterns.remove(highestSelectivity);
 		return highestSelectivity;
+	}
+
+	private boolean compareSelectivity(OpWrapper highestSelectivity, OpWrapper opWrapper) {
+		//True means that opWrapper is higher
+		if (opWrapper.getSelectivity() == highestSelectivity.getSelectivity()) {
+			if (opWrapper.isTripleOverflown() || highestSelectivity.isTripleOverflown()) {
+				return opWrapper.isTripleOverflown() ? false : true;
+			}
+			if (opWrapper.onlyContainsVariables() && highestSelectivity.onlyContainsVariables()) {
+				
+				if (opWrapper.isOpExtend()) {
+					return true;
+				} else if (highestSelectivity.isOpExtend()) {
+					return false;
+				}
+			}
+		}
+		
+		return opWrapper.getSelectivity() > highestSelectivity.getSelectivity();
 	}
 
 	private List<OpWrapper> addToList(Op op) {

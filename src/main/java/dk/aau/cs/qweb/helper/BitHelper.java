@@ -3,10 +3,11 @@ package dk.aau.cs.qweb.helper;
 import dk.aau.cs.qweb.triple.Key;
 
 public class BitHelper {
+	private static final long OVERFLOWN_MASK =	Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2);
 	private static final long OBJECT_MASK = 	Long.parseLong("0000000000000000000000000000000000000000000011111111111111111111", 2);
 	private static final long PREDICATE_MASK = 	Long.parseLong("0000000000000000000000001111111111111111111100000000000000000000", 2);
 	private static final long SUBJECT_MASK =	Long.parseLong("0000111111111111111111110000000000000000000000000000000000000000", 2);
-	
+
 	public static boolean isThereAnyKeysSetToZeroInEmbeddedId(final Key key) {
 		return isThereAnyKeysSetToZeroInEmbeddedId(key.getId());
 	}
@@ -63,5 +64,14 @@ public class BitHelper {
 	
 	public static long getEmbeddedObject(final Key key) {
 		return getEmbeddedObject(key.getId());
+	}
+
+	public static boolean isOverflownEmbeddedTriple(Key key) {
+		if (isIdAnEmbeddedTriple(key)) {
+			if ((key.getId() & OVERFLOWN_MASK) == OVERFLOWN_MASK) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -43,47 +43,9 @@ public class OpStarExecutor extends OpExecutor{
 
 	// operations
 
-	
 	@Override
 	protected QueryIterator execute(OpExtend opExtend, QueryIterator input) {
 		return new DecodeBindingsIterator(execute((OpExtend)opExtend, new EncodeBindingsIterator( input, execCxt )),execCxt);
-		
-//		if (opExtend.getVarExprList().getExprs().values().size() != 1) {
-//			throw new IllegalStateException("Did not expect "+opExtend+ " to have multiple expressions, this state is not handled");
-//		}
-//		
-//		//This for loop can only run once.
-//		for (Expr iterable_element : opExtend.getVarExprList().getExprs().values()) {
-//			if (iterable_element instanceof NodeValueNode) {
-//				NodeValueNode temp = (NodeValueNode)iterable_element;
-//				Node_Triple node = (Node_Triple)temp.asNode();
-//				Var var = opExtend.getVarExprList().getVars().get(0);
-////				
-////				QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
-////				System.out.println(opExtend.getSubOp());
-////				if (qIter instanceof DecodeBindingsIterator) {
-////					DecodeBindingsIterator qItasdaser = (DecodeBindingsIterator)qIter;
-////				}
-//				
-//				Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
-//				qIt = new ExtendWithEmbeddedTriplePatternQueryIter(encode(var),encode(node) ,qIt, execCxt) ;
-//				
-//				//missing call to children.
-//				//exec(opExtend.getSubOp(), input) ;
-//				
-//				
-//				return new DecodeBindingsIterator(qIt,execCxt);
-//			}
-//		}
-//		//If contain embedded create custom queryiterator
-//		//else use defualt.
-//		
-//        // We know (parse time checking) the variable is unused so far in
-//        // the query so we can use QueryIterAssign knowing that it behaves
-//        // the same as extend. The boolean should only be a check.
-//        QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
-//        qIter = new QueryIterAssign(qIter, opExtend.getVarExprList(), execCxt, true) ;
-//        return qIter ;
     }
 	
 	@Override
