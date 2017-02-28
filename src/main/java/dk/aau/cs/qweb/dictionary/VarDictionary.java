@@ -50,9 +50,9 @@ public class VarDictionary
 	 */
 	final public int getId ( Var v ) throws IllegalArgumentException
 	{
-		if (v.getVarName().startsWith("_")) {
-			throw new IllegalArgumentException("Illegal variable name, must not start with _");
-		}
+//		if (v.getVarName().startsWith("_")) {
+//			throw new IllegalArgumentException("Illegal variable name, must not start with _");
+//		}
 		Integer i = dictVarName2Id.get( v.getVarName() );
 
 		if ( i == null ) {
