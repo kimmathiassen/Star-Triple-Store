@@ -166,8 +166,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			if (tp.getKey().getId() != solutionMapping.get(var)) {
 				return null;
 			}
-		} else {
-			//
+		} else if (sNew.isConcreate() && pNew.isConcreate() && oNew.isConcreate()) {
 			solutionMapping.set(var, KeyFactory.createKey(tp.getSubject().getKey(), tp.getPredicate().getKey(), tp.getObject().getKey()));
 		}
 
