@@ -66,7 +66,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 
 	public boolean hasNext ()
 	{
-		while ( currentMatches == null || ! currentMatches.hasNext() )
+ 		while ( currentMatches == null || ! currentMatches.hasNext() )
 		{
 			if ( ! input.hasNext() ) {
 				return false;
@@ -166,6 +166,9 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			if (tp.getKey().getId() != solutionMapping.get(var)) {
 				return null;
 			}
+		} else {
+			//
+			solutionMapping.set(var, KeyFactory.createKey(tp.getSubject().getKey(), tp.getPredicate().getKey(), tp.getObject().getKey()));
 		}
 
 		return tp;
