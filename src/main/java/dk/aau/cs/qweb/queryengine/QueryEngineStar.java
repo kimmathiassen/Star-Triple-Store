@@ -20,9 +20,9 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.engine.main.QueryEngineMain;
 import org.apache.jena.sparql.util.Context ;
 
-import dk.aau.cs.qweb.Transform.MyTransform;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.graph.Graph;
+import dk.aau.cs.qweb.transform.MyTransform;
 
 
 public class QueryEngineStar extends QueryEngineMain {

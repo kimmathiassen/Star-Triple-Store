@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.Transform;
+package dk.aau.cs.qweb.transform;
 
 import java.util.ArrayList;
 import java.util.Collection;

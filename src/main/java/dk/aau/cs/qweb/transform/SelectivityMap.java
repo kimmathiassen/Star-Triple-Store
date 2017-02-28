@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.Transform;
+package dk.aau.cs.qweb.transform;
 
 import java.util.HashMap;
 import java.util.Map;
