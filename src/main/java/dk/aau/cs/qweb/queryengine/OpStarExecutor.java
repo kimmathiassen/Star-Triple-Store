@@ -2,7 +2,9 @@ package dk.aau.cs.qweb.queryengine;
 
 import java.util.Iterator;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
@@ -10,7 +12,6 @@ import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.expr.Expr;
@@ -45,42 +46,44 @@ public class OpStarExecutor extends OpExecutor{
 	
 	@Override
 	protected QueryIterator execute(OpExtend opExtend, QueryIterator input) {
-		if (opExtend.getVarExprList().getExprs().values().size() != 1) {
-			throw new IllegalStateException("Did not expect "+opExtend+ " to have multiple expressions, this state is not handled");
-		}
+		return new DecodeBindingsIterator(execute((OpExtend)opExtend, new EncodeBindingsIterator( input, execCxt )),execCxt);
 		
-		//This for loop can only run once.
-		for (Expr iterable_element : opExtend.getVarExprList().getExprs().values()) {
-			if (iterable_element instanceof NodeValueNode) {
-				NodeValueNode temp = (NodeValueNode)iterable_element;
-				Node_Triple node = (Node_Triple)temp.asNode();
-				Var var = opExtend.getVarExprList().getVars().get(0);
+//		if (opExtend.getVarExprList().getExprs().values().size() != 1) {
+//			throw new IllegalStateException("Did not expect "+opExtend+ " to have multiple expressions, this state is not handled");
+//		}
+//		
+//		//This for loop can only run once.
+//		for (Expr iterable_element : opExtend.getVarExprList().getExprs().values()) {
+//			if (iterable_element instanceof NodeValueNode) {
+//				NodeValueNode temp = (NodeValueNode)iterable_element;
+//				Node_Triple node = (Node_Triple)temp.asNode();
+//				Var var = opExtend.getVarExprList().getVars().get(0);
+////				
+////				QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
+////				System.out.println(opExtend.getSubOp());
+////				if (qIter instanceof DecodeBindingsIterator) {
+////					DecodeBindingsIterator qItasdaser = (DecodeBindingsIterator)qIter;
+////				}
 //				
-//				QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
-//				System.out.println(opExtend.getSubOp());
-//				if (qIter instanceof DecodeBindingsIterator) {
-//					DecodeBindingsIterator qItasdaser = (DecodeBindingsIterator)qIter;
-//				}
-				
-				Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
-				qIt = new ExtendWithEmbeddedTriplePatternQueryIter(encode(var),encode(node) ,qIt, execCxt) ;
-				
-				//missing call to children.
-				//exec(opExtend.getSubOp(), input) ;
-				
-				
-				return new DecodeBindingsIterator(qIt,execCxt);
-			}
-		}
-		//If contain embedded create custom queryiterator
-		//else use defualt.
-		
-        // We know (parse time checking) the variable is unused so far in
-        // the query so we can use QueryIterAssign knowing that it behaves
-        // the same as extend. The boolean should only be a check.
-        QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
-        qIter = new QueryIterAssign(qIter, opExtend.getVarExprList(), execCxt, true) ;
-        return qIter ;
+//				Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
+//				qIt = new ExtendWithEmbeddedTriplePatternQueryIter(encode(var),encode(node) ,qIt, execCxt) ;
+//				
+//				//missing call to children.
+//				//exec(opExtend.getSubOp(), input) ;
+//				
+//				
+//				return new DecodeBindingsIterator(qIt,execCxt);
+//			}
+//		}
+//		//If contain embedded create custom queryiterator
+//		//else use defualt.
+//		
+//        // We know (parse time checking) the variable is unused so far in
+//        // the query so we can use QueryIterAssign knowing that it behaves
+//        // the same as extend. The boolean should only be a check.
+//        QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
+//        qIter = new QueryIterAssign(qIter, opExtend.getVarExprList(), execCxt, true) ;
+//        return qIter ;
     }
 	
 	@Override
@@ -105,23 +108,101 @@ public class OpStarExecutor extends OpExecutor{
 	
 	@Override
 	public QueryIterator execute ( OpTriple opTriple, QueryIterator input )	{
-		Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
-		qIt = new TriplePatternQueryIter( encode(opTriple.getTriple()), qIt, execCxt );
-
-		return new DecodeBindingsIterator( qIt, execCxt );
+		return new DecodeBindingsIterator(execute((OpTriple)opTriple, new EncodeBindingsIterator( input, execCxt )),execCxt);
 	}
 	
 	@Override
 	protected QueryIterator execute(OpJoin opJoin, QueryIterator input) {
+		return new DecodeBindingsIterator(execute((OpJoin)opJoin, new EncodeBindingsIterator( input, execCxt )),execCxt);
+		
+//		Op opLeft = opJoin.getLeft();
+//		Op opRight = opJoin.getRight();
+//		QueryIterator jenaIterator = input;
+//		Iterator<SolutionMapping> leftIter = null;
+//		QueryIterator leftBindings = null;
+//		
+//		if (opLeft instanceof OpTriple) {
+//			leftIter = execute((OpTriple)opLeft,new EncodeBindingsIterator( input, execCxt ));
+//		} else if (opLeft instanceof OpJoin) {
+//			leftIter = execute((OpJoin)opLeft,new EncodeBindingsIterator( input, execCxt ));
+//		} else if (opLeft instanceof OpExtend) {
+//			leftIter = execute((OpExtend)opLeft,new EncodeBindingsIterator( input, execCxt ));
+//		} else {
+//			leftBindings = exec(opLeft, input);
+//		}
+//			
+//		if (leftIter != null) {
+//			if (opRight instanceof OpTriple) {
+//				jenaIterator = new DecodeBindingsIterator(execute((OpTriple)opRight,leftIter), execCxt);
+//			} else if (opRight instanceof OpJoin) {
+//				jenaIterator = new DecodeBindingsIterator(execute((OpJoin)opRight,leftIter), execCxt);
+//			} else if (opRight instanceof OpExtend) {
+//				jenaIterator = new DecodeBindingsIterator(execute((OpExtend)opRight,leftIter), execCxt);
+//			} 
+//		} else {
+//			jenaIterator = exec(opRight, leftBindings) ;
+//		}
+//			
+//		
+//        return jenaIterator ;
+    }
+	
+	
+	private Iterator<SolutionMapping> execute(OpJoin opJoin, Iterator<SolutionMapping> solutionMappingIter) {
+		Op opLeft = opJoin.getLeft();
+		Op opRight = opJoin.getRight();
+		Iterator<SolutionMapping> leftIter = null;
+		
+		if (opLeft instanceof OpTriple) {
+			leftIter = execute((OpTriple)opLeft,solutionMappingIter);
+		} else if (opLeft instanceof OpJoin) {
+			leftIter = execute((OpJoin)opLeft,solutionMappingIter);
+		} else if (opLeft instanceof OpExtend) {
+			leftIter = execute((OpExtend)opLeft,solutionMappingIter);
+		}  else {
+			throw new NotImplementedException("There is no id-based iterator implemented for "+opLeft);
+		}
+			
+		if (opRight instanceof OpTriple) {
+			return execute((OpTriple)opRight,leftIter);
+		} else if (opRight instanceof OpJoin) {
+			return execute((OpJoin)opRight,leftIter);
+		} else if (opRight instanceof OpExtend) {
+			return execute((OpExtend)opRight,leftIter);
+		} else {
+			throw new NotImplementedException("There is no id-based iterator implemented for "+opRight);
+		}
+	}
+	
+	private Iterator<SolutionMapping> execute(OpExtend opExtend, Iterator<SolutionMapping> solutionMappingIter) {
+	
+		if (opExtend.getVarExprList().getExprs().values().size() != 1) {
+			throw new IllegalStateException("Did not expect "+opExtend+ " to have multiple expressions, this state is not handled");
+		}
+		
+		//This for loop can only run once.
+		for (Expr iterable_element : opExtend.getVarExprList().getExprs().values()) {
+			if (iterable_element instanceof NodeValueNode) {
+				NodeValueNode temp = (NodeValueNode)iterable_element;
+				Node_Triple node = (Node_Triple)temp.asNode();
+				Var var = opExtend.getVarExprList().getVars().get(0);
 
-	        QueryIterator left = exec(opJoin.getLeft(), input) ;
-	        
-	        QueryIterator right = exec(opJoin.getRight(), left) ;
-	        
-	        return right ;
-	    }
+				//Note that children of OpExtend are not expected and are not handled
+				
+				return new ExtendWithEmbeddedTriplePatternQueryIter(encode(var),encode(node) ,solutionMappingIter, execCxt) ;
+			} else {
+				throw new NotImplementedException("only embedded triple patterns are currently supported. OpStarExecutor.execute()");
+				//handle normal bind
+			}
+		}
+		
+		throw new IllegalStateException("The opExtend is in an illegalState, it does not seem to contain any expression: "+opExtend.getVarExprList());
+	}
 	
-	
+	private Iterator<SolutionMapping> execute(OpTriple opTriple, Iterator<SolutionMapping> solutionMappingIter) {
+		return new TriplePatternQueryIter( encode(opTriple.getTriple()), solutionMappingIter, execCxt );
+	}
+
 	// helper methods
 
 	final protected TripleStarPattern encode ( Triple tp) {
