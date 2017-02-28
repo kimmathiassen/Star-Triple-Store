@@ -103,7 +103,7 @@ public class queriesWithEmbeddedTriplePatterns {
 	@Test
 	public void queryMixOfEmbeddedAndNormalTriples() {
 		String queryString = prolog +
-				"SELECT ?o WHERE {ex:kim ex:worksAt ?o}" ; 
+				"SELECT ?o WHERE {ex:kim ex:worksAt ?o} order by ?o" ; 
        
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
@@ -118,8 +118,8 @@ public class queriesWithEmbeddedTriplePatterns {
 	            count++;
 	        }
 	    }
-	    assertEquals("http://example.org/aau",o.get(0).toString());
-	    assertEquals("http://example.org/LiU",o.get(1).toString());
+	    assertEquals("http://example.org/aau",o.get(1).toString());
+	    assertEquals("http://example.org/LiU",o.get(0).toString());
 		assertEquals(2,count);
 	}
 	
