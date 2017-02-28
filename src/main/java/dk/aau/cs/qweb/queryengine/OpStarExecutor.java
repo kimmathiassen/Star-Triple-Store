@@ -11,7 +11,6 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
-import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.expr.Expr;
@@ -46,7 +45,6 @@ public class OpStarExecutor extends OpExecutor{
 	
 	@Override
 	protected QueryIterator execute(OpExtend opExtend, QueryIterator input) {
-		System.out.println();
 		if (opExtend.getVarExprList().getExprs().values().size() != 1) {
 			throw new IllegalStateException("Did not expect "+opExtend+ " to have multiple expressions, this state is not handled");
 		}
@@ -57,10 +55,21 @@ public class OpStarExecutor extends OpExecutor{
 				NodeValueNode temp = (NodeValueNode)iterable_element;
 				Node_Triple node = (Node_Triple)temp.asNode();
 				Var var = opExtend.getVarExprList().getVars().get(0);
+//				
+//				QueryIterator qIter = exec(opExtend.getSubOp(), input) ;
+//				System.out.println(opExtend.getSubOp());
+//				if (qIter instanceof DecodeBindingsIterator) {
+//					DecodeBindingsIterator qItasdaser = (DecodeBindingsIterator)qIter;
+//				}
 				
 				Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
 				qIt = new ExtendWithEmbeddedTriplePatternQueryIter(encode(var),encode(node) ,qIt, execCxt) ;
-		        return new DecodeBindingsIterator(qIt,execCxt);
+				
+				//missing call to children.
+				//exec(opExtend.getSubOp(), input) ;
+				
+				
+				return new DecodeBindingsIterator(qIt,execCxt);
 			}
 		}
 		//If contain embedded create custom queryiterator
@@ -95,28 +104,22 @@ public class OpStarExecutor extends OpExecutor{
 	}
 	
 	@Override
-	public QueryIterator execute ( OpTriple opTriple, QueryIterator input )
-	{
+	public QueryIterator execute ( OpTriple opTriple, QueryIterator input )	{
 		Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
 		qIt = new TriplePatternQueryIter( encode(opTriple.getTriple()), qIt, execCxt );
 
 		return new DecodeBindingsIterator( qIt, execCxt );
 	}
 	
-	
 	@Override
-	public QueryIterator execute ( OpJoin opJoin, QueryIterator input )
-	{
-        // Need to clone input into left and right.
-        // Do by evaling for each input case, the left and right and concat'ing
-        // the results.
+	protected QueryIterator execute(OpJoin opJoin, QueryIterator input) {
 
-        QueryIterator left = exec(opJoin.getLeft(), input) ;
-        QueryIterator right = exec(opJoin.getRight(), root()) ;
-        // Join key.
-        QueryIterator qIter = Join.join(left, right, execCxt) ;
-        return qIter ;
-	}
+	        QueryIterator left = exec(opJoin.getLeft(), input) ;
+	        
+	        QueryIterator right = exec(opJoin.getRight(), left) ;
+	        
+	        return right ;
+	    }
 	
 	
 	// helper methods
