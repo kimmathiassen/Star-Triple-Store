@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.jena.graph.Triple;
 
-import dk.aau.cs.qweb.dictionary.MyDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
 
 public class TripleStarBuilder {
 
 	public List<TripleStar> createTriple(Triple t) {
-		MyDictionary dict = MyDictionary.getInstance();
+		NodeDictionary dict = NodeDictionary.getInstance();
 		List<TripleStar> triples = new ArrayList<TripleStar>();
 		Key subject = dict.createKey(t.getSubject());
 		Key predicate = dict.createKey(t.getPredicate());

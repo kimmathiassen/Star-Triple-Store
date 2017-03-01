@@ -11,22 +11,22 @@ import dk.aau.cs.qweb.model.Node_Triple;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
-public class MyDictionary {
+public class NodeDictionary {
 	
-	private static MyDictionary instance;
+	private static NodeDictionary instance;
 	HashMap<Key, Node> id2Node;
 	HashMap<Node, Key> node2Id;
 	long id;
 
-	private MyDictionary() {
+	private NodeDictionary() {
 		id2Node = new HashMap<Key, Node>();
 		node2Id = new HashMap<Node, Key>();
 		id = 1;
 	}
 	
-	public static MyDictionary getInstance() {
+	public static NodeDictionary getInstance() {
 		if(instance == null) {
-	         instance = new MyDictionary();
+	         instance = new NodeDictionary();
 	    }
 	    return instance;
 	}

@@ -9,7 +9,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.MyDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarBuilder;
 
@@ -26,7 +26,7 @@ public class DictionaryTest {
 		List<TripleStar> idTriples = builder.createTriple(original);
 		TripleStar idTriple = idTriples.get(0);
 		
-		MyDictionary dict = MyDictionary.getInstance();
+		NodeDictionary dict = NodeDictionary.getInstance();
 		Node subjectNode = dict.getNode(idTriple.subjectId);
 		Node predicateNode = dict.getNode(idTriple.predicateId);
 		Node objectNode = dict.getNode(idTriple.objectId);

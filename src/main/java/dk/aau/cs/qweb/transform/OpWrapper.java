@@ -14,7 +14,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
-import dk.aau.cs.qweb.dictionary.MyDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.model.Node_Triple;
 
@@ -48,7 +48,7 @@ public class OpWrapper {
 	
 	public boolean isTripleOverflown() {
 		Triple triple =  getTriple(op);
-		MyDictionary dict = MyDictionary.getInstance();
+		NodeDictionary dict = NodeDictionary.getInstance();
 		if (triple != null) {
 			if(triple.getSubject() instanceof Node_Triple) {
 				if (BitHelper.isOverflownEmbeddedTriple(dict.createKey(triple.getSubject()))) {
