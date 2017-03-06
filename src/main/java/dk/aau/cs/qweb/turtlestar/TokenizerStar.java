@@ -453,21 +453,47 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
     private String readEmbeddedTriple() {
     	String image = "<<";
     	int ch = reader.readChar() ; //Consumers "<"
+    	ch = reader.peekChar() ;
     	
         long posn = reader.getPosition() ;
-        String prefixPart = readPrefixPart() ; // Prefix part or keyword
-        TokenStar embedded1 = TokenStar.createEmbedded();
-        embedded1.setImage(prefixPart) ;
-        image += prefixPart;
-        embedded1.setType(TokenTypeStar.KEYWORD) ;
-        ch = reader.peekChar() ;
-        if ( ch == CH_COLON ) {
-            reader.readChar() ;
-            embedded1.setType(TokenTypeStar.PREFIXED_NAME) ;
-            String ln = readLocalPart() ; // Local part
-            embedded1.setImage2(ln) ;
-            image += ":"+ln+" ";
-        }
+        
+        TokenStar embedded1 = null;
+        if ( ch == CH_LT ) { 
+        	
+        	reader.readChar() ;
+        	embedded1 = TokenStar.createEmbedded();
+        	String iri = "<"+readIRI()+"> ";
+        	image += iri;
+        	embedded1.setImage(iri) ;
+        	embedded1.setType(TokenTypeStar.IRI) ;
+        	
+        	
+        	
+        } else if ( ch == CH_UNDERSCORE ) {
+        	
+        	expect("_:") ;
+        	
+        	String iri = "_:"+readBlankNodeLabel();
+        	image += iri+" ";
+        	embedded1 = TokenStar.createEmbedded();
+        	embedded1.setImage(iri+" ") ;
+        	embedded1.setType(TokenTypeStar.BNODE) ;
+        } else {
+        	 String prefixPart = readPrefixPart() ; // Prefix part or keyword
+             embedded1 = TokenStar.createEmbedded();
+             embedded1.setImage(prefixPart) ;
+             image += prefixPart;
+             embedded1.setType(TokenTypeStar.KEYWORD) ;
+             ch = reader.peekChar() ;
+             if ( ch == CH_COLON ) {
+            	 
+                 reader.readChar() ;
+                 embedded1.setType(TokenTypeStar.PREFIXED_NAME) ;
+                 String ln = readLocalPart() ; // Local part
+                 embedded1.setImage2(ln) ;
+                 image += ":"+ln+" ";
+             }
+        }    
 
         // If we made no progress, nothing found, not even a keyword -- it's an
         // error.
@@ -477,20 +503,32 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
         token.setEmbeddedToken1(embedded1);
         
         skip() ;
-        
-    	posn = reader.getPosition() ;
-        prefixPart = readPrefixPart() ; // Prefix part or keyword
-        image += prefixPart;
-        TokenStar embedded2 = TokenStar.createEmbedded();
-        embedded2.setImage(prefixPart) ;
-        embedded2.setType(TokenTypeStar.KEYWORD) ;
         ch = reader.peekChar() ;
-        if ( ch == CH_COLON ) {
-            reader.readChar() ;
-            embedded2.setType(TokenTypeStar.PREFIXED_NAME) ;
-            String ln = readLocalPart() ; // Local part
-            embedded2.setImage2(ln) ;
-            image += ":"+ln+" ";
+        
+        TokenStar embedded2 = null;
+		if ( ch == CH_LT ) {
+        	reader.readChar() ;
+        	embedded2 = TokenStar.createEmbedded();
+        	String iri = "<"+readIRI()+"> ";
+        	image += iri;
+        	embedded2.setImage(iri) ;
+        	embedded2.setType(TokenTypeStar.IRI) ;
+        	
+        } else {
+        	posn = reader.getPosition() ;
+            String prefixPart = readPrefixPart() ; // Prefix part or keyword
+            image += prefixPart;
+            embedded2 = TokenStar.createEmbedded();
+            embedded2.setImage(prefixPart) ;
+            embedded2.setType(TokenTypeStar.KEYWORD) ;
+            ch = reader.peekChar() ;
+            if ( ch == CH_COLON ) {
+                reader.readChar() ;
+                embedded2.setType(TokenTypeStar.PREFIXED_NAME) ;
+                String ln = readLocalPart() ; // Local part
+                embedded2.setImage2(ln) ;
+                image += ":"+ln+" ";
+            }
         }
 
         // If we made no progress, nothing found, not even a keyword -- it's an
@@ -499,8 +537,8 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
             exception("Failed to find a prefix name or keyword: %c(%d;0x%04X)", ch, ch, ch) ;
     	
         token.setEmbeddedToken2(embedded2);
-        
         skip() ;
+        ch = reader.peekChar() ;
         
         // ---- Literal
         if ( ch == CH_QUOTE1 || ch == CH_QUOTE2 ) {
@@ -549,8 +587,9 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 TokenStar mainToken = new TokenStar(embedded3) ;
                 mainToken.setType(TokenTypeStar.LITERAL_LANG) ;
                 mainToken.setSubToken1(token) ;
-                mainToken.setImage2(langTag()) ;
-                image += langTag();
+                String tag = langTag();
+                mainToken.setImage2(tag) ;
+                image += tag;
                 embedded3 = mainToken ;
             } else if ( reader.peekChar() == '^' ) {
                 expect("^^") ;
@@ -564,22 +603,44 @@ public class TokenizerStar implements Iterator<TokenStar>, Closeable {
                 
                 // Stash current token.
                 TokenStar mainToken = new TokenStar(embedded3) ;
-                mainToken.setSubToken1(embedded3) ;
+                
+                mainToken.setSubToken1(embedded3) ;//This might be wrong!
                 mainToken.setImage(embedded3.getImage()) ;
-
-                TokenStar subToken = parseToken() ;
+                
+                TokenStar temp = token;
+                TokenStar subToken = parseToken() ; // token is overridden
+                token = temp;
                 if ( !subToken.isIRI() )
                     exception("Datatype URI required after ^^ - URI or prefixed name expected") ;
 
                 mainToken.setSubToken2(subToken) ;
                 mainToken.setType(TokenTypeStar.LITERAL_DT) ;
+                image += "^^<"+subToken.getImage()+">";
 
                 embedded3 = mainToken ;
             } 
             token.setEmbeddedToken3(embedded3);
+        } else if ( ch == CH_UNDERSCORE ) {
+        	expect("_:") ;
+        	TokenStar embedded3 = TokenStar.createEmbedded();
+        	String iri = "_:"+readBlankNodeLabel();
+        	image += iri+" ";
+        	embedded3.setImage(iri) ;
+        	embedded3.setType(TokenTypeStar.BNODE) ;
+        	token.setEmbeddedToken3(embedded3);
+        	
+        } else if ( ch == CH_LT ) {
+        	reader.readChar() ;
+        	TokenStar embedded3 = TokenStar.createEmbedded();
+        	String iri = "<"+readIRI()+"> ";
+        	image += iri;
+        	embedded3.setImage(iri) ;
+        	embedded3.setType(TokenTypeStar.IRI) ;
+        	token.setEmbeddedToken3(embedded3);
+        	
         } else {
         	posn = reader.getPosition() ;
-            prefixPart = readPrefixPart() ; // Prefix part or keyword
+            String prefixPart = readPrefixPart() ; // Prefix part or keyword
             TokenStar embedded3 = TokenStar.createEmbedded();
             embedded3.setImage(prefixPart) ;
             image += prefixPart;
