@@ -74,4 +74,9 @@ public class BitHelper {
 		}
 		return false;
 	}
+
+	public static Key createOverflowKey(long overflowTripleKey) {
+		long id = overflowTripleKey * -1;
+		return new Key(OVERFLOWN_MASK | id);
+	}
 }

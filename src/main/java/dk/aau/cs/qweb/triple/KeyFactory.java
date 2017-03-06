@@ -52,4 +52,8 @@ public class KeyFactory {
 		//No bits are set meaning that this is a normal key.
 		return new Key((key));
 	}
+
+	public static long getOverflowLimit() {
+		return LARGEST_20_BIT_NUMBER;
+	}
 }
