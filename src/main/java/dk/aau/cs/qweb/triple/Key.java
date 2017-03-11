@@ -2,6 +2,8 @@ package dk.aau.cs.qweb.triple;
 
 import java.util.Objects;
 
+import dk.aau.cs.qweb.helper.BitHelper;
+
 public class Key implements StarNode{
 	
 	public Key(long id) {
@@ -14,6 +16,13 @@ public class Key implements StarNode{
 	
 	@Override
 	public String toString() {
+		if (id < 0) { //is embedded triple
+			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
+			String subject = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedSubject(id))).replace(' ', '0');
+			String predicate = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedPredicate(id))).replace(' ', '0');
+			String object = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedObject(id))).replace(' ', '0');
+			return header + "-"+subject+"-"+predicate+"-"+object;
+		}
 		return Long.toBinaryString(id);
 	}
 

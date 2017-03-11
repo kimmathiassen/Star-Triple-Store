@@ -67,8 +67,12 @@ public class BitHelper {
 	}
 
 	public static boolean isOverflownEmbeddedTriple(Key key) {
-		if (isIdAnEmbeddedTriple(key)) {
-			if ((key.getId() & OVERFLOWN_MASK) == OVERFLOWN_MASK) {
+		return isOverflownEmbeddedTriple(key.getId());
+	}
+	
+	public static boolean isOverflownEmbeddedTriple(long id) {
+		if (isIdAnEmbeddedTriple(id)) {
+			if ((id & OVERFLOWN_MASK) == OVERFLOWN_MASK) {
 				return true;
 			}
 		}
@@ -78,5 +82,12 @@ public class BitHelper {
 	public static Key createOverflowKey(long overflowTripleKey) {
 		long id = overflowTripleKey * -1;
 		return new Key(OVERFLOWN_MASK | id);
+	}
+
+	public static long getEmbeddedHeader(long id) {
+		if (!isIdAnEmbeddedTriple(id)) {
+			throw new IllegalArgumentException("expected an embedded triple, but recieved: "+String.format("%64s", Long.toBinaryString(id)).replace(' ', '0'));
+		}
+		return isOverflownEmbeddedTriple(id) ? 12 : 8;
 	}
 }
