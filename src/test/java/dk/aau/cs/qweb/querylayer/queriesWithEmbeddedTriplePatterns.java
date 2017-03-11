@@ -72,6 +72,7 @@ public class queriesWithEmbeddedTriplePatterns {
         		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
     	
         RDFDataMgr.read(model, filename);
+        g.eliminateDuplicates();
 	}
 	
 	
