@@ -94,20 +94,31 @@ public class NodeDictionary {
 				numberOfEmbeddedTriples++;
 			}
 			
+			Node subject = normalizeNode(embeddedNode.getSubject());
+			Node predicate = normalizeNode(embeddedNode.getPredicate());
+			Node object = normalizeNode(embeddedNode.getObject());
+			
 			if (doesNodeContainOverflowKey(embeddedNode)) {
-				registerOrGetNode(embeddedNode.getSubject());
-				registerOrGetNode(embeddedNode.getPredicate());
-				registerOrGetNode(embeddedNode.getObject());
+				registerOrGetNode(subject);
+				registerOrGetNode(predicate);
+				registerOrGetNode(object);
 				return registerOverflowNode(embeddedNode);
 			} else {
-				Key s1 = registerOrGetNode(embeddedNode.getSubject());
-				Key p1 = registerOrGetNode(embeddedNode.getPredicate());
-				Key o1 = registerOrGetNode(embeddedNode.getObject());
+				Key s1 = registerOrGetNode(subject);
+				Key p1 = registerOrGetNode(predicate);
+				Key o1 = registerOrGetNode(object);
 				return KeyFactory.createKey(s1, p1, o1);
 			}
 		} else {
 			return registerOrGetNode(node);
 		}
+	}
+
+	private Node normalizeNode(Node node) {
+		if (node.toString().trim().startsWith("<") && node.toString().trim().endsWith(">")) {
+			return NodeFactoryStar.createURI(node.toString().trim().substring(1, node.toString().trim().length()-1));
+		} 
+		return node;
 	}
 
 	private boolean newEmbeddedTriple(Node_Triple embeddedNode) {
