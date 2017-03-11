@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.collections4.iterators.IteratorChain;
+
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
@@ -34,12 +36,20 @@ public class TripleBunch  {
 			return innerMap.get(key).iterator();
 		} else {
 			//return an iterator of all arrayLists
-			return new IteratorOfIterators(innerMap.values());
+			IteratorChain<TripleStar> chain = new IteratorChain<TripleStar>();
+			for (ArrayList<TripleStar> iterable_element : innerMap.values()) {
+				chain.addIterator(iterable_element.iterator());
+			}
+			return chain;
 		}
 	}
 	
 	public Iterator<TripleStar> iterator() {
-		return new IteratorOfIterators(innerMap.values());
+		IteratorChain<TripleStar> chain = new IteratorChain<TripleStar>();
+		for (ArrayList<TripleStar> iterable_element : innerMap.values()) {
+			chain.addIterator(iterable_element.iterator());
+		}
+		return chain;
 	}
 
 	public Iterator<TripleStar> iterator(Key key, TripleStarPattern triple) {

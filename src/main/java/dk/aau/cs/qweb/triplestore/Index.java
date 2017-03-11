@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.lang3.NotImplementedException;
 
 import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.TripleStar;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 
 public class Index   {
 	public enum Field {
@@ -96,7 +97,11 @@ public class Index   {
 	}
 
 	public Iterator<TripleStar> iterateAll() {
-		return new IteratorOfIterators(indexMap.values().iterator());
+		IteratorChain<TripleStar> chain = new IteratorChain<TripleStar>();
+		for (TripleBunch triplebunch : indexMap.values()) {
+			chain.addIterator(triplebunch.iterator());
+		}
+		return chain;
 	}
 
 	public void eliminateDuplicates() {
