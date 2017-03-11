@@ -8,9 +8,8 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
+import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TripleStore {
@@ -128,8 +127,6 @@ public class TripleStore {
     	if (!t.doesAllKeysExistInDictionary()) {
 			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
 		}
-    	NodeDictionary ads = NodeDictionary.getInstance();
-    	
     	
     	if (t.getSubject().isConcreate() && t.getPredicate().isConcreate())
 		    return new TripleStoreIterator( parent, SPO.iterator( t ));
