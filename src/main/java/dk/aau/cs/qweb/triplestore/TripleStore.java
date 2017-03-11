@@ -9,6 +9,7 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
 import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
@@ -18,11 +19,13 @@ public class TripleStore {
     protected Index SPO;
     protected Index POS;
     protected Index OSP;
+    private int triplesAddedCount = 0;
+    long millis = System.currentTimeMillis();
     
     public TripleStore ( Graph parent) { 
-    	this.SPO = new Index(Field.S,Field.P,Field.O );
+    	this.SPO = new Index(Field.S, Field.P, Field.O );
     	this.POS = new Index(Field.P, Field.O, Field.S );
-        this.OSP = new Index(Field.O, Field.S,Field.P);
+        this.OSP = new Index(Field.O, Field.S, Field.P);
         this.parent = parent; 
     }   
     
@@ -36,10 +39,15 @@ public class TripleStore {
           Add a triple to this triple store.
      */
     public void add( TripleStar t ) {
-         SPO.add( t );
-         POS.add( t );
-         OSP.add( t ); 
-         }
+    	triplesAddedCount++;
+        SPO.add( t );
+        POS.add( t );
+        OSP.add( t ); 
+        if (triplesAddedCount % 100000 == 0) {
+			System.out.println("Triples added: " + triplesAddedCount+" Time diff: "+(millis - System.currentTimeMillis()));
+			millis = System.currentTimeMillis();
+		}
+    }
      
      /**
           Remove a triple from this triple store.
@@ -120,6 +128,8 @@ public class TripleStore {
     	if (!t.doesAllKeysExistInDictionary()) {
 			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
 		}
+    	NodeDictionary ads = NodeDictionary.getInstance();
+    	
     	
     	if (t.getSubject().isConcreate() && t.getPredicate().isConcreate())
 		    return new TripleStoreIterator( parent, SPO.iterator( t ));
