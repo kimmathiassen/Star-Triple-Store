@@ -6,6 +6,7 @@ import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -39,10 +40,12 @@ public class TurtleStarReaderEmbeddedTest {
         		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
     	
         RDFDataMgr.read(model, filename);
+        g.eliminateDuplicates();
 	}
 	
 	@Test
 	public void subjectEmbeddedNode() {
+		// This test case fails when all tests are run, when run individually it pass
 		String queryString = prolog +
 	        		"SELECT ?p ?o WHERE {<<ex:kim ex:worksAt ex:aau>> ?p ?o .}" ; 
 	       
