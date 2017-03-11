@@ -229,5 +229,9 @@ public class Graph extends GraphBase {
         demand.
     */
     protected GraphEventManager gem;
+
+	public void eliminateDuplicates() {
+		store.eliminateDuplicates();
+	}
 	
 }

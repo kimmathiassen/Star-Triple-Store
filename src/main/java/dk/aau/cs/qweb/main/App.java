@@ -81,27 +81,11 @@ public class App {
 		
         registerTTLS();
         registerQueryEngine();
+        
     	
         RDFDataMgr.read(model, filename);
+        g.eliminateDuplicates();
         
-        
-        
-        
-//        String queryString = prolog +
-//        		"SELECT ?p WHERE { BIND (ex:kim AS ?o) . ?o ?p  ex:aau .}" ; 
-        
-        
-        
-        
-//        String queryString = prolog +
-//        		"SELECT ?date WHERE {<<ex:kim ex:worksAt ex:aau>> ex:started  ?date . }" ; 
-        
-//        String queryString = prolog +
-//        		"SELECT ?n ?t WHERE {?o foaf:name ?n . <http://example.org/spiderman> ?p ?o . ?o a ?t .}" ; 
-//        
-//        String queryString = prolog +
-//        		"SELECT ?p ?o WHERE { <http://example.org/spiderman> ?p ?o .}" ; 
-//       
         Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
         
         try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){

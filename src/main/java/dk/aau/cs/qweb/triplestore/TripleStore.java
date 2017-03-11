@@ -135,4 +135,10 @@ public class TripleStore {
 			return new TripleStoreIterator( parent, POS.iterator( t ));
 		else return new TripleStoreIterator( parent, SPO.iterateAll());
     }
+
+	public void eliminateDuplicates() {
+		SPO.eliminateDuplicates();
+		POS.eliminateDuplicates();
+		OSP.eliminateDuplicates();
+	}
 }

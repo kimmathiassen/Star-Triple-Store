@@ -1,27 +1,29 @@
 package dk.aau.cs.qweb.triplestore;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triple.Key;
 
 public class TripleBunch  {
-	Map<Key,HashSet<TripleStar>> innerMap;
+	Map<Key, ArrayList<TripleStar>> innerMap;
 	
 	public TripleBunch() {
-		innerMap = new HashMap<Key,HashSet<TripleStar>>();
+		innerMap = new HashMap<Key,ArrayList<TripleStar>>();
 	}
 
 	public void put(Key field2, TripleStar triple) {
 		if (innerMap.containsKey(field2)) {
 			innerMap.get(field2).add(triple);
 		} else {
-			HashSet<TripleStar> array = new HashSet<TripleStar>();
+			ArrayList<TripleStar> array = new ArrayList<TripleStar>();
 			array.add(triple);
 			innerMap.put(field2, array);
 		}
@@ -48,5 +50,23 @@ public class TripleBunch  {
 			return set.iterator();
 		}
 		return Collections.emptyIterator();
+	}
+
+	public void eliminateDuplicates() {
+		for (Entry<Key, ArrayList<TripleStar>> list : innerMap.entrySet()) {
+			ArrayList<Integer> duplicates = new ArrayList<Integer>();
+			Collections.sort(list.getValue());
+			TripleStar previous = null;
+			for (TripleStar tripleStar : list.getValue()) {
+				if (tripleStar.equals(previous)) {
+					duplicates.add(list.getValue().indexOf(tripleStar));
+				}
+				previous = tripleStar;
+			}
+			
+			for (Integer integer : duplicates) {
+				innerMap.get(list.getKey()).remove((int)integer);
+			}
+		}
 	}
 }

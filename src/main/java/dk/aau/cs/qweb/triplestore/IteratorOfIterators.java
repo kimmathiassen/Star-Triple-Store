@@ -2,7 +2,6 @@ package dk.aau.cs.qweb.triplestore;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class IteratorOfIterators implements Iterator<TripleStar> {
     private Iterator<Iterator<TripleStar>> listIterator;
 
 
-    public IteratorOfIterators(Collection<HashSet<TripleStar>> collection) {
+    public IteratorOfIterators(Collection<ArrayList<TripleStar>> collection) {
     	iterators = new ArrayList<Iterator<TripleStar>>();
     	for (Collection<TripleStar> container : collection) {
 			iterators.add(container.iterator());

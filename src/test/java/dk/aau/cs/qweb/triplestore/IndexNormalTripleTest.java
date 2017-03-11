@@ -190,13 +190,14 @@ public class IndexNormalTripleTest {
 		TripleStar t2 = new TripleStar(new Key(1),new Key(2),new Key(3));
 		test.add(t1);
 		test.add(t2);
+		test.eliminateDuplicates();
 		
 		TripleStarPattern triplePattern = new TripleStarPattern(new Key(1),var,var);
 		Iterator<TripleStar> iterator = test.iterator(triplePattern);
 		int count = 0;
 		
 		while (iterator.hasNext()) {
-			System.out.println(iterator.next());
+			iterator.next();
 			count++;
 		}
 

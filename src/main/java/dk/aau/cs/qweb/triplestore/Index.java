@@ -98,4 +98,10 @@ public class Index   {
 	public Iterator<TripleStar> iterateAll() {
 		return new IteratorOfIterators(indexMap.values().iterator());
 	}
+
+	public void eliminateDuplicates() {
+		for (TripleBunch tripleBunch : indexMap.values()) {
+			tripleBunch.eliminateDuplicates();
+		}
+	}
 }
