@@ -233,5 +233,9 @@ public class Graph extends GraphBase {
 	public void eliminateDuplicates() {
 		store.eliminateDuplicates();
 	}
+
+	public int getNumberOfLookups() {
+		return store.getNumberOfLookups();
+	}
 	
 }

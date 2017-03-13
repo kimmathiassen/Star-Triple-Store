@@ -20,6 +20,7 @@ public class TripleStore {
     protected Index OSP;
     private int triplesAddedCount = 0;
     long millis = System.currentTimeMillis();
+    int numberOfLookups = 0;
     
     public TripleStore ( Graph parent) { 
     	this.SPO = new Index(Field.S, Field.P, Field.O );
@@ -124,6 +125,7 @@ public class TripleStore {
          dramatically - specifically on the not-galen.owl ontology.
      */
     public ExtendedIterator<TripleStar> find( TripleStarPattern t ) {
+    	numberOfLookups++;
     	if (!t.doesAllKeysExistInDictionary()) {
 			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
 		}
@@ -147,5 +149,9 @@ public class TripleStore {
 		SPO.eliminateDuplicates();
 		POS.eliminateDuplicates();
 		OSP.eliminateDuplicates();
+	}
+
+	public int getNumberOfLookups() {
+		return numberOfLookups;
 	}
 }
