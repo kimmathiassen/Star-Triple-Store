@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import dk.aau.cs.qweb.helper.BitHelper;
 
-public class Key implements StarNode{
+public class Key implements StarNode, Comparable<Key>{
 	
 	public Key(long id) {
 		this.id=id;
@@ -76,5 +76,29 @@ public class Key implements StarNode{
 	@Override
 	public boolean isConcreate() {
 		return true;
+	}
+
+	@Override
+	public int compareTo(Key other) {
+		if (BitHelper.isIdAnEmbeddedTriple(id) && BitHelper.isIdAnEmbeddedTriple(other.id)) {
+			
+			long subject = Long.compare( BitHelper.getEmbeddedSubject(id), BitHelper.getEmbeddedSubject(other.getId()));
+			if (subject != 0) {
+				return (int)subject;
+			} else {
+				long predicate = Long.compare( BitHelper.getEmbeddedPredicate(id), BitHelper.getEmbeddedPredicate(other.getId()));
+				if (predicate != 0) {
+					return (int)predicate;
+				} else {
+					return (int) Long.compare( BitHelper.getEmbeddedObject(id), BitHelper.getEmbeddedObject(other.getId()));
+				}
+			}
+		} else if (BitHelper.isIdAnEmbeddedTriple(id)) {
+			return 1;
+		} else if (BitHelper.isIdAnEmbeddedTriple(other.id)) {
+			return -1;
+		} else {
+			return (int) (this.id - other.id);
+		}
 	}
 }

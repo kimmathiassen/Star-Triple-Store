@@ -35,15 +35,15 @@ public class TripleStar implements Comparable<TripleStar> {
 
 	@Override
 	public int compareTo(TripleStar arg0) {
-		long subject = subjectId.getId() - arg0.subjectId.getId();
+		int subject = subjectId.compareTo(arg0.subjectId);
 		if (subject != 0) {
-			return (int)subject;
+			return subject;
 		} else {
-			long predicate = predicateId.getId() - arg0.predicateId.getId();
+			int predicate = predicateId.compareTo(arg0.predicateId);
 			if (predicate != 0) {
-				return (int)predicate;
+				return predicate;
 			} else {
-				return (int)(objectId.getId() - arg0.objectId.getId());
+				return (objectId.compareTo(arg0.objectId));
 			}
 		}
 	}

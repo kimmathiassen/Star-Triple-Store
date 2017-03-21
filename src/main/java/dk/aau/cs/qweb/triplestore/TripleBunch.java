@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections4.iterators.IteratorChain;
+import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
@@ -65,18 +66,22 @@ public class TripleBunch  {
 	public void eliminateDuplicates() {
 		for (Entry<Key, ArrayList<TripleStar>> list : innerMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
-			Collections.sort(list.getValue());
+			ArrayList<TripleStar> values = list.getValue();
+			Collections.sort(values);
 			TripleStar previous = null;
 			for (TripleStar tripleStar : list.getValue()) {
 				if (tripleStar.equals(previous)) {
-					duplicates.add(list.getValue().indexOf(tripleStar));
+					duplicates.add(values.indexOf(tripleStar));
 				}
 				previous = tripleStar;
 			}
-			
-			for (Integer integer : duplicates) {
-				innerMap.get(list.getKey()).remove((int)integer);
+			//Remove dup in reverse order to avoid changeing the indexs
+			for (Integer integer : Lists.reverse(duplicates)) {
+				innerMap.get(values.remove((int)integer));
 			}
 		}
+			
+		
+		
 	}
 }
