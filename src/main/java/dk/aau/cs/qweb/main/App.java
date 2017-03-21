@@ -81,7 +81,7 @@ public class App {
 		
         registerTTLS();
         registerQueryEngine();
-        
+        ModelFactory.createDefaultModel();
     	
         RDFDataMgr.read(model, filename);
         g.eliminateDuplicates();

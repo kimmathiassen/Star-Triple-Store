@@ -9,7 +9,6 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +62,26 @@ public class bindOptimizations {
 	    
 	    assertEquals(1,g.getNumberOfLookups());
 		assertEquals(1,count);
+		
+	}
+	
+	
+	@Test
+	public void indexLookupWithBind() {
+		String queryString = prolog +
+				"SELECT ?s WHERE {BIND(<<?s ex:worksAt ex:aau>> as ?t) .  ?s ex:worksAt ex:LiU . }" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            results.next();
+	        }
+	    }
+	    
+	    assertEquals(2,g.getNumberOfLookups());
 		
 	}
 

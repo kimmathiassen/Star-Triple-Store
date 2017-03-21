@@ -129,9 +129,9 @@ public class NodeDictionary {
 	}
 
 	private boolean doesNodeContainOverflowKey(Node_Triple embeddedNode) {
+		//TODO
 		if (isThereAnySpecialOverflowDistributionConditions) {
 			if (numberOfEmbeddedTriples != 0) {
-				System.out.println(id2Overflow.size());
 				float currentDistribtuion = (float)id2Overflow.size()/(float)numberOfEmbeddedTriples*100;
 				System.out.println(currentDistribtuion);
 				if (currentDistribtuion < overflowDistributionPercentage) {
