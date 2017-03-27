@@ -80,8 +80,5 @@ public class TripleBunch  {
 				innerMap.get(values.remove((int)integer));
 			}
 		}
-			
-		
-		
 	}
 }
