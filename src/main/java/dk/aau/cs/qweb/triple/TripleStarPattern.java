@@ -23,11 +23,11 @@ public class TripleStarPattern implements StarNode{
 
 	public boolean isFieldConcrete(Field field) {
 		if (field == Field.S) {
-			return subject.isConcreate();
+			return subject.isConcrete();
 		} else if (field == Field.P) {
-			return predicate.isConcreate();
+			return predicate.isConcrete();
 		} else if (field == Field.O) {
-			return object.isConcreate();
+			return object.isConcrete();
 		}
 		throw new IllegalParameterException("unknown Field " + field +" expected S, P or O.");
 	}
@@ -50,7 +50,7 @@ public class TripleStarPattern implements StarNode{
 
 	public StarNode getField(Field field) {
 		if (field == Field.S) {
-			if (subject.isConcreate()) {
+			if (subject.isConcrete()) {
 				return subject;
 			} else {
 				throw new IllegalStateException("The field "+field+" contains variables and should not be requested at this point in the code");
@@ -58,7 +58,7 @@ public class TripleStarPattern implements StarNode{
 		} else if (field == Field.P) {
 			return predicate;
 		} else if (field == Field.O) {
-				if (object.isConcreate()) {
+				if (object.isConcrete()) {
 					return object;
 				} else {
 					throw new IllegalStateException("The field "+field+" contains variables and should not be requested at this point in the code");
@@ -75,17 +75,17 @@ public class TripleStarPattern implements StarNode{
 		boolean subjectExistInDict = false;
 		boolean predicateExistInDict = false;
 		boolean objectExistInDict = false;
-		if (subject.isConcreate()) {
+		if (subject.isConcrete()) {
 			if (subject.isEmbeddedTriplePattern()) {
 				subjectExistInDict = subject.getTriplePattern().check();
 			} else {
 				subjectExistInDict = subject.getKey().getId() == 0 ? true : false;
 			}
 		}
-		if (predicate.isConcreate()) {
+		if (predicate.isConcrete()) {
 			predicateExistInDict = predicate.getKey().getId() == 0 ? true : false;
 		}
-		if (object.isConcreate()) {
+		if (object.isConcrete()) {
 			if (object.isEmbeddedTriplePattern()) {
 				objectExistInDict = object.getTriplePattern().check();
 			} else {
@@ -128,7 +128,7 @@ public class TripleStarPattern implements StarNode{
 
 
 	@Override
-	public boolean isConcreate() {
-		return (subject.isConcreate() && predicate.isConcreate() && object.isConcreate() ? true : false);
+	public boolean isConcrete() {
+		return (subject.isConcrete() && predicate.isConcrete() && object.isConcrete() ? true : false);
 	}
 }

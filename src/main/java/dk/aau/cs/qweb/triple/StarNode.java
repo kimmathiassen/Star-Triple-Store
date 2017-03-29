@@ -12,5 +12,5 @@ public interface StarNode {
 	Variable getVariable();
 	
 	// Does the triple pattern contain any variables?
-	boolean isConcreate();
+	boolean isConcrete();
 }

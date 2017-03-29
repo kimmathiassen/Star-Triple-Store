@@ -74,7 +74,7 @@ public class Key implements StarNode, Comparable<Key>{
 	}
 
 	@Override
-	public boolean isConcreate() {
+	public boolean isConcrete() {
 		return true;
 	}
 

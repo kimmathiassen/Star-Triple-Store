@@ -39,7 +39,7 @@ public class Variable implements StarNode {
 	}
 
 	@Override
-	public boolean isConcreate() {
+	public boolean isConcrete() {
 		return false;
 	}
 	
