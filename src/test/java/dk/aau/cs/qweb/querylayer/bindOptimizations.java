@@ -45,6 +45,7 @@ public class bindOptimizations {
 
 	@Test
 	public void saveLookupInBindWithBindVariableUseInLaterTriplePattern() {
+		//Known bug
 		String queryString = prolog +
 				"SELECT ?date ?t WHERE {BIND(<<ex:kim ex:worksAt ex:aau>> as ?t) .  ?t ex:started  ?date . }" ; 
        
@@ -60,11 +61,10 @@ public class bindOptimizations {
 	        }
 	    }
 	    
-	    assertEquals(1,g.getNumberOfLookups());
+	    //Since contains do not count as a lookup, the number of lookups should be 0
+	    assertEquals(0,g.getNumberOfLookups());
 		assertEquals(1,count);
-		
 	}
-	
 	
 	@Test
 	public void indexLookupWithBind() {
@@ -81,8 +81,7 @@ public class bindOptimizations {
 	        }
 	    }
 	    
-	    assertEquals(2,g.getNumberOfLookups());
-		
+	    //One lookup and one contains
+	    assertEquals(1,g.getNumberOfLookups());
 	}
-
 }
