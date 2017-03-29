@@ -83,7 +83,7 @@ public class TurtleStarReaderSpidermanTest {
 	@Test
 	public void linesWithComments() {
 		String queryString = prolog +
-        		"SELECT  ?o WHERE {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/person> .}" ; 
+        		"SELECT  ?o WHERE {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .}" ; 
        
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
@@ -99,5 +99,4 @@ public class TurtleStarReaderSpidermanTest {
 		
 		assertEquals(2,count);
 	}
-
 }
