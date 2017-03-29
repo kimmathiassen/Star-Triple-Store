@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.queryengine;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -12,6 +14,8 @@ import dk.aau.cs.qweb.triple.StarNode;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
+import dk.aau.cs.qweb.triplestore.KeyContainer;
+import dk.aau.cs.qweb.triplestore.TripleStoreIterator;
 
 
 public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closeable
@@ -41,7 +45,7 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 	 * an iterator over all triples that match the current query pattern
 	 * (see {@link #currentQueryPattern}) in the queried dataset
 	 */
-	protected Iterator<? extends TripleStar> currentMatches = null;
+	protected Iterator<? extends KeyContainer> currentMatches = null;
 
 
 	// initialization
@@ -67,8 +71,23 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 
 			currentInputMapping = input.next();
 			currentQueryPattern = substitute( tp, currentInputMapping );
-
-			currentMatches = graph.graphBaseFind( currentQueryPattern);
+			
+			// If tp contains no variables, contains is invoked instead.
+			if (currentQueryPattern.isConcrete()) {
+				boolean match = graph.graphBaseContains(currentQueryPattern);
+				if (match) {
+					ArrayList<KeyContainer> list = new ArrayList<KeyContainer>();
+					list.add(new KeyContainer(	currentQueryPattern.getSubject().getKey(),
+												currentQueryPattern.getPredicate().getKey(),
+												currentQueryPattern.getObject().getKey()));
+					
+					currentMatches = new TripleStoreIterator(graph,list.iterator());
+				} else {
+					currentMatches = new TripleStoreIterator( graph, Collections.<KeyContainer>emptyList().iterator());
+				}
+			}  else {
+				currentMatches = graph.graphBaseFind( currentQueryPattern);
+			}
 		}
 		return true;
 	}
@@ -82,23 +101,48 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 		// Create the next solution mapping by i) copying the mapping currently
 		// consumed from the input iterator and ii) by binding the variables in
 		// the copy corresponding to the currently matching triple (currentMatch).
-		TripleStar currentMatch = currentMatches.next();
+		KeyContainer keyContainer = currentMatches.next();
+		TripleStar currentMatch = createTriple(keyContainer);
 		//BindingProvenance currentMatchProvenance = execCxt.recordProvenance ? new BindingProvenanceImpl( (TraceableTriple) currentMatch, tp ) : null;
 		SolutionMapping result = new SolutionMapping( currentInputMapping );
 
-		if ( !currentQueryPattern.getSubject().isConcreate() ) {
+		if ( !currentQueryPattern.getSubject().isConcrete() ) {
 			result.set( currentQueryPattern.getSubject().getVariable().getId(), currentMatch.subjectId );
 		}
 
-		if ( !currentQueryPattern.getPredicate().isConcreate() ) {
+		if ( !currentQueryPattern.getPredicate().isConcrete() ) {
 			result.set( currentQueryPattern.getPredicate().getVariable().getId(), currentMatch.predicateId );
 		}
 
-		if ( !currentQueryPattern.getObject().isConcreate() ) {
+		if ( !currentQueryPattern.getObject().isConcrete() ) {
 			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
 
 		return result;
+	}
+
+	private TripleStar createTriple(KeyContainer keyContainer) {
+		Key subject;
+		if (keyContainer.containsSubject()) {
+			subject = keyContainer.getSubject();
+		} else {
+			subject = tp.getSubject().getKey();
+		}
+		
+		Key predicate;
+		if (keyContainer.containsPredicate()) {
+			predicate = keyContainer.getPredicate();
+		} else {
+			predicate = tp.getPredicate().getKey();
+		}
+		
+		Key object;
+		if (keyContainer.containsObject()) {
+			object = keyContainer.getObject();
+		} else {
+			object = tp.getObject().getKey();
+		}
+		return new TripleStar(subject,predicate,object);
 	}
 
 	public void remove ()
@@ -126,7 +170,7 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 	static public TripleStarPattern substitute ( TripleStarPattern triplePattern, SolutionMapping solutionMapping )
 	{
 		StarNode sNew, pNew, oNew;
-		if (!triplePattern.getSubject().isConcreate() )
+		if (!triplePattern.getSubject().isConcrete() )
 		{
 			int variable = triplePattern.getSubject().getVariable().getId();
 			sNew = solutionMapping.contains(variable) ? new Key(solutionMapping.get(variable)) : new Variable(variable);
@@ -134,14 +178,14 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 			sNew = triplePattern.getSubject();
 		}
 
-		if ( !triplePattern.getPredicate().isConcreate()){
+		if ( !triplePattern.getPredicate().isConcrete()){
 			int variable = triplePattern.getPredicate().getVariable().getId();
 			pNew = solutionMapping.contains(variable) ? new Key(solutionMapping.get(variable)) : new Variable(variable);
 		} else {
 			pNew = triplePattern.getPredicate();
 		}
 
-		if ( !triplePattern.getObject().isConcreate()) {
+		if ( !triplePattern.getObject().isConcrete()) {
 			int variable = triplePattern.getObject().getVariable().getId();
 			oNew = solutionMapping.contains(variable) ? new Key(solutionMapping.get(variable)) : new Variable(variable);
 		} else {

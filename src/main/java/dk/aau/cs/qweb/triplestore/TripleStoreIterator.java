@@ -5,23 +5,21 @@ import java.util.Iterator;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.util.iterator.WrappedIterator;
 
-import dk.aau.cs.qweb.triple.TripleStar;
-
-public class TripleStoreIterator extends WrappedIterator<TripleStar> {
+public class TripleStoreIterator extends WrappedIterator<KeyContainer> {
 	
     protected Graph toNotify;
-    protected TripleStar current;
+    protected KeyContainer current;
 
 	public TripleStoreIterator(
 			Graph toNotify, 
-			Iterator<TripleStar> it
+			Iterator<KeyContainer> it
 	        ) {
 		super( it ); 
         this.toNotify = toNotify;
 	}
 	
 	@Override
-    public TripleStar next() {
+    public KeyContainer next() {
         return current = super.next();       
     }
 }

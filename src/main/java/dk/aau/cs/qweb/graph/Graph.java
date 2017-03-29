@@ -15,6 +15,7 @@ import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarBuilder;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triplestore.KeyContainer;
 import dk.aau.cs.qweb.triplestore.TripleStore;
 
 public class Graph extends GraphBase {
@@ -182,13 +183,20 @@ public class Graph extends GraphBase {
     	
     	TripleStarPattern tripleStarPattern = builder.createTriplePatter();
 		
-		return new DecodingTriplesIterator(store.find(tripleStarPattern) );
+		return new DecodingTriplesIterator(store.find(tripleStarPattern),tripleStarPattern );
     }
     
-    public ExtendedIterator<TripleStar> graphBaseFind( TripleStarPattern triplePattern ) {
+    public ExtendedIterator<KeyContainer> graphBaseFind( TripleStarPattern triplePattern ) {
 		return store.find(triplePattern);
     }
-
+    
+    public boolean graphBaseContains( TripleStarPattern t ) {
+    	if (t.isConcrete()) {
+			return store.contains(t);
+		}
+    	throw new IllegalArgumentException("tp is not concrete "+t);
+    }
+    
     /**
          Answer true iff this graph contains <code>t</code>. If <code>t</code>
          happens to be concrete, then we hand responsibility over to the store.

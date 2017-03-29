@@ -14,49 +14,57 @@ import org.apache.jena.ext.com.google.common.collect.Lists;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TripleBunch  {
-	Map<Key, ArrayList<TripleStar>> innerMap;
+	Map<Key, ArrayList<KeyContainer>> innerMap;
 	
 	public TripleBunch() {
-		innerMap = new HashMap<Key,ArrayList<TripleStar>>();
+		innerMap = new HashMap<Key,ArrayList<KeyContainer>>();
 	}
 
-	public void put(Key field2, TripleStar triple) {
+	public void put(Key field2, final TripleStar triple) {
+		KeyContainer key = extractThirdField(triple,field2);
 		if (innerMap.containsKey(field2)) {
-			innerMap.get(field2).add(triple);
+			innerMap.get(field2).add(key);
 		} else {
-			ArrayList<TripleStar> array = new ArrayList<TripleStar>();
-			array.add(triple);
+			ArrayList<KeyContainer> array = new ArrayList<KeyContainer>();
+			array.add(key);
 			innerMap.put(field2, array);
 		}
 	}
 
-	public Iterator<TripleStar> iterator(Key key) {
-		if (innerMap.containsKey(key)) {
-			return innerMap.get(key).iterator();
+	private KeyContainer extractThirdField(TripleStar triple, Key secondFieldKey) {
+		if (secondFieldKey.equals(triple.subjectId)) {
+			return new KeyContainer(triple.predicateId,Field.P);
+		} else if (secondFieldKey.equals(triple.predicateId)) {
+			return new KeyContainer(triple.objectId,Field.O);
 		} else {
-			//return an iterator of all arrayLists
-			IteratorChain<TripleStar> chain = new IteratorChain<TripleStar>();
-			for (ArrayList<TripleStar> iterable_element : innerMap.values()) {
-				chain.addIterator(iterable_element.iterator());
-			}
-			return chain;
+			return new KeyContainer(triple.subjectId,Field.S);
 		}
 	}
+
+	//One variable
+	public Iterator<KeyContainer> iterator(Key key, Field f) {
+		return new AddKeyToIteratorWrapper(innerMap.get(key).iterator(),key,f);
+	}
 	
-	public Iterator<TripleStar> iterator() {
-		IteratorChain<TripleStar> chain = new IteratorChain<TripleStar>();
-		for (ArrayList<TripleStar> iterable_element : innerMap.values()) {
-			chain.addIterator(iterable_element.iterator());
+	//Two variables
+	public Iterator<KeyContainer> iterator(Field f) {
+		IteratorChain<KeyContainer> chain = new IteratorChain<KeyContainer>();
+		for (Entry<Key, ArrayList<KeyContainer>> iterable_element : innerMap.entrySet()) {
+			chain.addIterator(new AddKeyToIteratorWrapper(iterable_element.getValue().iterator(),iterable_element.getKey(),f));
 		}
 		return chain;
 	}
 
-	public Iterator<TripleStar> iterator(Key key, TripleStarPattern triple) {
-		TripleStar ts = new TripleStar(triple.getSubject().getKey(),triple.getPredicate().getKey(),triple.getObject().getKey());
+	//Zero varialbes 
+	//When a tp without variables are given, contains should be used instaed.
+	@Deprecated
+	public Iterator<KeyContainer> iterator(Key key, TripleStarPattern triple) {
+		KeyContainer ts = new KeyContainer(triple.getSubject().getKey(),triple.getPredicate().getKey(),triple.getObject().getKey());
 		if (innerMap.get(key).contains(ts)) {
-			HashSet<TripleStar> set = new HashSet<TripleStar>();
+			HashSet<KeyContainer> set = new HashSet<KeyContainer>();
 			set.add(ts);
 			return set.iterator();
 		}
@@ -64,12 +72,12 @@ public class TripleBunch  {
 	}
 
 	public void eliminateDuplicates() {
-		for (Entry<Key, ArrayList<TripleStar>> list : innerMap.entrySet()) {
+		for (Entry<Key, ArrayList<KeyContainer>> list : innerMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
-			ArrayList<TripleStar> values = list.getValue();
+			ArrayList<KeyContainer> values = list.getValue();
 			Collections.sort(values);
-			TripleStar previous = null;
-			for (TripleStar tripleStar : list.getValue()) {
+			KeyContainer previous = null;
+			for (KeyContainer tripleStar : list.getValue()) {
 				if (tripleStar.equals(previous)) {
 					duplicates.add(values.indexOf(tripleStar));
 				}
@@ -80,5 +88,9 @@ public class TripleBunch  {
 				innerMap.get(values.remove((int)integer));
 			}
 		}
+	}
+	
+	public String toString() {
+		return "TripleBunch( "+innerMap+")";
 	}
 }

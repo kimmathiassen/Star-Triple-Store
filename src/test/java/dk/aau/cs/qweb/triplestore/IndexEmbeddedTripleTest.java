@@ -56,7 +56,7 @@ public class IndexEmbeddedTripleTest {
 		POS.add(t1);
 		
 		TripleStarPattern triplePattern = new TripleStarPattern(var,KeyFactory.createKey(4),KeyFactory.createKey(5));
-		Iterator<TripleStar> integer = POS.iterator(triplePattern);
+		Iterator<KeyContainer> integer = POS.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -76,7 +76,7 @@ public class IndexEmbeddedTripleTest {
 		SPO.add(t1);
 		
 		TripleStarPattern triplePattern = new TripleStarPattern(KeyFactory.createKey(5),KeyFactory.createKey(4),var);
-		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
+		Iterator<KeyContainer> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -97,7 +97,7 @@ public class IndexEmbeddedTripleTest {
 		OSP.add(t1);
 		
 		TripleStarPattern triplePattern = new TripleStarPattern(var,KeyFactory.createKey(7),var);
-		Iterator<TripleStar> integer = OSP.iterator(triplePattern);
+		Iterator<KeyContainer> integer = OSP.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -123,7 +123,7 @@ public class IndexEmbeddedTripleTest {
 		SPO.add(t4);
 		
 		TripleStarPattern triplePattern = new TripleStarPattern(KeyFactory.createKey(4),KeyFactory.createKey(5),var);
-		Iterator<TripleStar> integer = SPO.iterator(triplePattern);
+		Iterator<KeyContainer> integer = SPO.iterator(triplePattern);
 		int count = 0;
 		
 		while (integer.hasNext()) {
@@ -134,5 +134,4 @@ public class IndexEmbeddedTripleTest {
 		assertEquals(count,2);
 		SPO.clear();
 	}
-
 }

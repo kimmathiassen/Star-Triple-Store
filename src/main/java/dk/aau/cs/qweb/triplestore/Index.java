@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.lang3.NotImplementedException;
@@ -31,7 +32,7 @@ public class Index   {
 		size = 0;
 	}
 
-	public void add(TripleStar t) {
+	public void add(final TripleStar t) {
 		Key firstKey = getFieldKey(field1,t);
 		if (indexMap.containsKey(firstKey)) {
 			indexMap.get(firstKey).put(getFieldKey(field2,t),t);
@@ -70,23 +71,30 @@ public class Index   {
 		return (size == 0 ? true : false);
 	}
 
-	public boolean containsBySameValueAs(TripleStar t) {
-		throw new NotImplementedException("Index.containsBySameValueAs");
+	public boolean contains(TripleStarPattern t) {
+		if (indexMap.containsKey(t.getSubject())) {
+			TripleBunch map = indexMap.get(t.getSubject());
+			if (map.innerMap.containsKey(t.getPredicate())) {
+				return map.innerMap.get(t.getPredicate()).contains(new KeyContainer(t.getObject().getKey(),Field.O));
+			}
+		}
+		return false;
 	}
 
-	public boolean contains(TripleStar t) {
-		throw new NotImplementedException("Index.contains");
-	}
-
-	public Iterator<TripleStar> iterator(TripleStarPattern triple) {
+	public Iterator<KeyContainer> iterator(TripleStarPattern triple) {
 		Key firstKey = triple.getField(field1).getKey();
 		if (indexMap.containsKey(firstKey)) {
+			//Zero variables
 			if (triple.isFieldConcrete(field2) && triple.isFieldConcrete(field3)) {
-				return indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),triple);
-			} else if (triple.isFieldConcrete(field2)) {
-				return indexMap.get(firstKey).iterator(triple.getField(field2).getKey());
-			} else {
-				return indexMap.get(firstKey).iterator();
+				return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),triple),firstKey,field1);
+			} 
+			// One variable
+			else if (triple.isFieldConcrete(field2)) {
+				return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),field2),firstKey,field1);
+			}
+			// Two variables
+			else {
+				return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(field2),firstKey,field1);
 			}
 		}
 		return Collections.emptyIterator();
@@ -96,10 +104,10 @@ public class Index   {
 		throw new NotImplementedException("Index.removedOneViaIterator");
 	}
 
-	public Iterator<TripleStar> iterateAll() {
-		IteratorChain<TripleStar> chain = new IteratorChain<TripleStar>();
-		for (TripleBunch triplebunch : indexMap.values()) {
-			chain.addIterator(triplebunch.iterator());
+	public Iterator<KeyContainer> iterateAll() {
+		IteratorChain<KeyContainer> chain = new IteratorChain<KeyContainer>();
+		for (Entry<Key, TripleBunch> iterable_element : indexMap.entrySet()) {
+			chain.addIterator(new AddKeyToIteratorWrapper(iterable_element.getValue().iterator(field2),iterable_element.getKey(),field1));
 		}
 		return chain;
 	}

@@ -94,12 +94,12 @@ public class TripleStore {
     	throw new NotImplementedException("MyTriplestore.listObjects");
     }
      
-     /**
-          Answer true iff this triple store contains the (concrete) triple <code>t</code>.
-     */
-    public boolean contains( TripleStar t ) { 
-    	return SPO.containsBySameValueAs( t ); 
-    }
+    /**
+    Answer true iff this triple store contains the (concrete) triple <code>t</code>.
+	*/
+	public boolean contains( TripleStarPattern t ) { 
+		return SPO.contains( t ); 
+	}
      
     
      public boolean containsByEquality( Triple t ) { 
@@ -124,23 +124,23 @@ public class TripleStore {
          (ANY, P, O) searches on largish models with few predicates declined
          dramatically - specifically on the not-galen.owl ontology.
      */
-    public ExtendedIterator<TripleStar> find( TripleStarPattern t ) {
+    public ExtendedIterator<KeyContainer> find( TripleStarPattern t ) {
     	numberOfLookups++;
     	if (!t.doesAllKeysExistInDictionary()) {
-			return new TripleStoreIterator( parent, Collections.<TripleStar>emptyList().iterator());
+			return new TripleStoreIterator( parent, Collections.<KeyContainer>emptyList().iterator());
 		}
     	
-    	if (t.getSubject().isConcreate() && t.getPredicate().isConcreate())
+    	if (t.getSubject().isConcrete() && t.getPredicate().isConcrete())
 		    return new TripleStoreIterator( parent, SPO.iterator( t ));
-		else if (t.getObject().isConcreate() && t.getSubject().isConcreate())
+		else if (t.getObject().isConcrete() && t.getSubject().isConcrete())
 		    return new TripleStoreIterator( parent, OSP.iterator( t ));
-		else if (t.getPredicate().isConcreate() && t.getObject().isConcreate())
+		else if (t.getPredicate().isConcrete() && t.getObject().isConcrete())
 		    return new TripleStoreIterator( parent, POS.iterator( t ));
-		else if (t.getSubject().isConcreate()) 
+		else if (t.getSubject().isConcrete()) 
 			return new TripleStoreIterator( parent, SPO.iterator( t ));
-		else if (t.getObject().isConcreate()) 
+		else if (t.getObject().isConcrete()) 
 			return new TripleStoreIterator( parent, OSP.iterator( t ));
-		else if (t.getPredicate().isConcreate()) 
+		else if (t.getPredicate().isConcrete()) 
 			return new TripleStoreIterator( parent, POS.iterator( t ));
 		else return new TripleStoreIterator( parent, SPO.iterateAll());
     }
