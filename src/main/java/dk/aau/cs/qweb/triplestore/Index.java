@@ -86,7 +86,8 @@ public class Index   {
 		if (indexMap.containsKey(firstKey)) {
 			//Zero variables
 			if (triple.isFieldConcrete(field2) && triple.isFieldConcrete(field3)) {
-				return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),triple),firstKey,field1);
+				throw new IllegalArgumentException("No varialbes found in triple "+triple+", use graph.contains instead");
+				//return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),triple),firstKey,field1);
 			} 
 			// One variable
 			else if (triple.isFieldConcrete(field2)) {

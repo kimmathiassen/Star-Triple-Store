@@ -3,7 +3,6 @@ package dk.aau.cs.qweb.triplestore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,7 +12,6 @@ import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index.Field;
 
 public class TripleBunch  {
@@ -60,16 +58,16 @@ public class TripleBunch  {
 
 	//Zero varialbes 
 	//When a tp without variables are given, contains should be used instaed.
-	@Deprecated
-	public Iterator<KeyContainer> iterator(Key key, TripleStarPattern triple) {
-		KeyContainer ts = new KeyContainer(triple.getSubject().getKey(),triple.getPredicate().getKey(),triple.getObject().getKey());
-		if (innerMap.get(key).contains(ts)) {
-			HashSet<KeyContainer> set = new HashSet<KeyContainer>();
-			set.add(ts);
-			return set.iterator();
-		}
-		return Collections.emptyIterator();
-	}
+//	@Deprecated
+//	public Iterator<KeyContainer> iterator(Key key, TripleStarPattern triple) {
+//		KeyContainer ts = new KeyContainer(triple.getSubject().getKey(),triple.getPredicate().getKey(),triple.getObject().getKey());
+//		if (innerMap.get(key).contains(ts)) {
+//			HashSet<KeyContainer> set = new HashSet<KeyContainer>();
+//			set.add(ts);
+//			return set.iterator();
+//		}
+//		return Collections.emptyIterator();
+//	}
 
 	public void eliminateDuplicates() {
 		for (Entry<Key, ArrayList<KeyContainer>> list : innerMap.entrySet()) {
