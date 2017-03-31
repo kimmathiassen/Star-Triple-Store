@@ -10,7 +10,7 @@ import org.apache.jena.riot.ReaderRIOT;
 import org.apache.jena.riot.lang.LabelToNode;
 import org.apache.jena.riot.system.ErrorHandler;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
-import org.apache.jena.riot.system.FactoryRDFCaching;
+import org.apache.jena.riot.system.FactoryRDFStd;
 import org.apache.jena.riot.system.IRIResolver;
 import org.apache.jena.riot.system.ParserProfile;
 import org.apache.jena.riot.system.PrefixMapFactory;
@@ -36,7 +36,7 @@ public class TTLSReader implements ReaderRIOT {
         ErrorHandler handler = ErrorHandlerFactory.getDefaultErrorHandler();
         
         LabelToNode labelMapping = SyntaxLabels.createLabelToNode();
-        profile = new ParserProfileStar(prologue, handler, new FactoryRDFCaching(FactoryRDFCaching.DftNodeCacheSize, labelMapping)) ;
+        profile = new ParserProfileStar(prologue, handler, new FactoryRDFStd(labelMapping)) ;
         
 		LangTurtleStar parser = new LangTurtleStar(tokenizer, profile, output); 
         parser.parse();
@@ -47,7 +47,7 @@ public class TTLSReader implements ReaderRIOT {
 		TokenizerStar tokenizer = new TokenizerStar( (PeekReader) reader) ;
         
         LabelToNode labelMapping = SyntaxLabels.createLabelToNode();
-        profile = new ParserProfileStar(prologue, handler, new FactoryRDFCaching(FactoryRDFCaching.DftNodeCacheSize, labelMapping)) ;
+        profile = new ParserProfileStar(prologue, handler, new FactoryRDFStd(labelMapping)) ;
         
 		LangTurtleStar parser = new LangTurtleStar(tokenizer, profile, output); 
         parser.parse();
