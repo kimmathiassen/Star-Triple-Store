@@ -35,10 +35,10 @@ public class Index   {
 	public void add(final TripleStar t) {
 		Key firstKey = getFieldKey(field1,t);
 		if (indexMap.containsKey(firstKey)) {
-			indexMap.get(firstKey).put(getFieldKey(field2,t),t);
+			indexMap.get(firstKey).put(field2,t);
 		} else {
 			TripleBunch tripleBunch = new TripleBunch();
-			tripleBunch.put(getFieldKey(field2,t),t);
+			tripleBunch.put(field2,t);
 			indexMap.put(firstKey, tripleBunch);
 		}
 		size++;
@@ -114,6 +114,7 @@ public class Index   {
 	}
 
 	public void eliminateDuplicates() {
+		System.out.println(field1.toString()+field2.toString()+field3.toString());
 		for (TripleBunch tripleBunch : indexMap.values()) {
 			tripleBunch.eliminateDuplicates();
 		}

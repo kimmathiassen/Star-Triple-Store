@@ -21,21 +21,31 @@ public class TripleBunch  {
 		innerMap = new HashMap<Key,ArrayList<KeyContainer>>();
 	}
 
-	public void put(Key field2, final TripleStar triple) {
+	public void put(Field field2, final TripleStar triple) {
 		KeyContainer key = extractThirdField(triple,field2);
 		if (innerMap.containsKey(field2)) {
 			innerMap.get(field2).add(key);
 		} else {
 			ArrayList<KeyContainer> array = new ArrayList<KeyContainer>();
 			array.add(key);
-			innerMap.put(field2, array);
+			innerMap.put(getFieldKey(field2,triple), array);
+		}
+	}
+	
+	private Key getFieldKey(Field field,TripleStar t) {
+		if (field == Field.S) {
+			return t.subjectId;
+		} else if (field == Field.P) {
+			return t.predicateId;
+		} else {
+			return t.objectId;
 		}
 	}
 
-	private KeyContainer extractThirdField(TripleStar triple, Key secondFieldKey) {
-		if (secondFieldKey.equals(triple.subjectId)) {
+	private KeyContainer extractThirdField(TripleStar triple, Field field) {
+		if (field  == Field.S) {
 			return new KeyContainer(triple.predicateId,Field.P);
-		} else if (secondFieldKey.equals(triple.predicateId)) {
+		} else if (field == Field.P) {
 			return new KeyContainer(triple.objectId,Field.O);
 		} else {
 			return new KeyContainer(triple.subjectId,Field.S);
@@ -73,6 +83,9 @@ public class TripleBunch  {
 		for (Entry<Key, ArrayList<KeyContainer>> list : innerMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
 			ArrayList<KeyContainer> values = list.getValue();
+			if (values.size() > 2 && values.size() < 4) {
+				System.out.println(list.getKey()+" "+values);
+			}
 			Collections.sort(values);
 			KeyContainer previous = null;
 			for (KeyContainer tripleStar : list.getValue()) {
