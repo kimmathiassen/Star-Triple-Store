@@ -114,7 +114,6 @@ public class Index   {
 	}
 
 	public void eliminateDuplicates() {
-		System.out.println(field1.toString()+field2.toString()+field3.toString());
 		for (TripleBunch tripleBunch : indexMap.values()) {
 			tripleBunch.eliminateDuplicates();
 		}
