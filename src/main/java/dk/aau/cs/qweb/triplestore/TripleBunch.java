@@ -23,8 +23,8 @@ public class TripleBunch  {
 
 	public void put(Field field2, final TripleStar triple) {
 		KeyContainer key = extractThirdField(triple,field2);
-		if (innerMap.containsKey(field2)) {
-			innerMap.get(field2).add(key);
+		if (innerMap.containsKey(getFieldKey(field2,triple))) {
+			innerMap.get(getFieldKey(field2,triple)).add(key);
 		} else {
 			ArrayList<KeyContainer> array = new ArrayList<KeyContainer>();
 			array.add(key);
