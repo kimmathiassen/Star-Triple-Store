@@ -17,6 +17,7 @@ import static dk.aau.cs.qweb.turtlestar.TokenTypeStar.SEMICOLON;
 
 import org.apache.jena.atlas.AtlasException;
 import org.apache.jena.atlas.iterator.PeekIterator;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -27,6 +28,8 @@ import org.apache.jena.riot.RiotParseException;
 import org.apache.jena.riot.system.ErrorHandler;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.sparql.graph.NodeConst;
+
+import dk.aau.cs.qweb.node.NodeFactoryStar;
 
 public class LangTurtleStar {
 
@@ -332,11 +335,14 @@ public class LangTurtleStar {
             TokenStar tErr = peekToken() ;
             String image = peekToken().getImage() ;
             if ( image.equals(KW_A) )
-                return NodeConst.nodeRDFType ;
+                //return NodeConst.nodeRDFType ;
+            	return NodeFactoryStar.createSimpleURINode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
             if ( !strict && image.equals(KW_SAME_AS) )
-                return nodeSameAs ;
+                //return nodeSameAs ;
+            	return NodeFactoryStar.createSimpleURINode(image);
             if ( !strict && image.equals(KW_LOG_IMPLIES) )
-                return NodeConst.nodeRDFType ;
+                //return NodeConst.nodeRDFType ;
+            	return NodeFactoryStar.createSimpleURINode(image);
             exception(tErr, "Unrecognized: " + image) ;
         }
 
@@ -408,9 +414,11 @@ public class LangTurtleStar {
             String image = peekToken().getImage() ;
             nextToken() ;
             if ( image.equals(KW_TRUE) )
-                return NodeConst.nodeTrue ;
+            	return NodeFactoryStar.createSimpleLiteralNode("true",  XSDDatatype.XSDboolean);
+                //return NodeConst.nodeTrue ;
             if ( image.equals(KW_FALSE) )
-                return NodeConst.nodeFalse ;
+            	return NodeFactoryStar.createSimpleLiteralNode("false",  XSDDatatype.XSDboolean);
+                //return NodeConst.nodeFalse ;
             if ( image.equals(KW_A) )
                 exception(tErr, "Keyword 'a' not legal at this point") ;
 

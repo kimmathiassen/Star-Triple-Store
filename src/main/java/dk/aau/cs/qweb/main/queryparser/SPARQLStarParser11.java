@@ -85,6 +85,7 @@ import org.apache.jena.sparql.expr.aggregate.AggregateRegistry;
 import org.apache.jena.sparql.expr.aggregate.Aggregator;
 import org.apache.jena.sparql.expr.aggregate.AggregatorFactory;
 import org.apache.jena.sparql.expr.aggregate.Args;
+import org.apache.jena.sparql.graph.NodeConst;
 import org.apache.jena.sparql.lang.SPARQLParserBase;
 import org.apache.jena.sparql.lang.sparql_11.JavaCharStream;
 import org.apache.jena.sparql.lang.sparql_11.ParseException;
@@ -133,6 +134,8 @@ import dk.aau.cs.qweb.node.NodeFactoryStar;
 
 @SuppressWarnings("unused")
 public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser11Constants {
+	protected final Node nRDFtype       = NodeFactoryStar.createSimpleURINode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type") ;
+	
 	 final public void QueryUnit() throws ParseException {
 		    ByteOrderMark();
 		    startQuery() ;
@@ -5303,6 +5306,9 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		    
 		  @Override
 		  protected Node createNode(String iri) {
+			  if (iri.equals("a")) {
+				  return NodeFactoryStar.createSimpleURINode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+			}
 	          return NodeFactoryStar.createSimpleURINode(iri) ;
 		  }
 		  
