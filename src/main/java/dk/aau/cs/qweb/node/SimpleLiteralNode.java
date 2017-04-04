@@ -19,4 +19,9 @@ public class SimpleLiteralNode extends SimpleNode {
 		}
 		return false;
 	}
+	
+	@Override
+	public String getLiteralLexicalForm() {
+		return (String)label;
+	}
 }
