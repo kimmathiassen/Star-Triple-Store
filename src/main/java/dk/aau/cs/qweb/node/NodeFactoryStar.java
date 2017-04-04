@@ -5,6 +5,8 @@ import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 
+import dk.aau.cs.qweb.dictionary.PrefixDictionary;
+
 public class NodeFactoryStar extends NodeFactory {
 
 	public static Node createEmbeddedNode(Node node1, Node node2, Node node3) {
@@ -12,7 +14,29 @@ public class NodeFactoryStar extends NodeFactory {
 	}
 
 	public static Node createSimpleURINode(String label) {
-		return new SimpleURINode(normalizeURI(label));
+		String normalized = normalizeURI(label);
+		if (normalized.startsWith("http")) {
+			String[] hashTagSplit = normalized.split("#");
+			if (hashTagSplit.length == 2) {
+				int prefix = PrefixDictionary.getInstance().createId(hashTagSplit[0]);
+				return new SimpleURINode(prefix,hashTagSplit[1]);
+			}
+			String[] slashSplit = normalized.split("/");
+			if (slashSplit[slashSplit.length-1].equals("")) {
+				String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
+				int prefix = PrefixDictionary.getInstance().createId(body);
+				String head = slashSplit[slashSplit.length-2];
+				return new SimpleURINode(prefix,head);
+			} else {
+				String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
+				int prefix = PrefixDictionary.getInstance().createId(body);
+				String head = slashSplit[slashSplit.length-1];
+				return new SimpleURINode(prefix,head);
+			}
+		} else {
+			return new SimpleURINode(normalized);
+		}
+		
 	}
 	
 	public static Node createSimpleLiteralNode(String label, XSDDatatype xsdinteger) {
