@@ -99,4 +99,26 @@ public class TurtleStarReaderSpidermanTest {
 		
 		assertEquals(2,count);
 	}
+	
+	@Test
+	public void linesWithCommentsWithShorthandNotationForType() {
+		String queryString = prolog +
+        		"SELECT  ?o WHERE {?s a <http://xmlns.com/foaf/0.1/Person> .}" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    int count = 0;
+	    
+	    
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            results.next();
+	            count++;
+	        }
+	    }
+		
+		assertEquals(2,count);
+	}
 }
