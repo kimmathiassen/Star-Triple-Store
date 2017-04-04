@@ -18,7 +18,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
 import dk.aau.cs.qweb.dictionary.VarDictionary;
-import dk.aau.cs.qweb.model.Node_Triple;
+import dk.aau.cs.qweb.node.Node_Triple;
 import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 

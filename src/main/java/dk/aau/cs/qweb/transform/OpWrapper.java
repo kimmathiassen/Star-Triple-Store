@@ -16,7 +16,7 @@ import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
-import dk.aau.cs.qweb.model.Node_Triple;
+import dk.aau.cs.qweb.node.Node_Triple;
 
 public class OpWrapper {
 	

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
-import dk.aau.cs.qweb.model.NodeFactoryStar;
+import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarBuilder;

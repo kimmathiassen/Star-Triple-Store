@@ -5,7 +5,7 @@ import org.apache.jena.sparql.core.Var;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
-import dk.aau.cs.qweb.model.Node_Triple;
+import dk.aau.cs.qweb.node.Node_Triple;
 
 public class TriplePatternBuilder {
 

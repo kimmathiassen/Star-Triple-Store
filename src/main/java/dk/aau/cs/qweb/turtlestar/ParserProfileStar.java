@@ -17,7 +17,7 @@ import org.apache.jena.riot.system.Prologue;
 import org.apache.jena.riot.system.RiotLib;
 import org.apache.jena.sparql.core.Quad;
 
-import dk.aau.cs.qweb.model.NodeFactoryStar;
+import dk.aau.cs.qweb.node.NodeFactoryStar;
 
 public class ParserProfileStar {
 	protected ErrorHandler errorHandler ;

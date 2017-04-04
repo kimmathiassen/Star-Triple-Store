@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.model;
+package dk.aau.cs.qweb.node;
 
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;

@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.model;
+package dk.aau.cs.qweb.node;
 
 import org.apache.jena.graph.Node_URI;
 

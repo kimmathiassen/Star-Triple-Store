@@ -7,8 +7,8 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.helper.BitHelper;
-import dk.aau.cs.qweb.model.NodeFactoryStar;
-import dk.aau.cs.qweb.model.Node_Triple;
+import dk.aau.cs.qweb.node.NodeFactoryStar;
+import dk.aau.cs.qweb.node.Node_Triple;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
@@ -241,6 +241,7 @@ public class NodeDictionary {
 //import dk.aau.cs.qweb.helper.BitHelper;
 //import dk.aau.cs.qweb.model.NodeFactoryStar;
 //import dk.aau.cs.qweb.model.Node_Triple;
+//import dk.aau.cs.qweb.model.PrintNode;
 //import dk.aau.cs.qweb.triple.Key;
 //import dk.aau.cs.qweb.triple.KeyFactory;
 //
@@ -279,30 +280,46 @@ public class NodeDictionary {
 //	}
 //
 //	private Key nodeToKey(Node node) {
-//		if (node instanceof Node_Triple) {
-//			Node_Triple embeddedNode = (Node_Triple) node;
-//			if (newEmbeddedTriple(embeddedNode)) {
-//				numberOfEmbeddedTriples++;
-//			}
-//			
-//			Node subject = normalizeNode(embeddedNode.getSubject());
-//			Node predicate = normalizeNode(embeddedNode.getPredicate());
-//			Node object = normalizeNode(embeddedNode.getObject());
-//			
-//			if (doesNodeContainOverflowKey(embeddedNode)) {
-//				registerOrGetNode(subject);
-//				registerOrGetNode(predicate);
-//				registerOrGetNode(object);
-//				return registerOverflowNode(embeddedNode);
+//		if (isEmbeddedNode(node)) {
+//			if (node instanceof PrintNode) {
+//				PrintNode printNode = (PrintNode) node;
+//				node = NodeFactoryStar.createEmbeddedNode(printNode);
+//			} 
+//			if (node instanceof Node_Triple) {
+//				Node_Triple embeddedNode = (Node_Triple) node;
+//				if (newEmbeddedTriple(embeddedNode)) {
+//					numberOfEmbeddedTriples++;
+//				}
+//				
+//				Node subject = normalizeNode(embeddedNode.getSubject());
+//				Node predicate = normalizeNode(embeddedNode.getPredicate());
+//				Node object = normalizeNode(embeddedNode.getObject());
+//				
+//				if (doesNodeContainOverflowKey(embeddedNode)) {
+//					registerOrGetNode(subject);
+//					registerOrGetNode(predicate);
+//					registerOrGetNode(object);
+//					return registerOverflowNode(embeddedNode);
+//				} else {
+//					Key s1 = registerOrGetNode(subject);
+//					Key p1 = registerOrGetNode(predicate);
+//					Key o1 = registerOrGetNode(object);
+//					return KeyFactory.createKey(s1, p1, o1);
+//				}
 //			} else {
-//				Key s1 = registerOrGetNode(subject);
-//				Key p1 = registerOrGetNode(predicate);
-//				Key o1 = registerOrGetNode(object);
-//				return KeyFactory.createKey(s1, p1, o1);
+//				throw new IllegalParameterException("Unknown node type "+ node.getClass().getName());
 //			}
 //		} else {
 //			return registerOrGetNode(node);
 //		}
+//	}
+//
+//	private boolean isEmbeddedNode(Node node) {
+//		String label = node.toString().trim();
+//		if (label.startsWith("<<") && label.endsWith(">>")) {
+//			return true;
+//		}
+//		return false;
 //	}
 //
 //	private Node normalizeNode(Node node) {
@@ -340,8 +357,8 @@ public class NodeDictionary {
 //	}
 //
 //	private Key registerOrGetNode(Node node) {
-//		if (node2Id.containsKey(node)) {
-//			return node2Id.get(node);
+//		if (node2Id.containsKey(node.toString())) {
+//			return node2Id.get(node.toString());
 //		} else {
 //			return registerNode(node);
 //		}
@@ -362,12 +379,12 @@ public class NodeDictionary {
 ////		}
 //		if (BitHelper.isIdAnEmbeddedTriple(id)) {
 //			if (BitHelper.isOverflownEmbeddedTriple(id)) {
-//				return NodeFactoryStar.createPrintNode(id2Overflow.get(id));
+//				return NodeFactoryStar.createSimpleURINode(id2Overflow.get(id));
 //			} else {
 //				Key subject = KeyFactory.createKey(BitHelper.getEmbeddedSubject(id));
 //				Key predicate = KeyFactory.createKey(BitHelper.getEmbeddedPredicate(id));
 //				Key object = KeyFactory.createKey(BitHelper.getEmbeddedObject(id));
-//				return NodeFactoryStar.createPrintNode("<<"+id2Node.get(subject)+" "+ id2Node.get(predicate)+" "+ id2Node.get(object)+">>");
+//				return NodeFactoryStar.createEmbeddedNode(NodeFactoryStar.id2Node.get(subject),id2Node.get(predicate),id2Node.get(object));
 //			}
 //		} else {
 //			return NodeFactoryStar.createPrintNode(id2Node.get(id));
