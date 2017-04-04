@@ -1,5 +1,12 @@
 package dk.aau.cs.qweb.main;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -33,17 +40,23 @@ import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 public class App {
 	
 	public static void main(String[] args) {
-		
+		List<String> queries = new ArrayList<String>();
 		CommandLineParser parser = new DefaultParser();
 		Graph g = new Graph();
 		String filename = "";
-		String queryString = "";
 		Model model = ModelFactory.createModelForGraph(g);
+		String  prolog = "PREFIX dc: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  "+
+        		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  " +
+        		"PREFIX foaf: <http://xmlns.com/foaf/0.1/>  " + 
+        		"PREFIX ex: <http://example.org/>  " + 
+        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  "+
+        		"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>   ";
 		
 		// create the Options
 		Options options = new Options();
 		options.addOption("h", "help", false, "Display this message." );
 		options.addOption("q", "query", true, "the sparql* query");
+		options.addOption("f", "query-folder", true, "path to folder with .sparqls files");
 		options.addOption("l", "location", true, "path to the turtle* file");
 		options.addOption("e", "explain", false, "prints the query plan");
 		
@@ -56,15 +69,19 @@ public class App {
 			} 
 				    
 		    if (line.hasOption("query")) {
-		    	String prolog = "PREFIX dc: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  "+
-		        		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  " +
-		        		"PREFIX foaf: <http://xmlns.com/foaf/0.1/>  " + 
-		        		"PREFIX ex: <http://example.org/>  " + 
-		        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  "+
-		        		"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>   ";
-		    	
-		    	queryString = prolog + line.getOptionValue("query"); 
-		    	
+		    	String queryString = prolog + line.getOptionValue("query"); 
+		    	queries.add(queryString);
+		    }
+		    
+		    if (line.hasOption("query-folder")) {
+		    	final File folder = new File(line.getOptionValue("query-folder"));
+		    	for (final File fileEntry : folder.listFiles()) {
+		    		if (fileEntry.getName().endsWith(".sparqls")) {
+		    			
+		    			String queryString = prolog + new String(Files.readAllBytes(Paths.get(fileEntry.toString())));
+		    			queries.add(queryString);
+					}
+		        }
 		    }
 		    
 		    if (line.hasOption("location")) {
@@ -77,21 +94,28 @@ public class App {
 		    
 		} catch( ParseException exp ) {
 			printHelp(exp, options);
+		} catch (IOException e) {
+			e.printStackTrace();
 		} 
 		
         registerTTLS();
         registerQueryEngine();
         ModelFactory.createDefaultModel();
+        
+     
     	
         RDFDataMgr.read(model, filename);
         g.eliminateDuplicates();
         
-        Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
-        
-        try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
-            ResultSet rs = qexec.execSelect() ;
-            ResultSetFormatter.out(System.out, rs, query) ;
-        }
+        for (String queryString : queries) {
+        	System.out.println(queryString);
+        	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+             
+             try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+                 ResultSet rs = qexec.execSelect() ;
+                 ResultSetFormatter.out(System.out, rs, query) ;
+             }
+		}
     }
 
 	public static void registerTTLS() {
