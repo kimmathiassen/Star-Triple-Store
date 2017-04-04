@@ -11,4 +11,13 @@ public class SimpleBlankNode extends  SimpleNode {
 	public boolean isBlank() {
 		return true; 
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof SimpleBlankNode) {
+			SimpleBlankNode other = (SimpleBlankNode) o;
+			return label.equals(other.label);
+		}
+		return false;
+	}
 }

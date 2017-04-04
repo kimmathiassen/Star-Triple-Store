@@ -12,7 +12,7 @@ public class NodeFactoryStar extends NodeFactory {
 	}
 
 	public static Node createSimpleURINode(String label) {
-		return new SimpleURINode(label);
+		return new SimpleURINode(normalizeURI(label));
 	}
 	
 	public static Node createSimpleLiteralNode(String label, XSDDatatype xsdinteger) {
@@ -38,5 +38,14 @@ public class NodeFactoryStar extends NodeFactory {
 	public static Node createSimpleBlankNode(Node blankNode) {
 		return new SimpleBlankNode(blankNode.getBlankNodeLabel());
 	}
-
+	
+	private static String normalizeURI(String uri) {
+		if (uri.trim().startsWith("<")) {
+			uri = uri.trim().substring(1);
+		}
+		if (uri.trim().endsWith(">")) {
+			uri = uri.trim().substring(0, uri.trim().length()-1);
+		}
+		return uri;
+	}
 }

@@ -10,4 +10,13 @@ public class SimpleLiteralNode extends SimpleNode {
 	public boolean isLiteral() {
 		return true;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof SimpleLiteralNode) {
+			SimpleLiteralNode other = (SimpleLiteralNode) o;
+			return label.equals(other.label);
+		}
+		return false;
+	}
 }

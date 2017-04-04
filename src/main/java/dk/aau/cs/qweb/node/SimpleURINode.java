@@ -1,7 +1,5 @@
 package dk.aau.cs.qweb.node;
 
-import org.apache.jena.graph.Node_URI;
-
 public class SimpleURINode extends SimpleNode {
 
 	protected SimpleURINode(String label) {
@@ -15,12 +13,9 @@ public class SimpleURINode extends SimpleNode {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof SimpleNode) {
-			SimpleNode other = (SimpleNode) o;
-			return label.equals(other);
-		} else if (o instanceof Node_URI) {
-			Node_URI other = (Node_URI) o;
-			this.label.equals(other.toString());
+		if (o instanceof SimpleURINode) {
+			SimpleURINode other = (SimpleURINode) o;
+			return getURI().equals(other.getURI());
 		}
 		return false;
 	}
