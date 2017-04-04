@@ -1,0 +1,4 @@
+select ?a?b?c 
+where {
+        <<?a  ?b <http://dbpedia.org/resource/Category:Buildings_and_structures_in_Massac_County,_Illinois> >> <context> ?c
+}

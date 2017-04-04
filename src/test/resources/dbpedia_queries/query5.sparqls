@@ -1,0 +1,5 @@
+select ?a?b 
+where {
+        <<<http://dbpedia.org/resource/United_States_Navy_SEALs>   <http://dbpedia.org/property/battles>   ?a  >> <context> <http://dbpedia.org/data/United_States_Navy_SEALs.xml>. 
+        << ?a  <http://dbpedia.org/property/battles>  ?b >> <context> <http://dbpedia.org/data/War_on_Terror.xml>
+}

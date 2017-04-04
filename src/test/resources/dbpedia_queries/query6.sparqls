@@ -1,0 +1,5 @@
+select ?a?b?c 
+where {
+        <<?a <http://dbpedia.org/property/knownFor> ?b >> <context> <http://dbpedia.org/data/Marienetta_Jirkowsky.xml>. 
+        <<?a <http://dbpedia.org/ontology/knownFor> ?c >> <context> <http://dbpedia.org/data/Berlin_Wall.xml>
+}

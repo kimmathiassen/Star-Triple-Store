@@ -1,0 +1,4 @@
+select ?a?b?c 
+where {
+        <<?a  ?b  ?c >> <context> <http://dbpedia.org/data/Plasmodium_hegneri.xml>
+}

@@ -1,0 +1,5 @@
+select ?a?b?c 
+where {
+        << <http://dbpedia.org/resource/George_Lyle_Ashe>  <http://dbpedia.org/property/religion> ?b >> <context> ?a. 
+        <<<http://dbpedia.org/resource/George_Lyle_Ashe>  <http://dbpedia.org/property/placeOfBirth>  ?c >>  <context> ?a
+}

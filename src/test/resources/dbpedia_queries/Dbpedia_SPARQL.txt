@@ -1,0 +1,78 @@
+Query 1:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?a?b?d 
+where {
+	?r rdf:subject <http://dbpedia.org/resource/Family_of_Barack_Obama>.
+ 	?r rdf:predicate <http://dbpedia.org/ontology/wikiPageExternalLink>. 
+	?r rdf:object ?a. ?r <context> ?c. 
+	?r1 rdf:subject <http://dbpedia.org/resource/Family_of_Barack_Obama>. 
+	?r1 rdf:predicate <http://dbpedia.org/property/members>. 
+	?r1 rdf:object ?b. 
+	?r1 <context> ?c. 
+	?r2 rdf:subject <http://dbpedia.org/resource/Family_of_Barack_Obama>. 
+	?r2 rdf:predicate <http://xmlns.com/foaf/0.1/depiction>. 
+	?r2 rdf:object ?d. 
+	?r2 <context> ?c
+}
+
+Query 2:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?a?b?c 
+where {
+	?r rdf:subject ?a.
+	?r rdf:predicate ?b. 
+	?r rdf:object <http://dbpedia.org/resource/Category:Buildings_and_structures_in_Massac_County,_Illinois>. 
+	?r <context> ?c
+}
+
+Query 3:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?a?b?c 
+where {
+	?r rdf:subject <http://dbpedia.org/resource/George_Lyle_Ashe>. 
+	?r rdf:predicate <http://dbpedia.org/property/religion>. 
+	?r rdf:object ?b. 
+	?r <context> ?a. 
+	?r1 rdf:subject <http://dbpedia.org/resource/George_Lyle_Ashe>. 
+	?r1 rdf:predicate <http://dbpedia.org/property/placeOfBirth>. 
+	?r1 rdf:object ?c. 
+	?r1 <context> ?a
+}
+
+Query 4:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?a?b?c 
+where {
+	?r rdf:subject ?a. 
+	?r rdf:predicate ?b. 
+	?r rdf:object ?c. 
+	?r <context> <http://dbpedia.org/data/Plasmodium_hegneri.xml>
+}
+
+Query 5:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?a?b 
+where {
+	?r rdf:subject <http://dbpedia.org/resource/United_States_Navy_SEALs>. 	
+	?r rdf:predicate <http://dbpedia.org/property/battles>. 
+	?r rdf:object ?a. 
+	?r <context> <http://dbpedia.org/data/United_States_Navy_SEALs.xml>. 
+	?r1 rdf:subject ?a. 
+	?r1 rdf:predicate <http://dbpedia.org/property/battles>. 
+	?r1 rdf:object ?b. 
+	?r1 <context> <http://dbpedia.org/data/War_on_Terror.xml>
+}
+
+Query 6:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?a?b?c 
+where {
+	?r rdf:subject ?a. 
+	?r rdf:predicate <http://dbpedia.org/property/knownFor>. 
+	?r rdf:object ?b. 
+	?r <context> <http://dbpedia.org/data/Marienetta_Jirkowsky.xml>. 
+	?r1 rdf:subject ?a. 
+	?r1 rdf:predicate <http://dbpedia.org/ontology/knownFor>. 
+	?r1 rdf:object ?c. 
+	?r1 <context> <http://dbpedia.org/data/Berlin_Wall.xml>
+}

@@ -1,0 +1,17 @@
+select ?a?b?d 
+where {
+	BIND(<< <http://dbpedia.org/resource/Family_of_Barack_Obama> <http://dbpedia.org/ontology/wikiPageExternalLink> ?a >> AS ?t1) .
+	BIND(<< <http://dbpedia.org/resource/Family_of_Barack_Obama> <http://dbpedia.org/property/members> ?b >> AS ?t2) .
+	BIND(<< <http://dbpedia.org/resource/Family_of_Barack_Obama> <http://xmlns.com/foaf/0.1/depiction> ?d >> AS ?t3) .
+	?t1 <context> ?c .
+	?t2 <context> ?c .
+	?t3 <context> ?c .
+}
+
+
+#select ?a?b?d 
+#where {
+#        << <http://dbpedia.org/resource/Family_of_Barack_Obama> <http://dbpedia.org/ontology/wikiPageExternalLink> ?a >> <context> ?c . 
+#        << <http://dbpedia.org/resource/Family_of_Barack_Obama> <http://dbpedia.org/property/members> ?b >> <context> ?c  .
+#        << <http://dbpedia.org/resource/Family_of_Barack_Obama> <http://xmlns.com/foaf/0.1/depiction> ?d >> <context> ?c .
+#}
