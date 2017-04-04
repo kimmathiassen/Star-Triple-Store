@@ -10,7 +10,7 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.graph.Graph;
@@ -19,12 +19,12 @@ import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
 
 public class TurtleStarReaderMultipleLabels {
 
-	static Graph g;
-	static String prolog;
-	static Model model;
+	Graph g;
+	String prolog;
+	Model model;
 	
-	@BeforeClass
-	public static void setup() {
+	@Before
+	public void setup() {
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/multipleLabels.ttls" ;

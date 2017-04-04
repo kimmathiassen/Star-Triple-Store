@@ -19,9 +19,9 @@ import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
 
 public class bindOptimizations {
 
-	private static Graph g;
-	private static String prolog;
-	private static Model model;
+	private Graph g;
+	private String prolog;
+	private Model model;
 
 	@Before
 	public void setUpBefore() throws Exception {
