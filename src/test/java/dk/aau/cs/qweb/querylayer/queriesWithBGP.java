@@ -59,14 +59,14 @@ public class queriesWithBGP {
             assertEquals("http://example.org/green-goblin",solution.get("s").toString());
             assertEquals("http://example.org/spiderman",solution.get("enemy").toString());
             assertEquals("http://xmlns.com/foaf/0.1/Person",solution.get("type").toString());
-            assertEquals("Green Goblin",solution.get("name").toString());
+            assertEquals("\"Green Goblin\"",solution.get("name").toString());
             
             results.hasNext();
             solution = results.next();
             assertEquals("http://example.org/spiderman",solution.get("s").toString());
             assertEquals("http://example.org/green-goblin",solution.get("enemy").toString());
             assertEquals("http://xmlns.com/foaf/0.1/Person",solution.get("type").toString());
-            assertEquals("Spiderman",solution.get("name").toString());
+            assertEquals("\"Spiderman\"",solution.get("name").toString());
 	    }
 	}
 }
