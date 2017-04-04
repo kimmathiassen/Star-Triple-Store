@@ -46,47 +46,6 @@ public class NodeDictionary {
 		return numberOfEmbeddedTriples;
 	}
 	
-	// This methods seem over complicated but it is in order to be able to handle triple patterns
-//	public TripleStarPattern createTriplePattern(Triple t) {
-//		StarNode subject = nodeToKey(t.getSubject());
-//		StarNode predicate = nodeToKey(t.getPredicate());
-//		StarNode object = nodeToKey(t.getObject());
-//		
-//		return new TripleStarPattern(subject, predicate, object);
-//	}
-//	
-
-//	private TripleStarPattern convertEmbeddedTriplePatternNode(Node embeddedNode) {
-//		Node_Triple embedded = (Node_Triple) embeddedNode ;
-//		Node subjectNode = embedded.getSubject();
-//		Node predicateNode = embedded.getPredicate();
-//		Node objectNode = embedded.getObject();
-//		TriplePatternBuilder builder = new TriplePatternBuilder();
-//		
-//		if (subjectNode.isConcrete()) {
-//			builder.setSubject(lookupKeyOrCreateNew(subjectNode));
-//		} 
-//		
-//		if (predicateNode.isConcrete()) {
-//			builder.setPredicate(lookupKeyOrCreateNew(predicateNode));
-//		} 
-//		
-//		if (objectNode.isConcrete()) {
-//			builder.setObject(lookupKeyOrCreateNew(objectNode));
-//		} 
-//		return builder.createTriplePatter();
-//	}
-
-//	private Key lookupKeyOrCreateNew(Node node) { //Only used in triple patterns 
-//		if (node2Id.containsKey(node)) {
-//			return node2Id.get(node);
-//		} else {
-//			return  new Key(0); //meaning that a resource does not exist in dict, key 0 is an error code.
-//		}
-//	}
-
-	
-
 	private Key nodeToKey(Node node) {
 		if (node instanceof Node_Triple) {
 			Node_Triple embeddedNode = (Node_Triple) node;
