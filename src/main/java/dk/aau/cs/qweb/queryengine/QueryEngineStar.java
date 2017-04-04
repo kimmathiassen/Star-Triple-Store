@@ -92,7 +92,6 @@ public class QueryEngineStar extends QueryEngineMain {
 	@Override
 	public QueryIterator eval ( Op op, DatasetGraph dsg, Binding input, Context context )
 	{
-		System.out.println(op);
 	    op = Transformer.transform(new MyTransform(), op) ;
 		System.out.println(op);
 		ExecutionContext execCxt = createExecutionContext ( op, dsg, context );

@@ -23,7 +23,6 @@ public class MyTransform extends TransformCopy {
 
 	@Override
 	public Op transform(OpBGP opBGP) {
-		System.out.println(opBGP);
 		Op op = createJoinTree(opBGP);
 		System.out.println(op);
 		return op;
