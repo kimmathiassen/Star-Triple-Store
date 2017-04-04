@@ -41,7 +41,7 @@ public class EncodeBindingsIterator implements Iterator<SolutionMapping>, Closea
 			Var var = itVar.next();
 			curOutput.set( varDict.getId(var),nodeDict.createKey(curInput.get(var)));
 		}
-
+		//System.out.println("encode (bindings -> solutionMappings): "+curOutput);
 		return curOutput;
 	}
 

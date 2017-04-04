@@ -50,7 +50,7 @@ public class DecodeBindingsIterator extends QueryIter
 				               nodeDict.getNode(new Key(curInput.get(i))));
 			}
 		}
-
+		//System.out.println("decode (solutionMappings -> bindings): "+curOutput);
 		return curOutput;
 	}
 
