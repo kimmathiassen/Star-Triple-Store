@@ -24,6 +24,7 @@ public class ParserProfileStar {
     protected Prologue     prologue ;
     protected boolean      strictMode = SysRIOT.isStrictMode() ;
     protected FactoryRDF   factory ;
+	protected NodeFactoryStar factoryStar;
 
     public ParserProfileStar(Prologue prologue, ErrorHandler errorHandler) {
         this(prologue, errorHandler, RiotLib.factoryRDF()) ;
@@ -36,6 +37,7 @@ public class ParserProfileStar {
         this.prologue = prologue ;
         this.errorHandler = errorHandler ;
         this.factory = factory ;
+        this.factoryStar = new NodeFactoryStar();
     }
 
     public ErrorHandler getHandler() {
@@ -79,27 +81,33 @@ public class ParserProfileStar {
     }
 
     public Node createURI(String uriStr, long line, long col) {
-        return factory.createURI(uriStr);
+    	return NodeFactoryStar.createSimpleURINode(uriStr);
+        //return factory.createURI(uriStr);
     }
 
     public Node createBlankNode(Node scope, String label, long line, long col) {
-        return factory.createBlankNode(label);
+        //return factory.createBlankNode(label);
+    	return NodeFactoryStar.createSimpleBlankNode(factory.createBlankNode(label));
     }
 
     public Node createBlankNode(Node scope, long line, long col) {
-        return factory.createBlankNode();
+    	return NodeFactoryStar.createSimpleBlankNode(factory.createBlankNode());
+        //return factory.createBlankNode();
     }
 
     public Node createTypedLiteral(String lexical, RDFDatatype dt, long line, long col) {
-        return factory.createTypedLiteral(lexical, dt);
+    	return NodeFactoryStar.createSimpleLiteralNode(lexical,dt);
+        //return factory.createTypedLiteral(lexical, dt);
     }
 
     public Node createLangLiteral(String lexical, String langTag, long line, long col) {
-        return factory.createLangLiteral(lexical, langTag);
+    	return NodeFactoryStar.createSimpleLiteralNode(lexical,langTag);
+        //return factory.createLangLiteral(lexical, langTag);
     }
 
     public Node createStringLiteral(String lexical, long line, long col) {
-        return factory.createStringLiteral(lexical);
+    	return NodeFactoryStar.createSimpleLiteralNode(lexical);
+        //return factory.createStringLiteral(lexical);
     }
   
     /** Special token forms */

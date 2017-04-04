@@ -1,7 +1,12 @@
 package dk.aau.cs.qweb.main.queryparser;
 
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.datatypes.TypeMapper;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Query;
+import org.apache.jena.riot.system.RiotLib;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.E_Add;
 import org.apache.jena.sparql.expr.E_BNode;
@@ -5261,6 +5266,53 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		  final public void disable_tracing() {
 		  }
 
+		  @Override
+		  protected Node createLiteralInteger(String lexicalForm) {
+		        //return NodeFactory.createLiteral(lexicalForm, XSDDatatype.XSDinteger) ;
+			  return NodeFactoryStar.createSimpleLiteralNode(lexicalForm,XSDDatatype.XSDinteger);
+		  }
 
-
+		  @Override
+		  protected Node createLiteralDouble(String lexicalForm) {
+		      //return NodeFactory.createLiteral(lexicalForm, XSDDatatype.XSDdouble) ;
+			  return NodeFactoryStar.createSimpleLiteralNode(lexicalForm,XSDDatatype.XSDdouble);
+		  }
+		  @Override
+		  protected Node createLiteralDecimal(String lexicalForm) {
+			  return NodeFactoryStar.createSimpleLiteralNode(lexicalForm,XSDDatatype.XSDdecimal);
+		      //return NodeFactory.createLiteral(lexicalForm, XSDDatatype.XSDdecimal) ;
+		  }
+		  
+		  @Override
+		  protected Node createLiteral(String lexicalForm, String langTag, String datatypeURI) {
+		      Node n = null ;
+		      // Can't have type and lang tag in parsing.
+		      if ( datatypeURI != null ) {
+		          RDFDatatype dType = TypeMapper.getInstance().getSafeTypeByName(datatypeURI) ;
+		          //n = NodeFactory.createLiteral(lexicalForm, dType) ;
+		          n = NodeFactoryStar.createSimpleLiteralNode(lexicalForm,dType);
+		      } else if ( langTag != null && !langTag.isEmpty() )
+		          //n = NodeFactory.createLiteral(lexicalForm, langTag) ;
+		    	  n = NodeFactoryStar.createSimpleLiteralNode(lexicalForm,langTag);
+		      else {
+		          //n = NodeFactory.createLiteral(lexicalForm) ;
+		      		n = NodeFactoryStar.createSimpleLiteralNode(lexicalForm);
+		      }
+		      return n ;
+		  }
+		    
+		  @Override
+		  protected Node createNode(String iri) {
+	          return NodeFactoryStar.createSimpleURINode(iri) ;
+		  }
+		  
+		  @Override
+	      protected Node createBNode(int line, int column) {
+	          return NodeFactoryStar.createSimpleBlankNode(super.createBNode(line, column));
+	      }
+		  
+		  @Override
+	      protected Node createBNode(String label, int line, int column) {
+			  return NodeFactoryStar.createSimpleBlankNode(super.createBNode(label,line, column));
+	      }
 }
