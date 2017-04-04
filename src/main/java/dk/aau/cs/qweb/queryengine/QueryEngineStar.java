@@ -93,7 +93,7 @@ public class QueryEngineStar extends QueryEngineMain {
 	public QueryIterator eval ( Op op, DatasetGraph dsg, Binding input, Context context )
 	{
 	    op = Transformer.transform(new MyTransform(), op) ;
-		System.out.println(op);
+	//	System.out.println(op);
 		ExecutionContext execCxt = createExecutionContext ( op, dsg, context );
 		return createIteratorChain( op, input, execCxt );
 	}
