@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.reasoner.IllegalParameterException;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
@@ -134,7 +135,14 @@ public class OpWrapper {
 		} else {
 			throw new NotImplementedException("support of op "+left.getClass()+" has not been implemented");
 		}
-		extractVariables((OpTriple) join.getRight());
+		
+		if (join.getRight() instanceof OpExtend) {
+			extractVariables((OpExtend) join.getRight());
+		} else if (join.getRight() instanceof OpTriple) {
+			extractVariables((OpTriple) join.getRight());
+		} else {
+			throw new IllegalParameterException("Right leaf node must either an OpTriple or OpExtend, was "+join.getRight().toString());
+		}
 	}
 
 	public int getSelectivity() {

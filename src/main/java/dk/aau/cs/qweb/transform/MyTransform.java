@@ -3,7 +3,9 @@ package dk.aau.cs.qweb.transform;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
@@ -11,9 +13,11 @@ import org.apache.jena.sparql.algebra.TransformCopy;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
+import org.apache.jena.sparql.algebra.op.OpSequence;
 import org.apache.jena.sparql.algebra.op.OpTable;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
 import dk.aau.cs.qweb.dictionary.VarDictionary;
@@ -28,49 +32,12 @@ public class MyTransform extends TransformCopy {
 		return op;
 	}
 	
-//	@Override
-//	public Op transform(OpTriple optriple) {
-//		Op op = optriple;
-//		
-//		if (containsEmbeddedTriple(optriple)) {
-//			List<OpWrapper> elements = splitTripleWithEmbeddedTriple(optriple);
-//			OpWrapper tree = getOpWithHighestSelectivity(elements);
-//			while (elements.size()>0) {
-//				OpWrapper rightJoin = getOpWithHighestSelectivityThatJoins(tree,elements);
-//				tree = opJoin(tree, rightJoin);
-//			}
-//			return tree.asOp();
-//		}
-//		return op;
-//	}
+	@Override
+    public Op transform(OpSequence opSequence, List<Op> elts) {
+		Op op = createJoinTree(opSequence);
+		return op;
+    }
 	
-//	@Override
-//    public Op transform(OpSequence opSequence, List<Op> elts) {
-//		
-//		
-//		OpWrapper opExtend = null;
-//		for (Op op : opSequence.getElements()) {
-//			if (op instanceof OpExtend) {
-//				if (opExtend == null) {
-//					opExtend = new OpWrapper(op);
-//				} else { 
-//					OpWrapper temp = new OpWrapper(op);
-//					opExtend = temp.getSelectivity() > opExtend.getSelectivity() ? temp : opExtend;
-//					
-//				}
-//				return mergeExtendAndBGP(opExtend,opSequence);
-//			}
-//		}
-//		return opSequence;
-//    }
-	
-//	@Override
-//    public Op transform(OpExtend opExtend, Op subOp) {
-//		System.out.println(opExtend);
-//		System.out.println(subOp);
-//		return null;
-//	}
-
 	private List<Op> splitTripleWithEmbeddedTriple(Triple triple) {
 		List<Op> split = new ArrayList<>();
 		Node subject = triple.getSubject();
@@ -107,19 +74,6 @@ public class MyTransform extends TransformCopy {
 			return false;
 		}
 	}
-
-//	private OpSequence mergeExtendAndBGP(OpExtend opExtend, OpSequence opSequence) {
-//		System.out.println(opExtend.getVarExprList());
-//		for (Op op : opSequence.getElements()) {
-//			if (op instanceof OpBGP) {
-//				List<OpWrapper> opWrappers = addToList(op);
-//			}
-//		}
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
-
 
 	private Op createJoinTree(Op op) {
 		List<OpWrapper> triplePatterns = addToList(op);
@@ -189,10 +143,44 @@ public class MyTransform extends TransformCopy {
 			for (Op element : splitBGP(op)) {
 				wrappedOp.add(new OpWrapper(element));
 			}
+		} else if (op instanceof OpSequence) {
+			for (Op element : splitSequence(op)) {
+				wrappedOp.add(new OpWrapper(element));
+			}
+		} else if (op instanceof OpExtend) {
+			for (Op element : splitExtend(op)) {
+				wrappedOp.add(new OpWrapper(element));
+			}
+		} else {
+			throw new NotImplementedException("no support of "+op.getName());
 		}
 		
-		//TODO add cases for other the OpBGP
 		return wrappedOp;
+	}
+
+	private List<Op> splitSequence(Op op) {
+		List<Op> result = new ArrayList<Op>();
+		OpSequence sequence = (OpSequence)op;
+		for (Op element : sequence.getElements()) {
+			if (element instanceof OpBGP) {
+				result.addAll(splitBGP(element));
+			} else if (element instanceof OpExtend) {
+				result.addAll(splitExtend(element));
+			} else {
+				throw new NotImplementedException("no support for "+element.getName());
+			}
+		}
+		return result;
+	}
+
+	private List<Op>  splitExtend(Op op) {
+		List<Op> result = new ArrayList<Op>();
+		OpExtend extend = (OpExtend)op;
+		
+		for (Entry<Var, Expr> element : extend.getVarExprList().getExprs().entrySet()) {
+			result.add(OpExtend.create(OpTable.empty() , element.getKey(), element.getValue()));
+		}
+		return result;
 	}
 
 	private List<Op> splitBGP(Op op) {
