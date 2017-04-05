@@ -83,9 +83,6 @@ public class TripleBunch  {
 		for (Entry<Key, ArrayList<KeyContainer>> list : innerMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
 			ArrayList<KeyContainer> values = list.getValue();
-			if (values.size() > 2 && values.size() < 4) {
-				System.out.println(list.getKey()+" "+values);
-			}
 			Collections.sort(values);
 			KeyContainer previous = null;
 			for (KeyContainer tripleStar : list.getValue()) {
