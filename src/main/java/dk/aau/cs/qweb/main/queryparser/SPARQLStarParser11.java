@@ -1873,6 +1873,7 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		      case IRIref:
 		      case PNAME_NS:
 		      case PNAME_LN:
+		      case LT: //Embedded triple
 		      case BLANK_NODE_LABEL:
 		      case VAR1:
 		      case VAR2:
@@ -1921,6 +1922,7 @@ public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser
 		      case IRIref:
 		      case PNAME_NS:
 		      case PNAME_LN:
+		      case LT: //Embedded triple
 		      case BLANK_NODE_LABEL:
 		      case VAR1:
 		      case VAR2:
