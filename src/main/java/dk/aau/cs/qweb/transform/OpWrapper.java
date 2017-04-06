@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.reasoner.IllegalParameterException;
 import org.apache.jena.sparql.algebra.Op;
@@ -120,6 +121,26 @@ public class OpWrapper {
 	}
 	
 	private void extractVariables(OpExtend op) {
+		for (Expr exp : op.getVarExprList().getExprs().values()) {
+			if (exp instanceof NodeValueNode) {
+				NodeValueNode node = (NodeValueNode) exp;
+				Node_Triple triple = (Node_Triple) node.asNode();
+				Node subject = triple.getSubject();
+				Node predicate = triple.getPredicate();
+				Node object = triple.getObject();
+				
+				if (!subject.isConcrete()) {
+					variables.add((Var)subject);
+				}
+				if (!predicate.isConcrete()) {
+					variables.add((Var)predicate);
+				}
+				if (!object.isConcrete()) {
+					variables.add((Var)object);
+				}
+			}
+		}
+		
 		variables.addAll(op.getVarExprList().getVars());
 	}
 
