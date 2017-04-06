@@ -54,7 +54,10 @@ public class TripleBunch  {
 
 	//One variable
 	public Iterator<KeyContainer> iterator(Key key, Field f) {
-		return new AddKeyToIteratorWrapper(innerMap.get(key).iterator(),key,f);
+		if (innerMap.containsKey(key)) {
+			return new AddKeyToIteratorWrapper(innerMap.get(key).iterator(),key,f);
+		}
+		return Collections.emptyIterator();
 	}
 	
 	//Two variables
