@@ -205,7 +205,10 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 		
 		//If there exist bindings for var 
 		if (solutionMapping.contains(var)) {
-			if (tp.getKey().getId() != solutionMapping.get(var)) {
+			Key tpKey = KeyFactory.createKey(tp.getSubject().getKey(), tp.getPredicate().getKey(), tp.getObject().getKey());
+			if (tpKey.getId() != solutionMapping.get(var)) {
+				//Handles the case where the key of the substituted embedded key does not match the one from the solutionMappings.
+				//If these keys does not match then the substitution is not valid, null is interpreted later as no matching triples.
 				return null;
 			}
 		} else if (sNew.isConcrete() && pNew.isConcrete() && oNew.isConcrete()) {
