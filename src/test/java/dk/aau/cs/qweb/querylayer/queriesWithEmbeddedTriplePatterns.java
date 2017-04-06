@@ -69,7 +69,8 @@ public class queriesWithEmbeddedTriplePatterns {
         		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  " +
         		"PREFIX foaf: <http://xmlns.com/foaf/0.1/>  " + 
         		"PREFIX ex: <http://example.org/>  " + 
-        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
+        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  " +
+        		"prefix xsd: <http://www.w3.org/2001/XMLSchema#> ";
     	
         RDFDataMgr.read(model, filename);
         g.eliminateDuplicates();
@@ -206,5 +207,151 @@ public class queriesWithEmbeddedTriplePatterns {
 	    }
 		assertEquals(0,count);
 	}
+	
+	@Test
+	public void queriesWithPrefixAndFullURI() {
+		String queryString1 = prolog +
+				"SELECT ?t WHERE {BIND(<<ex:kim ex:worksAt ex:LiU>> as ?t) }" ; 
+       
+	    Query query1 = QueryFactory.create(queryString1,SyntaxStar.syntaxSPARQL_Star) ;
+	    RDFNode t1 = null;
+	    try(QueryExecution qexec1 = QueryExecutionFactory.create(query1, model)){
+	        ResultSet results1 = qexec1.execSelect() ;
+	        
+	        while ( results1.hasNext() ) {
+	        	QuerySolution solution1 = results1.next();
+	            t1  = solution1.get("t");
+	        }
+	    }
+	    
+	    String queryString2 = prolog +
+				"SELECT ?t WHERE {BIND(<<ex:kim <http://example.org/worksAt> ex:LiU>> as ?t) }" ; 
+       
+	    Query query2 = QueryFactory.create(queryString2,SyntaxStar.syntaxSPARQL_Star) ;
+	    RDFNode t2 = null;
+	    try(QueryExecution qexec2 = QueryExecutionFactory.create(query2, model)){
+	        ResultSet results2 = qexec2.execSelect() ;
+	        
+	        while ( results2.hasNext() ) {
+	        	QuerySolution solution2 = results2.next();
+	            t2  = solution2.get("t");
+	        }
+	    }
+	    
+		assertEquals(t1,t2);
+	}
+	
+	@Test
+	public void queryWithMultipleEmbeddedTriplePatternsWithDot() {
+		String queryString = prolog +
+        		"SELECT ?s WHERE {<<?s ex:worksAt ex:aau>> ex:is \"Not a lie\" . \n"+ 
+        "<<?s ex:worksAt ex:aau>> ex:started \"1999-08-16\"^^xsd:date . }" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    int count = 0;
+	    RDFNode s = null;
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            QuerySolution solution = results.next();
+	            s = solution.get("s");
+	            count++;
+	        }
+	    }
+	    assertEquals("http://example.org/kim",s.toString());
+		assertEquals(1,count);
+	}
+	
+	@Test
+	public void queryWithMultipleEmbeddedTriplePatternsWithSemicolon() {
+		String queryString = prolog +
+        		"SELECT ?s WHERE {<<?s ex:worksAt ex:aau>> ex:is \"Not a lie\" ; "+ 
+        " ex:started \"1999-08-16\"^^xsd:date . }" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    int count = 0;
+	    RDFNode s = null;
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            QuerySolution solution = results.next();
+	            s = solution.get("s");
+	            count++;
+	        }
+	    }
+	    assertEquals("http://example.org/kim",s.toString());
+		assertEquals(1,count);
+	}
+	
+	@Test
+	public void queryWithTwoTriplePatternsOneBind() {
+		String queryString = prolog +
+        		"SELECT ?s WHERE {Bind(<<?s ex:worksAt ex:aau>> AS ?t1) . ?t1 ex:is \"Not a lie\" ."+ 
+        "?t1 ex:started \"1999-08-16\"^^xsd:date }" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    int count = 0;
+	    RDFNode s = null;
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            QuerySolution solution = results.next();
+	            s = solution.get("s");
+	            count++;
+	        }
+	    }
+	    assertEquals("http://example.org/kim",s.toString());
+		assertEquals(1,count);
+	}
+	
+	
+	@Test
+	public void queryTriplePatternsWithDotSubjectSubjectJoin() {
+		String queryString = prolog +
+        		"SELECT ?s WHERE {?s ex:is \"Not a lie\" . "+ 
+        "?s ex:started \"1999-08-16\"^^xsd:date . }" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    int count = 0;
+	    RDFNode s = null;
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            QuerySolution solution = results.next();
+	            s = solution.get("s");
+	            count++;
+	        }
+	    }
+	    assertEquals("<<http://example.org/kim http://example.org/worksAt http://example.org/aau>>",s.toString());
+		assertEquals(1,count);
+	}
+	
+	@Test
+	public void queryTriplePatternsWithDotSubjectObjectJoin() {
+		String queryString = prolog +
+        		"SELECT ?s WHERE {?s ex:is \"Not a lie\" . "+ 
+        "<http://example.org/kim> ex:started ?s . }" ; 
+       
+	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+	    int count = 0;
+	    
+	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+	        ResultSet results = qexec.execSelect() ;
+	        
+	        while ( results.hasNext() ) {
+	            count++;
+	        }
+	    }
+		assertEquals(0,count);
+	}
+	
 }
 
