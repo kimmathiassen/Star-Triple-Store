@@ -8,6 +8,8 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index.Field;
@@ -46,6 +48,18 @@ public class TripleStore {
         if (triplesAddedCount % 100000 == 0) {
 			System.out.println("Triples added: " + triplesAddedCount+" Time diff: "+(millis - System.currentTimeMillis()));
 			millis = System.currentTimeMillis();
+		}
+        
+        if (triplesAddedCount % 10000000 == 0) {
+			System.out.println("Index contains: " + SPO.size() );
+			int embeddedTriples = NodeDictionary.getInstance().getNumberOfEmbeddedTriples();
+			int overflow = NodeDictionary.getInstance().getNumberOfOverflowNodes();
+			int size = NodeDictionary.getInstance().size();
+			System.out.println("Node Dictionary size: " + size);
+			System.out.println("+ Normal triples: " + (size-embeddedTriples-overflow));
+			System.out.println("+ Embedded triples: " + (embeddedTriples));
+			System.out.println("+ Overflow triples: " + (overflow));
+			System.out.println("Prefix Dictionary size: " + PrefixDictionary.getInstance().size());
 		}
     }
      
