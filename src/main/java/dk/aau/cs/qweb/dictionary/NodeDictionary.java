@@ -42,6 +42,10 @@ public class NodeDictionary {
 	    return instance;
 	}
 	
+	public int size() {
+		return id2Node.size()+id2Overflow.size();
+	}
+	
 	public int getNumberOfEmbeddedTriples() {
 		return numberOfEmbeddedTriples;
 	}
