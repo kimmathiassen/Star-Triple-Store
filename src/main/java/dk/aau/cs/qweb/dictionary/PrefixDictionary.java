@@ -60,7 +60,7 @@ public class PrefixDictionary
 	 */
 	final public int size ()
 	{
-		return Id2Prefix.size();
+		return PrefixName2Id.size();
 	}
 
 	// operations
