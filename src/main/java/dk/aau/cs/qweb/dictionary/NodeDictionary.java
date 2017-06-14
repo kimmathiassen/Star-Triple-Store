@@ -9,6 +9,7 @@ import org.apache.jena.reasoner.IllegalParameterException;
 import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.node.Node_Triple;
+import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
@@ -72,14 +73,16 @@ public class NodeDictionary {
 				Key o1 = registerOrGetNode(object);
 				return KeyFactory.createKey(s1, p1, o1);
 			}
-		} else {
+		} else if (node instanceof SimpleNode) {
 			return registerOrGetNode(node);
+		} else {
+			throw new IllegalArgumentException("The type of "+node.getClass().getSimpleName()+" is not a instance of SimpleNode or Node_triple");
 		}
 	}
 
 	private Node normalizeNode(Node node) {
 		if (node.toString().trim().startsWith("<") && node.toString().trim().endsWith(">")) {
-			return NodeFactoryStar.createURI(node.toString().trim().substring(1, node.toString().trim().length()-1));
+			return NodeFactoryStar.createSimpleURINode(node.toString().trim().substring(1, node.toString().trim().length()-1));
 		} 
 		return node;
 	}
