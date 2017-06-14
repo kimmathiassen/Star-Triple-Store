@@ -5,6 +5,9 @@ import java.util.Objects;
 import dk.aau.cs.qweb.helper.BitHelper;
 
 public class Key implements StarNode, Comparable<Key>{
+	@SuppressWarnings("unused")
+	private long maxReferenceTripleId = -5764607523034234879l;
+	private long maxEmbeddedTripleId = -1152921504606846975l;
 	
 	public Key(long id) {
 		this.id=id;
@@ -16,7 +19,12 @@ public class Key implements StarNode, Comparable<Key>{
 	
 	@Override
 	public String toString() {
-		if (id < 0) { //is embedded triple
+		if (id < maxEmbeddedTripleId) {
+			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
+			String body = String.format("%60s",Long.toBinaryString(BitHelper.getOverflowBody(id))).replace(' ', '0');
+			return header + "-"+body;
+		}
+		else if (id < 0) { //is embedded triple
 			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
 			String subject = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedSubject(id))).replace(' ', '0');
 			String predicate = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedPredicate(id))).replace(' ', '0');

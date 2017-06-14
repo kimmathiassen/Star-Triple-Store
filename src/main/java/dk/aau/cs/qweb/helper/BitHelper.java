@@ -7,6 +7,7 @@ public class BitHelper {
 	private static final long OBJECT_MASK = 	Long.parseLong("0000000000000000000000000000000000000000000011111111111111111111", 2);
 	private static final long PREDICATE_MASK = 	Long.parseLong("0000000000000000000000001111111111111111111100000000000000000000", 2);
 	private static final long SUBJECT_MASK =	Long.parseLong("0000111111111111111111110000000000000000000000000000000000000000", 2);
+	private static final long BODY_MASK =		Long.parseLong("0000111111111111111111111111111111111111111111111111111111111111", 2);
 
 	public static boolean isThereAnyKeysSetToZeroInEmbeddedId(final Key key) {
 		return isThereAnyKeysSetToZeroInEmbeddedId(key.getId());
@@ -80,8 +81,7 @@ public class BitHelper {
 	}
 
 	public static Key createOverflowKey(long overflowTripleKey) {
-		long id = overflowTripleKey * -1;
-		return new Key(OVERFLOWN_MASK | id);
+		return new Key(-4611686018427387904l + overflowTripleKey);
 	}
 
 	public static long getEmbeddedHeader(long id) {
@@ -89,5 +89,9 @@ public class BitHelper {
 			throw new IllegalArgumentException("expected an embedded triple, but recieved: "+String.format("%64s", Long.toBinaryString(id)).replace(' ', '0'));
 		}
 		return isOverflownEmbeddedTriple(id) ? 12 : 8;
+	}
+
+	public static long getOverflowBody(long id) {
+		return (id & BODY_MASK );
 	}
 }
