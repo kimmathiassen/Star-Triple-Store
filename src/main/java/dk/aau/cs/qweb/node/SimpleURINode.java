@@ -4,15 +4,15 @@ import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 
 public class SimpleURINode extends SimpleNode {
 	
-	private int urlBody;
+	private int urlBodyId;
 
 	protected SimpleURINode(String label) {
 		super(label);
 	}
 	
-	public SimpleURINode(int body, String head) {
+	public SimpleURINode(int bodyId, String head) {
 		super(head);
-		urlBody = body;
+		urlBodyId = bodyId;
 	}
 
 	@Override
@@ -24,14 +24,14 @@ public class SimpleURINode extends SimpleNode {
 	public boolean equals(Object o) {
 		if (o instanceof SimpleURINode) {
 			SimpleURINode other = (SimpleURINode) o;
-			return urlBody == other.urlBody && label.equals(other.label);
+			return urlBodyId == other.urlBodyId && label.equals(other.label);
 		}
 		return false;
 	}
 	
 	@Override 
 	public String getURI() {
-		String prefix = PrefixDictionary.getInstance().getPrefix(urlBody);
+		String prefix = PrefixDictionary.getInstance().getPrefix(urlBodyId);
 		return prefix+label;
 	}
 	
