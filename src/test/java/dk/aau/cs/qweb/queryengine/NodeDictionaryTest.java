@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.junit.Test;
 
@@ -21,9 +20,9 @@ public class NodeDictionaryTest {
 
 	@Test
 	public void writeAndReadTriple() {
-		Node subject = NodeFactory.createURI("http://example.com/product/1");
-		Node predicate = NodeFactory.createURI("http://product.com/name");
-		Node object = NodeFactory.createLiteral("Eclipse");
+		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
+		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Triple original = Triple.create(subject, predicate, object);
 		
 		TripleStarBuilder builder = new TripleStarBuilder();
@@ -42,11 +41,10 @@ public class NodeDictionaryTest {
 	
 	@Test
 	public void overflowBitIsSet() {
-		Node subject = NodeFactory.createURI("http://example.com/product/1");
-		Node predicate = NodeFactory.createURI("http://product.com/name");
-		Node object = NodeFactory.createLiteral("Eclipse");
+		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
+		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
-		
 	
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
@@ -59,9 +57,9 @@ public class NodeDictionaryTest {
 	
 	@Test
 	public void embeddedTripleBitIsSet() {
-		Node subject = NodeFactory.createURI("http://example.com/product/1");
-		Node predicate = NodeFactory.createURI("http://product.com/name");
-		Node object = NodeFactory.createLiteral("Eclipse");
+		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
+		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
 		NodeDictionary dict = NodeDictionary.getInstance();
@@ -75,18 +73,18 @@ public class NodeDictionaryTest {
 	
 	@Test
 	public void countUniqueEmbeddedNodes() {
-		Node subject = NodeFactory.createURI("http://example.com/product/1");
-		Node predicate = NodeFactory.createURI("http://product.com/name");
-		Node object = NodeFactory.createLiteral("Eclipse");
+		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
+		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		Node subject1 = NodeFactory.createURI("http://example.com/product/2");
+		Node subject1 = NodeFactoryStar.createSimpleURINode("http://example.com/product/2");
 		Node embeddedNode1 = NodeFactoryStar.createEmbeddedNode(subject1, predicate, object);
 		
-		Node subject2 = NodeFactory.createURI("http://example.com/product/3");
+		Node subject2 = NodeFactoryStar.createSimpleURINode("http://example.com/product/3");
 		Node embeddedNode2 = NodeFactoryStar.createEmbeddedNode(subject2, predicate, object);
 		
-		Node subject3 = NodeFactory.createURI("http://example.com/product/1");
+		Node subject3 = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
 	
@@ -105,21 +103,21 @@ public class NodeDictionaryTest {
 	
 	@Test
 	public void customDistribution() {
-		Node subject = NodeFactory.createURI("http://example.com/product/1");
-		Node predicate = NodeFactory.createURI("http://product.com/name");
-		Node object = NodeFactory.createLiteral("Eclipse");
+		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
+		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		Node subject1 = NodeFactory.createURI("http://example.com/product/2");
+		Node subject1 = NodeFactoryStar.createSimpleURINode("http://example.com/product/2");
 		Node embeddedNode1 = NodeFactoryStar.createEmbeddedNode(subject1, predicate, object);
 		
-		Node subject2 = NodeFactory.createURI("http://example.com/product/3");
+		Node subject2 = NodeFactoryStar.createSimpleURINode("http://example.com/product/3");
 		Node embeddedNode2 = NodeFactoryStar.createEmbeddedNode(subject2, predicate, object);
 		
-		Node subject3 = NodeFactory.createURI("http://example.com/product/661");
+		Node subject3 = NodeFactoryStar.createSimpleURINode("http://example.com/product/661");
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
-		Node subject4 = NodeFactory.createURI("http://example.com/product/41");
+		Node subject4 = NodeFactoryStar.createSimpleURINode("http://example.com/product/41");
 		Node embeddedNode4 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
 		
 		
