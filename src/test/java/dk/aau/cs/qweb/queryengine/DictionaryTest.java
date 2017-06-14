@@ -99,7 +99,7 @@ public class DictionaryTest {
 		dict.createKey(embeddedNode2);
 		dict.createKey(embeddedNode3);
 		
-		
+		assertEquals(3, dict.getNumberOfOverflowNodes());
 		assertEquals(3, dict.getNumberOfEmbeddedTriples());
 	}
 	
@@ -116,7 +116,7 @@ public class DictionaryTest {
 		Node subject2 = NodeFactory.createURI("http://example.com/product/3");
 		Node embeddedNode2 = NodeFactoryStar.createEmbeddedNode(subject2, predicate, object);
 		
-		Node subject3 = NodeFactory.createURI("http://example.com/product/1");
+		Node subject3 = NodeFactory.createURI("http://example.com/product/661");
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
 		Node subject4 = NodeFactory.createURI("http://example.com/product/41");
