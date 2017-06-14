@@ -4,7 +4,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Before;
-import org.junit.Test;
 
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
@@ -33,9 +32,9 @@ public class TurtleStarReaderEmbeddedDBpedia {
         RDFDataMgr.read(model, filename);
 	}
 	
-	@Test
-	public void subjectEmbeddedNode() {
-		
-		assert(true);
-	}
+//	@Test
+//	public void subjectEmbeddedNode() {
+//		
+//		assert(true);
+//	}
 }
