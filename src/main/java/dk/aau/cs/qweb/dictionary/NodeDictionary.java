@@ -92,17 +92,9 @@ public class NodeDictionary {
 	}
 
 	private boolean doesNodeContainOverflowKey(Node_Triple embeddedNode) {
-		//TODO
 		if (isThereAnySpecialOverflowDistributionConditions) {
 			if (numberOfEmbeddedTriples != 0) {
-				float currentDistribtuion = (float)id2Overflow.size()/(float)numberOfEmbeddedTriples*100;
-				System.out.println(currentDistribtuion);
-				if (currentDistribtuion < overflowDistributionPercentage) {
-					System.out.println("count as overflow");
-				} else {
-					System.out.println("count as normal embedded");
-				}
-				
+				float currentDistribtuion = (float)id2Overflow.size()/(float)numberOfEmbeddedTriples*(float)100;
 				return currentDistribtuion < overflowDistributionPercentage ? true : false;
 			}
 			return false;
@@ -145,13 +137,11 @@ public class NodeDictionary {
 	}
 	
 	private Key registerOverflowNode(Node_Triple triple) {
-		Key tempId;
 		Key key = BitHelper.createOverflowKey(overflowId);
 		id2Overflow.put(key, triple);
 		overflow2Id.put(triple,key);
-		tempId = key;
 		overflowId++;
-		return tempId;
+		return key;
 	}
 	
 	public Key createKey(Node node) {
