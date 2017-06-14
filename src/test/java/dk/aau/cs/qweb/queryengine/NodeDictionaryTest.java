@@ -17,7 +17,7 @@ import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarBuilder;
 
-public class DictionaryTest {
+public class NodeDictionaryTest {
 
 	@Test
 	public void writeAndReadTriple() {
