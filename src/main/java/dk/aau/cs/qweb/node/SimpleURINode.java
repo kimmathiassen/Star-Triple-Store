@@ -5,6 +5,7 @@ import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 public class SimpleURINode extends SimpleNode {
 	
 	private int urlBodyId;
+	private boolean hasPrefix = false;
 
 	protected SimpleURINode(String label) {
 		super(label);
@@ -13,6 +14,7 @@ public class SimpleURINode extends SimpleNode {
 	public SimpleURINode(int bodyId, String head) {
 		super(head);
 		urlBodyId = bodyId;
+		hasPrefix = true;
 	}
 
 	@Override
@@ -31,8 +33,11 @@ public class SimpleURINode extends SimpleNode {
 	
 	@Override 
 	public String getURI() {
-		String prefix = PrefixDictionary.getInstance().getPrefix(urlBodyId);
-		return prefix+label;
+		if (hasPrefix) {
+			String prefix = PrefixDictionary.getInstance().getPrefix(urlBodyId);
+			return prefix+label;
+		}
+		return (String) label;
 	}
 	
 	@Override 
