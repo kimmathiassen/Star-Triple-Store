@@ -1,0 +1,76 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+<<<Paul_McCartney> <isMarriedTo> <Linda_McCartney>>> <occursUntil> "1998-04-07"^^xsd:date .
+<<<Paul_McCartney> <isMarriedTo> <Linda_McCartney>>> <occursSince> "1969-01-01"^^xsd:date .
+<<<Paul_McCartney> <isMarriedTo> <Heather_Mills>>> <occursSince> "2002-01-01"^^xsd:date .
+<<<Paul_McCartney> <isMarriedTo> <Heather_Mills>>> <occursUntil> "2008-05-31"^^xsd:date .
+<<<Paul_McCartney> <isMarriedTo> <Nancy_Shevell>>> <occursSince> "2011-10-09"^^xsd:date .
+<<<John_Lennon> <isMarriedTo> <Cynthia_Lennon>>> <occursUntil> "1968-11-08"^^xsd:date .
+<<<John_Lennon> <isMarriedTo> <Cynthia_Lennon>>> <occursSince> "1962-08-23"^^xsd:date .
+<<<John_Lennon> <isMarriedTo> <Yoko_Ono>>> <occursSince> "1969-03-20"^^xsd:date .
+<<<John_Lennon> <isMarriedTo> <Yoko_Ono>>> <occursUntil> "1980-12-08"^^xsd:date .
+<<<George_Harrison> <isMarriedTo> <Pattie_Boyd>>> <occursUntil> "1974-06-30"^^xsd:date .
+<<<George_Harrison> <isMarriedTo> <Pattie_Boyd>>> <occursSince> "1966-01-21"^^xsd:date .
+<<<George_Harrison> <isMarriedTo> <Olivia_Harrison>>> <occursSince> "1978-09-02"^^xsd:date .
+<<<George_Harrison> <isMarriedTo> <Olivia_Harrison>>> <occursUntil> "2001-11-29"^^xsd:date .
+<<<Ringo_Starr> <isMarriedTo> <Maureen_Starkey>>> <occursUntil> "1975-06-17"^^xsd:date .
+<<<Ringo_Starr> <isMarriedTo> <Maureen_Starkey>>> <occursSince> "1965-02-11"^^xsd:date .
+<<<Ringo_Starr> <isMarriedTo> <Barbara_Bach>>> <occursSince> "1981-04-27"^^xsd:date .
+<<<yagoLegalActor> rdfs:subClassOf <yagoLegalActorGeo>>> rdfs:comment "Additional YAGO class" .
+<<<yagoGeoEntity> rdfs:label "yagoGeoEntity"@eng>> rdfs:comment "Additional YAGO class for individuals with geographical coordinates" .
+<<<yagoPermanentlyLocatedEntity> rdfs:subClassOf owl:Thing>> rdfs:comment "Additional YAGO class for entities that can be permanently located somewhere"@eng .
+<<<yagoLegalActorGeo> rdfs:subClassOf owl:Thing>> rdfs:comment "Additional YAGO class" .
+<<<wordnet_musician_110340312> rdfs:subClassOf <wordnet_musician_110339966>>> rdfs:comment "Bugfix in WordNet suggested by Hannah Bast's team. This makes all musicians artists."@eng .
+<<<wordnet_city_108540903> rdfs:subClassOf <wordnet_city_108524735>>> rdfs:comment "Bugfix in WordNet suggested by Hannah Bast's team. "@eng .
+<<<wordnet_cabbage_107713895> rdfs:subClassOf <wordnet_cabbage_111875691>>> rdfs:comment "Bugfix in WordNet suggested by Hannah Bast's team. "@eng .
+<<<wordnet_vegetable_112212361> rdfs:subClassOf <wordnet_plant_100017222>>> rdfs:comment "Bugfix in WordNet suggested by Hannah Bast's team. "@eng .
+<<<wordnet_vegetable_107707451> rdfs:subClassOf <wordnet_plant_100017222>>> rdfs:comment "Bugfix in WordNet suggested by Hannah Bast's team. "@eng .
+<<<wikicategory_Roman_legions'_camps_in_Romania> rdfs:subClassOf <wordnet_camp_102944826>>> <extractionSource> <http://en.wikipedia.org/wiki/Tibiscum> .
+<<<Thomas_A._Welton> <hasGivenName> "Thomas"@eng>> <extractionSource> <yagoTheme_yagoTransitiveType> .
+<<<Thomas_A._Welton> rdfs:label "Thomas A. Welton"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Thomas_A._Welton> .
+<<<Thomas_A._Welton> <hasFamilyName> "Welton"@eng>> <extractionSource> <yagoTheme_yagoTransitiveType> .
+<<<Thomas_A._Welton> skos:prefLabel "Thomas A. Welton"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Thomas_A._Welton> .
+<<<Thomas_A._Welton> rdf:type <wikicategory_English_statisticians>>> <extractionSource> <http://en.wikipedia.org/wiki/Thomas_A._Welton> .
+<<<Thomas_A._Welton> <isPreferredMeaningOf> "Thomas A. Welton"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Thomas_A._Welton> .
+<Thomas_A._Welton> <hasGender> <male> .
+<<<Gmina_Obrzycko> <hasArea> "1.1065E8"^^<m2>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> rdfs:label "Gmina Obrzycko"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasLatitude> "52.70638888888889"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasLatitude> "52.7"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasLatitude> "52.7"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> skos:prefLabel "Gmina Obrzycko"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> rdf:type <wordnet_administrative_district_108491826>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> rdf:type <wordnet_administrative_district_108491826>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasWebsite> <http://www.obrzycko.pl/>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasWebsite> <http://www.obrzycko.pl/>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasLongitude> "16.529166666666665"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasLongitude> "16.516666666666666"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasLongitude> "16.516666666666666"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <hasNumberOfPeople> "4219"^^xsd:nonNegativeInteger>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <isPreferredMeaningOf> "Gmina Obrzycko"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <isLocatedIn> <Szamotuły_County>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Gmina_Obrzycko> <isLocatedIn> <Greater_Poland_Voivodeship>>> <extractionSource> <http://en.wikipedia.org/wiki/Gmina_Obrzycko> .
+<<<Salem,_Jay_County,_Indiana> rdfs:label "Salem">> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> rdfs:label "Salem">> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> rdfs:label "Salem"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> rdfs:label "Salem"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> rdfs:label "Salem, Jay County, Indiana"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <hasLatitude> "40.31027777777778"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <hasLatitude> "40.3"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <hasLatitude> "40.3"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> skos:prefLabel "Salem, Jay County, Indiana"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> rdf:type <wikicategory_Populated_places_in_Jay_County,_Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <hasLongitude> "-84.83333333333333"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <hasLongitude> "-84.83333333333333"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <hasLongitude> "-84.84333333333333"^^<degrees>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <isPreferredMeaningOf> "Salem, Jay County, Indiana"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <isLocatedIn> <Jay_County,_Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <isLocatedIn> <Jay_County,_Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <isLocatedIn> <United_States>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <isLocatedIn> <Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Salem,_Jay_County,_Indiana> <isLocatedIn> <Madison_Township,_Jay_County,_Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
+<<<Megan_Kalajzich_murder> rdfs:label "Megan Kalajzich murder"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Megan_Kalajzich_murder> .
