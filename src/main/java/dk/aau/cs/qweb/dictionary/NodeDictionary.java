@@ -76,7 +76,7 @@ public class NodeDictionary {
 		} else if (node instanceof SimpleNode) {
 			return registerOrGetNode(node);
 		} else {
-			throw new IllegalArgumentException("The type of "+node.getClass().getSimpleName()+" is not a instance of SimpleNode or Node_triple");
+			throw new IllegalArgumentException("The type of "+node.getClass().getSimpleName()+" is not a instance of SimpleNode or Node_triple. Node.toString() "+node);
 		}
 	}
 
