@@ -72,7 +72,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void countUniqueEmbeddedNodes() {
+	public void countUniqueEmbeddedReferenceNodes() {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -102,6 +102,36 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
+	public void countUniqueEmbeddedNodes() {
+		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
+		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
+		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
+		
+		Node subject1 = NodeFactoryStar.createSimpleURINode("http://example.com/product/2");
+		Node embeddedNode1 = NodeFactoryStar.createEmbeddedNode(subject1, predicate, object);
+		
+		Node subject2 = NodeFactoryStar.createSimpleURINode("http://example.com/product/3");
+		Node embeddedNode2 = NodeFactoryStar.createEmbeddedNode(subject2, predicate, object);
+		
+		Node subject3 = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
+		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
+		
+	
+		NodeDictionary dict = NodeDictionary.getInstance();
+		dict.clear();
+		dict.setOverflowDistribution(0);
+		
+		dict.createKey(embeddedNode);
+		dict.createKey(embeddedNode1);
+		dict.createKey(embeddedNode2);
+		dict.createKey(embeddedNode3);
+		
+		assertEquals(0, dict.getNumberOfOverflowNodes());
+		assertEquals(3, dict.getNumberOfEmbeddedTriples());
+	}
+	
+	@Test
 	public void customDistribution() {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
@@ -120,6 +150,11 @@ public class NodeDictionaryTest {
 		Node subject4 = NodeFactoryStar.createSimpleURINode("http://example.com/product/41");
 		Node embeddedNode4 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
 		
+		Node embeddedNode5 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
+		
+		Node subject6 = NodeFactoryStar.createSimpleURINode("http://example.com/product/33");
+		Node embeddedNode6 = NodeFactoryStar.createEmbeddedNode(subject6, predicate, object);
+		
 		
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
@@ -130,7 +165,9 @@ public class NodeDictionaryTest {
 		dict.createKey(embeddedNode2);
 		dict.createKey(embeddedNode3);
 		dict.createKey(embeddedNode4);
+		dict.createKey(embeddedNode5);
+		dict.createKey(embeddedNode6);
 		
-		assertEquals(2, dict.getNumberOfOverflowNodes());
+		assertEquals(3, dict.getNumberOfOverflowNodes());
 	}
 }
