@@ -8,7 +8,9 @@ import java.util.NoSuchElementException;
 import org.apache.jena.atlas.lib.Closeable;
 import org.apache.jena.sparql.engine.ExecutionContext;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.graph.Graph;
+import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.StarNode;
@@ -126,8 +128,15 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 		if ( !currentQueryPattern.getObject().isConcrete() ) {
 			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
+
+		if (BitHelper.isOverflownEmbeddedTriple(currentMatch.subjectId)|
+				BitHelper.isOverflownEmbeddedTriple(currentMatch.predicateId)|
+				BitHelper.isOverflownEmbeddedTriple(currentMatch.objectId)) {
+			result.set(var,NodeDictionary.getInstance().getReferernceTripleKey(currentMatch.subjectId, currentMatch.predicateId, currentMatch.objectId));
+		} else {
+			result.set(var,KeyFactory.createKey(currentMatch.subjectId, currentMatch.predicateId ,currentMatch.objectId ));
+		}
 		
-		result.set(var,KeyFactory.createKey(currentMatch.subjectId, currentMatch.predicateId ,currentMatch.objectId ));
 
 		return result;
 	}
