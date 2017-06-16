@@ -28,7 +28,7 @@ public class MyTransform extends TransformCopy {
 	@Override
 	public Op transform(OpBGP opBGP) {
 		Op op = createJoinTree(opBGP);
-	//	System.out.println(op);
+		print(op,0);
 		return op;
 	}
 	
@@ -196,5 +196,42 @@ public class MyTransform extends TransformCopy {
 		return result;
 	}
 
+	private void print(Op op, int depth) {
+		if (op instanceof OpExtend) {
+			for (Op element : splitExtend(op)) {
+				OpExtend extend = (OpExtend)element;
+				
+				for (Entry<Var, Expr> entry : extend.getVarExprList().getExprs().entrySet()) {
+					System.out.print(insertDepth(depth));
+					System.out.print( "Bind: "+ entry.getKey()+" ");
+					NodeValueNode node = (NodeValueNode) entry.getValue();
+					Node_Triple t = (Node_Triple) node.getNode();
+					System.out.println("<"+t.getSubject()+" "+t.getPredicate()+" "+t.getObject()+">");
+				}
+			}
+		} else if (op instanceof OpJoin) {
+			System.out.print(insertDepth(depth));
+			System.out.println("Join:");
+			depth++;
+			print(((OpJoin) op).getRight(),depth);
+			print(((OpJoin) op).getLeft(),depth);
+			
+			
+		} else if (op instanceof OpTriple) {
+			OpTriple triple = (OpTriple)op;
+			System.out.print(insertDepth(depth));
+			System.out.print("Triple: "+ triple.getTriple().getSubject()+" ");
+			System.out.print(triple.getTriple().getPredicate()+" ");
+			System.out.println(triple.getTriple().getObject());
+		}
+		
+		else {
+			throw new NotImplementedException("no support of "+op.getName());
+		}
+	}
 
+	private String insertDepth(int depth) {
+		return String.join("", Collections.nCopies(depth, "  "));
+	}
+	
 }
