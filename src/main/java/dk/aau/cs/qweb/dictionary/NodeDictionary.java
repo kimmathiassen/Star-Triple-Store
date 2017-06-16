@@ -129,6 +129,15 @@ public class NodeDictionary {
 		}
 	}
 	
+	public Key getReferernceTripleKey(Key subjectId, Key predicateId, Key objectId) {
+		Node subject = getNode(subjectId);
+		Node predicate = getNode(predicateId);
+		Node object = getNode(objectId);
+		Node referenceTriple =  NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
+		
+		return overflow2Id.get(referenceTriple);
+	}
+	
 	private Key registerNode(Node node) {
 		Key tempId;
 		Key key = new Key(id);
