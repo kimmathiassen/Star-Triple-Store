@@ -13,7 +13,6 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
@@ -74,9 +73,6 @@ public class TurtleStarReaderEmbeddedTest {
 	    
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
-	        System.out.println("bob");
-	        System.out.println(NodeDictionary.getInstance());
-	        
 	        while ( results.hasNext() ) {
 	            results.next();
 	            count++;
