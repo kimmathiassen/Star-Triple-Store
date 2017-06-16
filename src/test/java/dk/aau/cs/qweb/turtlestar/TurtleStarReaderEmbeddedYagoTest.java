@@ -35,6 +35,4 @@ public class TurtleStarReaderEmbeddedYagoTest {
         
 		assertEquals(true, true);
 	}
-	
-
 }
