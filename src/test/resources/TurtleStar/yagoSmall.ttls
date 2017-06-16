@@ -74,3 +74,9 @@
 <<<Salem,_Jay_County,_Indiana> <isLocatedIn> <Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
 <<<Salem,_Jay_County,_Indiana> <isLocatedIn> <Madison_Township,_Jay_County,_Indiana>>> <extractionSource> <http://en.wikipedia.org/wiki/Salem,_Jay_County,_Indiana> .
 <<<Megan_Kalajzich_murder> rdfs:label "Megan Kalajzich murder"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Megan_Kalajzich_murder> .
+<<<Awqad,_Salalah> rdfs:label "`Awqad, Salalah"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Awqad,_Salalah> .
+<<<Arya> <isPreferredMeaningOf> "Arya`"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Arya> .
+<<<Ancash_Region> <hasPoverty> "61.1"^^<%>>> <extractionSource> <http://en.wikipedia.org/wiki/Ancash_Region> .
+<<<Benin> <hasInflation> "5.2"^^<%>>> <extractionSource> <http://en.wikipedia.org/wiki/Benin> .
+
+
