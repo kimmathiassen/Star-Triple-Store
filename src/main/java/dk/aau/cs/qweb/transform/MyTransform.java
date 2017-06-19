@@ -28,7 +28,7 @@ public class MyTransform extends TransformCopy {
 	@Override
 	public Op transform(OpBGP opBGP) {
 		Op op = createJoinTree(opBGP);
-		print(op,0);
+		//print(op,0);
 		return op;
 	}
 	
