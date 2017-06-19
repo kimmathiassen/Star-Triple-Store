@@ -48,11 +48,11 @@ public class NodeDictionaryTest {
 	
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
-		dict.setOverflowDistribution(100);
+		dict.setReferenceTripleDistribution(100);
 		
 		Key embeddedKey = dict.createKey(embeddedNode);
 		
-		assertTrue(BitHelper.isOverflownEmbeddedTriple(embeddedKey));
+		assertTrue(BitHelper.isReferenceBitSet(embeddedKey));
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ public class NodeDictionaryTest {
 		
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
-		dict.setOverflowDistribution(0);
+		dict.setReferenceTripleDistribution(0);
 		
 		Key embeddedKey = dict.createKey(embeddedNode);
 		
@@ -90,14 +90,15 @@ public class NodeDictionaryTest {
 	
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
-		dict.setOverflowDistribution(100);
+		dict.setReferenceTripleDistribution(100);
 		
 		dict.createKey(embeddedNode);
 		dict.createKey(embeddedNode1);
 		dict.createKey(embeddedNode2);
 		dict.createKey(embeddedNode3);
+		System.out.println(dict);
 		
-		assertEquals(3, dict.getNumberOfOverflowNodes());
+		assertEquals(3, dict.getNumberOfReferenceTriples());
 		assertEquals(3, dict.getNumberOfEmbeddedTriples());
 	}
 	
@@ -120,14 +121,14 @@ public class NodeDictionaryTest {
 	
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
-		dict.setOverflowDistribution(0);
+		dict.setReferenceTripleDistribution(0);
 		
 		dict.createKey(embeddedNode);
 		dict.createKey(embeddedNode1);
 		dict.createKey(embeddedNode2);
 		dict.createKey(embeddedNode3);
 		
-		assertEquals(0, dict.getNumberOfOverflowNodes());
+		assertEquals(0, dict.getNumberOfReferenceTriples());
 		assertEquals(3, dict.getNumberOfEmbeddedTriples());
 	}
 	
@@ -158,7 +159,7 @@ public class NodeDictionaryTest {
 		
 		NodeDictionary dict = NodeDictionary.getInstance();
 		dict.clear();
-		dict.setOverflowDistribution(50);
+		dict.setReferenceTripleDistribution(50);
 		
 		dict.createKey(embeddedNode);
 		dict.createKey(embeddedNode1);
@@ -168,6 +169,6 @@ public class NodeDictionaryTest {
 		dict.createKey(embeddedNode5);
 		dict.createKey(embeddedNode6);
 		
-		assertEquals(3, dict.getNumberOfOverflowNodes());
+		assertEquals(3, dict.getNumberOfReferenceTriples());
 	}
 }

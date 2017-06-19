@@ -53,7 +53,7 @@ public class TripleStore {
         if (triplesAddedCount % 10000000 == 0) {
 			System.out.println("Index contains: " + SPO.size() );
 			int embeddedTriples = NodeDictionary.getInstance().getNumberOfEmbeddedTriples();
-			int overflow = NodeDictionary.getInstance().getNumberOfOverflowNodes();
+			int overflow = NodeDictionary.getInstance().getNumberOfReferenceTriples();
 			int size = NodeDictionary.getInstance().size();
 			System.out.println("Node Dictionary size: " + size);
 			System.out.println("+ Normal triples: " + (size-embeddedTriples-overflow));

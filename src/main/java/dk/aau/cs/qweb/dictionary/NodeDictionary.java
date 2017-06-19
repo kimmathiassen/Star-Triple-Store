@@ -16,23 +16,19 @@ import dk.aau.cs.qweb.triple.KeyFactory;
 public class NodeDictionary {
 	
 	private static NodeDictionary instance;
-	HashMap<Key, Node> id2Node;
-	HashMap<Node, Key> node2Id;
-	HashMap<Key,Node_Triple > id2Overflow;
-	HashMap<Node_Triple, Key> overflow2Id;
-	long overflowId;
-	long id;
-	private boolean isThereAnySpecialOverflowDistributionConditions;
-	private int overflowDistributionPercentage;
+	HashMap<Key, Node> id2SimpleNode;
+	HashMap<Node, Key> simpleNode2Id;
+	HashMap<Key,Node_Triple > id2ReferenceTriple;
+	HashMap<Node_Triple, Key> referenceTriple2Id;
+	private boolean isThereAnySpecialReferenceTripleDistributionConditions;
+	private int referenceTripleDistributionPercentage;
 	int numberOfEmbeddedTriples;
 
 	private NodeDictionary() {
-		id2Node = new HashMap<Key, Node>();
-		node2Id = new HashMap<Node, Key>();
-		id2Overflow = new HashMap<Key, Node_Triple>();
-		overflow2Id = new HashMap<Node_Triple, Key>();
-		id = 1;
-		overflowId = 1;
+		id2SimpleNode = new HashMap<Key, Node>();
+		simpleNode2Id = new HashMap<Node, Key>();
+		id2ReferenceTriple = new HashMap<Key, Node_Triple>();
+		referenceTriple2Id = new HashMap<Node_Triple, Key>();
 		numberOfEmbeddedTriples = 0;
 	}
 	
@@ -44,7 +40,7 @@ public class NodeDictionary {
 	}
 	
 	public int size() {
-		return id2Node.size()+id2Overflow.size();
+		return id2SimpleNode.size()+id2ReferenceTriple.size();
 	}
 	
 	public int getNumberOfEmbeddedTriples() {
@@ -58,26 +54,66 @@ public class NodeDictionary {
 				numberOfEmbeddedTriples++;
 			}
 			
-			Node subject = normalizeNode(embeddedNode.getSubject());
-			Node predicate = normalizeNode(embeddedNode.getPredicate());
-			Node object = normalizeNode(embeddedNode.getObject());
+			Key s1 = nodeToKey(normalizeNode(embeddedNode.getSubject())); 
+			Key p1 = nodeToKey(normalizeNode(embeddedNode.getPredicate()));
+			Key o1 = nodeToKey(normalizeNode(embeddedNode.getObject()));
 			
-			if (doesNodeContainOverflowKey(embeddedNode)) {
-				registerOrGetNode(subject);
-				registerOrGetNode(predicate);
-				registerOrGetNode(object);
-				return registerOverflowNode(embeddedNode);
-			} else {
-				Key s1 = registerOrGetNode(subject);
-				Key p1 = registerOrGetNode(predicate);
-				Key o1 = registerOrGetNode(object);
-				return KeyFactory.createKey(s1, p1, o1);
-			}
+			return registerOrGetEmbeddedNode(s1,p1,o1,node);
 		} else if (node instanceof SimpleNode) {
-			return registerOrGetNode(node);
+			return registerOrGetNode((SimpleNode)node);
 		} else {
 			throw new IllegalArgumentException("The type of "+node.getClass().getSimpleName()+" is not a instance of SimpleNode or Node_triple. Node.toString() "+node);
 		}
+	}
+
+	private Key registerOrGetEmbeddedNode(Key subject, Key predicate, Key object, Node node) {
+		if (subject.getId() > BitHelper.getLargest20BitNumber() || 
+				predicate.getId() > BitHelper.getLargest20BitNumber() ||
+				object.getId() > BitHelper.getLargest20BitNumber()) {
+			if (referenceTriple2Id.containsKey(node)) {
+				return referenceTriple2Id.get(node);
+			}  else {
+				return registerEmbeddedNode(subject, predicate, object,node);
+			}
+		} else if (isThereAnySpecialReferenceTripleDistributionConditions && numberOfEmbeddedTriples != 0) {
+			float currentDistribtuion = (float)id2ReferenceTriple.size()/(float)numberOfEmbeddedTriples*(float)100;
+			if (referenceTriple2Id.containsKey(node)) {
+				return referenceTriple2Id.get(node);
+			} else if(currentDistribtuion <= referenceTripleDistributionPercentage) {
+				Key key = KeyFactory.createReferenceTriple();
+				addReferenceTriple(node, key);
+				return key;
+			} else {
+				return registerEmbeddedNode(subject, predicate, object,node);
+			}
+		} else {
+			if (simpleNode2Id.containsKey(node)) {
+				return simpleNode2Id.get(node);
+			} else {
+				return registerEmbeddedNode(subject, predicate, object,node);
+			}
+		}
+	}
+
+	private Key registerEmbeddedNode(Key subject, Key predicate, Key object,Node node) {
+		final Key key = KeyFactory.createKey(subject, predicate, object);
+		if (BitHelper.isReferenceBitSet(key)) {
+			addReferenceTriple(node, key);
+		
+		} else {
+			addSimpleNode(node, key);
+		}
+		return key;
+	}
+
+	private void addReferenceTriple(Node node, final Key key) {
+		id2ReferenceTriple.put(key, (Node_Triple)node);
+		referenceTriple2Id.put((Node_Triple)node,key);
+	}
+
+	private void addSimpleNode(Node node, final Key key) {
+		id2SimpleNode.put(key, node);
+		simpleNode2Id.put(node,key);
 	}
 
 	private Node normalizeNode(Node node) {
@@ -88,27 +124,15 @@ public class NodeDictionary {
 	}
 
 	private boolean newEmbeddedTriple(Node_Triple embeddedNode) {
-		boolean subject = !node2Id.containsKey(embeddedNode.getSubject());
-		boolean predicate = !node2Id.containsKey(embeddedNode.getPredicate());
-		boolean object = !node2Id.containsKey(embeddedNode.getObject());
+		boolean subject = !simpleNode2Id.containsKey(embeddedNode.getSubject());
+		boolean predicate = !simpleNode2Id.containsKey(embeddedNode.getPredicate());
+		boolean object = !simpleNode2Id.containsKey(embeddedNode.getObject());
 		return (subject || predicate || object);
 	}
 
-	private boolean doesNodeContainOverflowKey(Node_Triple embeddedNode) {
-		if (isThereAnySpecialOverflowDistributionConditions) {
-			if (numberOfEmbeddedTriples != 0) {
-				float currentDistribtuion = (float)id2Overflow.size()/(float)numberOfEmbeddedTriples*(float)100;
-				return currentDistribtuion < overflowDistributionPercentage ? true : false;
-			}
-			return false;
-		} else {
-			return id + 3 > KeyFactory.getOverflowLimit() ? true : false; 
-		}
-	}
-
-	private Key registerOrGetNode(Node node) {
-		if (node2Id.containsKey(node)) {
-			return node2Id.get(node);
+	private Key registerOrGetNode(SimpleNode node) {
+		if (simpleNode2Id.containsKey(node)) {
+			return simpleNode2Id.get(node);
 		} else {
 			return registerNode(node);
 		}
@@ -116,16 +140,16 @@ public class NodeDictionary {
 
 	public Node getNode(Key id) {
 		if (BitHelper.isIdAnEmbeddedTriple(id)) {
-			if (BitHelper.isOverflownEmbeddedTriple(id)) {
-				return id2Overflow.get(id);
+			if (BitHelper.isReferenceBitSet(id)) {
+				return id2ReferenceTriple.get(id);
 			} else {
 				Key subject = KeyFactory.createKey(BitHelper.getEmbeddedSubject(id));
 				Key predicate = KeyFactory.createKey(BitHelper.getEmbeddedPredicate(id));
 				Key object = KeyFactory.createKey(BitHelper.getEmbeddedObject(id));
-				return NodeFactoryStar.createEmbeddedNode(id2Node.get(subject), id2Node.get(predicate), id2Node.get(object));
+				return NodeFactoryStar.createEmbeddedNode(id2SimpleNode.get(subject), id2SimpleNode.get(predicate), id2SimpleNode.get(object));
 			}
 		} else {
-			return id2Node.get(id);
+			return id2SimpleNode.get(id);
 		}
 	}
 	
@@ -135,24 +159,13 @@ public class NodeDictionary {
 		Node object = getNode(objectId);
 		Node referenceTriple =  NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		return overflow2Id.get(referenceTriple);
+		return referenceTriple2Id.get(referenceTriple);
 	}
 	
-	private Key registerNode(Node node) {
-		Key tempId;
-		Key key = new Key(id);
-		id2Node.put(key, node);
-		node2Id.put(node,key);
-		tempId = key;
-		id++;
-		return tempId;
-	}
-	
-	private Key registerOverflowNode(Node_Triple triple) {
-		Key key = BitHelper.createOverflowKey(overflowId);
-		id2Overflow.put(key, triple);
-		overflow2Id.put(triple,key);
-		overflowId++;
+	private Key registerNode(SimpleNode node) {
+		final Key key = KeyFactory.createKey(node);
+		id2SimpleNode.put(key, node);
+		simpleNode2Id.put(node,key);
 		return key;
 	}
 	
@@ -163,255 +176,42 @@ public class NodeDictionary {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Entry<Key, Node> iterable_element : id2Node.entrySet()) {
+		sb.append("Node Dict\n");
+		
+		for (Entry<Key, Node> iterable_element : id2SimpleNode.entrySet()) {
+			sb.append(iterable_element.getKey()+": "+ iterable_element.getValue()+"\n");
+		}
+		
+		sb.append("\nReference Triple Dict\n");
+		for (Entry<Key, Node_Triple> iterable_element : id2ReferenceTriple.entrySet()) {
 			sb.append(iterable_element.getKey()+": "+ iterable_element.getValue()+"\n");
 		}
 		return sb.toString();
 	}
 
-	public void setOverflowDistribution(int i) {
-		if (node2Id.size() != 0) {
+	public void setReferenceTripleDistribution(int i) {
+		if (simpleNode2Id.size() != 0) {
 			throw new IllegalStateException("overflow distribution but only be set in an empty dictionary.");
 		}
 		if (i < 0 && i > 100) {
 			throw new IllegalParameterException("overflow distrubtion is a percentage number, it must be between [0 and 100]");
 		}
-		isThereAnySpecialOverflowDistributionConditions = true;
-		overflowDistributionPercentage = i;
+		isThereAnySpecialReferenceTripleDistributionConditions = true;
+		referenceTripleDistributionPercentage = i;
 	}
 
 	public void clear() {
-		id2Node.clear();
-		node2Id.clear();
-		overflow2Id.clear();
-		id2Overflow.clear();
-		id = 1;
-		overflowId = 1;
+		id2SimpleNode.clear();
+		simpleNode2Id.clear();
+		referenceTriple2Id.clear();
+		id2ReferenceTriple.clear();
+		KeyFactory.reset();
 		numberOfEmbeddedTriples = 0;
 	}
 
-	public int getNumberOfOverflowNodes() {
-		return id2Overflow.size();
+	public int getNumberOfReferenceTriples() {
+		return id2ReferenceTriple.size();
 	}
 }
 
-//package dk.aau.cs.qweb.dictionary;
-//
-//import java.util.HashMap;
-//import java.util.Map.Entry;
-//
-//import org.apache.jena.graph.Node;
-//import org.apache.jena.reasoner.IllegalParameterException;
-//
-//import dk.aau.cs.qweb.helper.BitHelper;
-//import dk.aau.cs.qweb.model.NodeFactoryStar;
-//import dk.aau.cs.qweb.model.Node_Triple;
-//import dk.aau.cs.qweb.model.PrintNode;
-//import dk.aau.cs.qweb.triple.Key;
-//import dk.aau.cs.qweb.triple.KeyFactory;
-//
-//public class NodeDictionary {
-//	
-//	private static NodeDictionary instance;
-//	HashMap<Key, String> id2Node;
-//	HashMap<String, Key> node2Id;
-//	HashMap<Key,String > id2Overflow;
-//	HashMap<String, Key> overflow2Id;
-//	long overflowId;
-//	long id;
-//	private boolean isThereAnySpecialOverflowDistributionConditions;
-//	private int overflowDistributionPercentage;
-//	int numberOfEmbeddedTriples;
-//
-//	private NodeDictionary() {
-//		id2Node = new HashMap<Key, String>();
-//		node2Id = new HashMap<String, Key>();
-//		id2Overflow = new HashMap<Key, String>();
-//		overflow2Id = new HashMap<String, Key>();
-//		id = 1;
-//		overflowId = 1;
-//		numberOfEmbeddedTriples = 0;
-//	}
-//	
-//	public static NodeDictionary getInstance() {
-//		if(instance == null) {
-//	         instance = new NodeDictionary();
-//	    }
-//	    return instance;
-//	}
-//	
-//	public int getNumberOfEmbeddedTriples() {
-//		return numberOfEmbeddedTriples;
-//	}
-//
-//	private Key nodeToKey(Node node) {
-//		if (isEmbeddedNode(node)) {
-//			if (node instanceof PrintNode) {
-//				PrintNode printNode = (PrintNode) node;
-//				node = NodeFactoryStar.createEmbeddedNode(printNode);
-//			} 
-//			if (node instanceof Node_Triple) {
-//				Node_Triple embeddedNode = (Node_Triple) node;
-//				if (newEmbeddedTriple(embeddedNode)) {
-//					numberOfEmbeddedTriples++;
-//				}
-//				
-//				Node subject = normalizeNode(embeddedNode.getSubject());
-//				Node predicate = normalizeNode(embeddedNode.getPredicate());
-//				Node object = normalizeNode(embeddedNode.getObject());
-//				
-//				if (doesNodeContainOverflowKey(embeddedNode)) {
-//					registerOrGetNode(subject);
-//					registerOrGetNode(predicate);
-//					registerOrGetNode(object);
-//					return registerOverflowNode(embeddedNode);
-//				} else {
-//					Key s1 = registerOrGetNode(subject);
-//					Key p1 = registerOrGetNode(predicate);
-//					Key o1 = registerOrGetNode(object);
-//					return KeyFactory.createKey(s1, p1, o1);
-//				}
-//			} else {
-//				throw new IllegalParameterException("Unknown node type "+ node.getClass().getName());
-//			}
-//		} else {
-//			return registerOrGetNode(node);
-//		}
-//	}
-//
-//	private boolean isEmbeddedNode(Node node) {
-//		String label = node.toString().trim();
-//		if (label.startsWith("<<") && label.endsWith(">>")) {
-//			return true;
-//		}
-//		return false;
-//	}
-//
-//	private Node normalizeNode(Node node) {
-//		if (node.toString().trim().startsWith("<") && node.toString().trim().endsWith(">")) {
-//			return NodeFactoryStar.createURI(node.toString().trim().substring(1, node.toString().trim().length()-1));
-//		} 
-//		return node;
-//	}
-//
-//	private boolean newEmbeddedTriple(Node_Triple embeddedNode) {
-//		boolean subject = !node2Id.containsKey(embeddedNode.getSubject());
-//		boolean predicate = !node2Id.containsKey(embeddedNode.getPredicate());
-//		boolean object = !node2Id.containsKey(embeddedNode.getObject());
-//		return (subject || predicate || object);
-//	}
-//
-//	private boolean doesNodeContainOverflowKey(Node_Triple embeddedNode) {
-//		//TODO
-//		if (isThereAnySpecialOverflowDistributionConditions) {
-//			if (numberOfEmbeddedTriples != 0) {
-//				float currentDistribtuion = (float)id2Overflow.size()/(float)numberOfEmbeddedTriples*100;
-//				System.out.println(currentDistribtuion);
-//				if (currentDistribtuion < overflowDistributionPercentage) {
-//					System.out.println("count as overflow");
-//				} else {
-//					System.out.println("count as normal embedded");
-//				}
-//				
-//				return currentDistribtuion < overflowDistributionPercentage ? true : false;
-//			}
-//			return false;
-//		} else {
-//			return id + 3 > KeyFactory.getOverflowLimit() ? true : false; 
-//		}
-//	}
-//
-//	private Key registerOrGetNode(Node node) {
-//		if (node2Id.containsKey(node.toString())) {
-//			return node2Id.get(node.toString());
-//		} else {
-//			return registerNode(node);
-//		}
-//	}
-//
-//	public Node getNode(Key id) {
-////		if (BitHelper.isIdAnEmbeddedTriple(id)) {
-////			if (BitHelper.isOverflownEmbeddedTriple(id)) {
-////				return id2Overflow.get(id);
-////			} else {
-////				Key subject = KeyFactory.createKey(BitHelper.getEmbeddedSubject(id));
-////				Key predicate = KeyFactory.createKey(BitHelper.getEmbeddedPredicate(id));
-////				Key object = KeyFactory.createKey(BitHelper.getEmbeddedObject(id));
-////				return NodeFactoryStar.createEmbeddedNode(id2Node.get(subject), id2Node.get(predicate), id2Node.get(object));
-////			}
-////		} else {
-////			return id2Node.get(id);
-////		}
-//		if (BitHelper.isIdAnEmbeddedTriple(id)) {
-//			if (BitHelper.isOverflownEmbeddedTriple(id)) {
-//				return NodeFactoryStar.createSimpleURINode(id2Overflow.get(id));
-//			} else {
-//				Key subject = KeyFactory.createKey(BitHelper.getEmbeddedSubject(id));
-//				Key predicate = KeyFactory.createKey(BitHelper.getEmbeddedPredicate(id));
-//				Key object = KeyFactory.createKey(BitHelper.getEmbeddedObject(id));
-//				return NodeFactoryStar.createEmbeddedNode(NodeFactoryStar.id2Node.get(subject),id2Node.get(predicate),id2Node.get(object));
-//			}
-//		} else {
-//			return NodeFactoryStar.createPrintNode(id2Node.get(id));
-//		}
-//	}
-//	
-//	private Key registerNode(Node node) {
-//		Key tempId;
-//		Key key = new Key(id);
-//		id2Node.put(key, node.toString());
-//		node2Id.put(node.toString(),key);
-//		tempId = key;
-//		id++;
-//		return tempId;
-//	}
-//	
-//	private Key registerOverflowNode(Node_Triple triple) {
-//		Key tempId;
-//		Key key = BitHelper.createOverflowKey(overflowId);
-//		id2Overflow.put(key, triple.toString());
-//		overflow2Id.put(triple.toString(),key);
-//		tempId = key;
-//		overflowId++;
-//		return tempId;
-//	}
-//	
-//	public Key createKey(Node node) {
-//		return nodeToKey(node);
-//	}
-//	
-//	@Override
-//	public String toString() {
-//		StringBuilder sb = new StringBuilder();
-//		for (Entry<Key, String> iterable_element : id2Node.entrySet()) {
-//			sb.append(iterable_element.getKey()+": "+ iterable_element.getValue()+"\n");
-//		}
-//		return sb.toString();
-//	}
-//
-//	public void setOverflowDistribution(int i) {
-//		if (node2Id.size() != 0) {
-//			throw new IllegalStateException("overflow distribution but only be set in an empty dictionary.");
-//		}
-//		if (i < 0 && i > 100) {
-//			throw new IllegalParameterException("overflow distrubtion is a percentage number, it must be between [0 and 100]");
-//		}
-//		isThereAnySpecialOverflowDistributionConditions = true;
-//		overflowDistributionPercentage = i;
-//	}
-//
-//	public void clear() {
-//		id2Node.clear();
-//		node2Id.clear();
-//		overflow2Id.clear();
-//		id2Overflow.clear();
-//		id = 1;
-//		overflowId = 1;
-//		numberOfEmbeddedTriples = 0;
-//	}
-//
-//	public int getNumberOfOverflowNodes() {
-//		return id2Overflow.size();
-//	}
-//}
 

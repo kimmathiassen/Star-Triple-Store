@@ -1,8 +1,6 @@
 package dk.aau.cs.qweb.triplestore;
 
-import static org.junit.Assert.*;
-
-import java.math.BigInteger;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -88,7 +86,7 @@ public class KeyFactoryTest {
 	public void embeddedKey() {
 		
 		Key key = KeyFactory.createKey(1023,511,255);
-		long id = new BigInteger("1000000000000011111111110000000000011111111100000000000011111111", 2).longValue();
+		long id = Long.MIN_VALUE + Long.parseLong("0000000000000011111111110000000000011111111100000000000011111111", 2);
 		
 		assertEquals(id, key.getId());
 	}

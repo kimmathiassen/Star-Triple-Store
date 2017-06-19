@@ -1,12 +1,16 @@
 package dk.aau.cs.qweb.triple;
 
-import org.apache.commons.lang3.NotImplementedException;
+import dk.aau.cs.qweb.helper.BitHelper;
+import dk.aau.cs.qweb.node.SimpleNode;
 
 //First bit in key is set if key is an embedded triple.
 //Second bit is set if embedded key does not fit in dictionary, otherwise it is part of the id.
 public class KeyFactory {
-	private static final long LARGEST_20_BIT_NUMBER = 1048575;
+	
 	private static final long EMBEDDED_BIT = Long.MIN_VALUE;
+	private static final long REFERENCE_BIT =	-Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2);
+	private static long elementId = 1l;
+	private static long referenceTripleId = 1l;
 	//private static final long EMBEDDED_IDENTIFIER_TO_LARGE_BIT = Long.MIN_VALUE >>> 1;
 
 	public static Key createKey(final Key subject,final Key predicate,final Key object) {
@@ -14,46 +18,58 @@ public class KeyFactory {
 		return createKey(subject.getId(),predicate.getId(),object.getId());
 	}
 	
+//	public static Key createReferenceTriple(long subject, long predicate, long object) {
+//		return createReferenceTriple(subject,predicate,object);
+//	}
+	
 	public static Key createKey(long subject, long predicate, long object) {
 		
-		if (subject < 0 || 
-				predicate < 0 ||
-				object < 0) {
-		
-		
-		if (subject > LARGEST_20_BIT_NUMBER || 
-				predicate > LARGEST_20_BIT_NUMBER ||
-				object > LARGEST_20_BIT_NUMBER) {
-			throw new NotImplementedException("add code that handles embedded triples with to large ids");
-		}
-		
+		if (subject < 0 || 	predicate < 0 || object < 0) {
 			throw new IllegalArgumentException("identifier must not be negative, (MSB is set)");
 		}
 		
-		//The correct bits are not set, e.g. 10...62*0
-		long key = EMBEDDED_BIT;
+		if (subject > BitHelper.getLargest20BitNumber() || 
+				predicate > BitHelper.getLargest20BitNumber() ||
+				object > BitHelper.getLargest20BitNumber()) {
+			return createReferenceTriple();
+		} else {
+			return createEmbeddedTriple(subject, predicate, object);
+		}
+	}
+
+	public static Key createReferenceTriple() {
+		Key key = new Key(REFERENCE_BIT + referenceTripleId);
+		referenceTripleId++;
 		
-		//Bitshift subject and predicate to their respective places in the long.
+		return key;
+	}
+
+	private static Key createEmbeddedTriple(long subject, long predicate, long object) {
 		subject = subject << 40;
 		predicate = predicate << 20;
 		
-		//Combine into one long.
-		key = key | subject;
-		key = key | predicate;
-		key = key | object;
-		
-		return new Key(key);
-	}
-	
-	public static Key createKey(long key) {
-		if (key < 0) {
-			throw new IllegalArgumentException("identifier must not be negative, (MSB is set)");
-		}
-		//No bits are set meaning that this is a normal key.
-		return new Key((key));
+		return new Key(EMBEDDED_BIT + subject + predicate + object);
 	}
 
-	public static long getOverflowLimit() {
-		return LARGEST_20_BIT_NUMBER;
+	public static Key createKey(SimpleNode node) {
+		Key key = new Key(elementId);
+		elementId++;
+		return key;
 	}
+
+	public static void reset() {
+		elementId = 1l;
+		referenceTripleId = 1l;
+	}
+
+	public static Key createKey(long id) {
+		if (id < 0) {
+			throw new IllegalArgumentException("ids must not be negative");
+		}
+		return new Key(id);
+	}
+
+//	public static Key createReferenceTriple(Key subject, Key predicate, Key object) {
+//		return createReferenceTriple(subject.getId(),predicate.getId(),object.getId());
+//	}
 }
