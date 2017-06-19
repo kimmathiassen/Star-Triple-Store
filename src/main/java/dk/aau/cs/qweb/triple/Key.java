@@ -8,8 +8,9 @@ public class Key implements StarNode, Comparable<Key>{
 	@SuppressWarnings("unused")
 	private long maxReferenceTripleId = -5764607523034234879l;
 	private long maxEmbeddedTripleId = -1152921504606846975l;
+	private final long id;
 	
-	public Key(long id) {
+	public Key(final long id) {
 		this.id=id;
 	}
 	
@@ -33,8 +34,6 @@ public class Key implements StarNode, Comparable<Key>{
 		}
 		return Long.toBinaryString(id);
 	}
-
-	private final long id;
 	
 	@Override
 	public boolean equals(final Object other) {
