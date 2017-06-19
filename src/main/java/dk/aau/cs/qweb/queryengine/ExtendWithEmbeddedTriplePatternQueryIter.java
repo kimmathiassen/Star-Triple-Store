@@ -129,9 +129,9 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
 
-		if (BitHelper.isOverflownEmbeddedTriple(currentMatch.subjectId)|
-				BitHelper.isOverflownEmbeddedTriple(currentMatch.predicateId)|
-				BitHelper.isOverflownEmbeddedTriple(currentMatch.objectId)) {
+		if (BitHelper.isReferenceBitSet(currentMatch.subjectId)|
+				BitHelper.isReferenceBitSet(currentMatch.predicateId)|
+				BitHelper.isReferenceBitSet(currentMatch.objectId)) {
 			result.set(var,NodeDictionary.getInstance().getReferernceTripleKey(currentMatch.subjectId, currentMatch.predicateId, currentMatch.objectId));
 		} else {
 			result.set(var,KeyFactory.createKey(currentMatch.subjectId, currentMatch.predicateId ,currentMatch.objectId ));
