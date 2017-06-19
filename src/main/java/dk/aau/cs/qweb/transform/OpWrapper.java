@@ -53,13 +53,13 @@ public class OpWrapper {
 		NodeDictionary dict = NodeDictionary.getInstance();
 		if (triple != null) {
 			if(triple.getSubject() instanceof Node_Triple) {
-				if (BitHelper.isOverflownEmbeddedTriple(dict.createKey(triple.getSubject()))) {
+				if (BitHelper.isReferenceBitSet(dict.createKey(triple.getSubject()))) {
 					return true;
 				}
 			}
 			
 			if(triple.getObject() instanceof Node_Triple) {
-				if (BitHelper.isOverflownEmbeddedTriple(dict.createKey(triple.getObject()))) {
+				if (BitHelper.isReferenceBitSet(dict.createKey(triple.getObject()))) {
 					return true;
 				}
 			}

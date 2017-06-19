@@ -8,6 +8,9 @@ public class BitHelper {
 	private static final long PREDICATE_MASK = 	Long.parseLong("0000000000000000000000001111111111111111111100000000000000000000", 2);
 	private static final long SUBJECT_MASK =	Long.parseLong("0000111111111111111111110000000000000000000000000000000000000000", 2);
 	private static final long BODY_MASK =		Long.parseLong("0000111111111111111111111111111111111111111111111111111111111111", 2);
+	private static final long LARGEST_20_BIT_NUMBER = 1048575;
+	private static final long REFERENCE_TRIPLE_HEADER = 12;
+	private static final long EMBEDDED_TRIPLE_HEADER = 8;
 
 	public static boolean isThereAnyKeysSetToZeroInEmbeddedId(final Key key) {
 		return isThereAnyKeysSetToZeroInEmbeddedId(key.getId());
@@ -55,6 +58,8 @@ public class BitHelper {
 		return id & OBJECT_MASK;
 	}
 	
+	
+	
 	public static long getEmbeddedSubject(final Key key) {
 		return getEmbeddedSubject(key.getId());
 	}
@@ -67,11 +72,11 @@ public class BitHelper {
 		return getEmbeddedObject(key.getId());
 	}
 
-	public static boolean isOverflownEmbeddedTriple(Key key) {
-		return isOverflownEmbeddedTriple(key.getId());
+	public static boolean isReferenceBitSet(Key key) {
+		return isReferenceBitSet(key.getId());
 	}
 	
-	public static boolean isOverflownEmbeddedTriple(long id) {
+	public static boolean isReferenceBitSet(long id) {
 		if (isIdAnEmbeddedTriple(id)) {
 			if ((id & OVERFLOWN_MASK) == OVERFLOWN_MASK) {
 				return true;
@@ -80,18 +85,18 @@ public class BitHelper {
 		return false;
 	}
 
-	public static Key createOverflowKey(long overflowTripleKey) {
-		return new Key(-4611686018427387904l + overflowTripleKey);
-	}
-
 	public static long getEmbeddedHeader(long id) {
 		if (!isIdAnEmbeddedTriple(id)) {
 			throw new IllegalArgumentException("expected an embedded triple, but recieved: "+String.format("%64s", Long.toBinaryString(id)).replace(' ', '0'));
 		}
-		return isOverflownEmbeddedTriple(id) ? 12 : 8;
+		return isReferenceBitSet(id) ? REFERENCE_TRIPLE_HEADER : EMBEDDED_TRIPLE_HEADER;
 	}
 
 	public static long getOverflowBody(long id) {
 		return (id & BODY_MASK );
+	}
+
+	public static long getLargest20BitNumber() {
+		return LARGEST_20_BIT_NUMBER;
 	}
 }
