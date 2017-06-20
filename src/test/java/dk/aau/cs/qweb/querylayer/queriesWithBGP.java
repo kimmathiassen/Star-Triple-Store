@@ -11,9 +11,12 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
@@ -40,6 +43,12 @@ public class queriesWithBGP {
         		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
     	
         RDFDataMgr.read(model, filename);
+	}
+	
+	@After
+	public void tearDown() {
+		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
 	}
 	
 	
