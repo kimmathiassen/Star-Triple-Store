@@ -47,7 +47,7 @@ public class ParserSPARQLStar extends SPARQLParser {
         SPARQLStarParser11 parser = new SPARQLStarParser11(in) ;
 
         try {
-            query.setStrict(true) ;
+            query.setStrict(false) ;
             parser.setQuery(query) ;
             action.exec(parser) ;
         }
