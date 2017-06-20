@@ -11,6 +11,7 @@ import dk.aau.cs.qweb.helper.BitHelper;
 public class TripleStarBuilder {
 
 	public List<TripleStar> createTriple(Triple t) {
+		//There might be a problem here in regards to nodes being added multiple times
 		NodeDictionary dict = NodeDictionary.getInstance();
 		List<TripleStar> triples = new ArrayList<TripleStar>();
 		Key subject = dict.createKey(t.getSubject());
