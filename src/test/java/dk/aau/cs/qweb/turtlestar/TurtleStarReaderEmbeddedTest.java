@@ -10,9 +10,12 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
@@ -25,6 +28,8 @@ public class TurtleStarReaderEmbeddedTest {
 	
 	@Before
 	public void setup() {
+		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
@@ -40,6 +45,12 @@ public class TurtleStarReaderEmbeddedTest {
     	
         RDFDataMgr.read(model, filename);
         g.eliminateDuplicates();
+	}
+	
+	@After
+	public void tearDown() {
+		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
 	}
 	
 	@Test
@@ -64,7 +75,7 @@ public class TurtleStarReaderEmbeddedTest {
 	}
 	
 	@Test
-	public void subjectEmbeddedNodePredicate() {
+	public void embeddedNodeInSubjectPositionTripleHasPredicate() {
 		String queryString = prolog +
         		"SELECT ?o WHERE {<<ex:kim ex:worksAt ex:aau>> ex:is ?o .}" ; 
        
@@ -119,6 +130,18 @@ public class TurtleStarReaderEmbeddedTest {
 	        }
 	    }
 		
+	    
+	    
 		assertEquals(2,count);
+		assertEquals(0, NodeDictionary.getInstance().getNumberOfReferenceTriples());
 	}
+	
+//	@Test
+//	public void test() {
+//		Key refMax = new Key(-Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2)+1152921504606846975l);
+//		System.out.println(refMax+" "+refMax.getId());
+//		
+//		Key refMin = new Key(-Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2)+0);
+//		System.out.println(refMin+" "+refMin.getId());
+//	}
 }

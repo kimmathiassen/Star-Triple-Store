@@ -60,6 +60,7 @@ public class IndexNormalTripleTest {
     	OSP.clear();
     }
 	
+
 	@Test
 	public void subjectLookup() 
 	{

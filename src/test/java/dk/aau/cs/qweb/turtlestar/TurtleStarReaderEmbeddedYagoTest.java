@@ -5,8 +5,11 @@ import static org.junit.Assert.assertEquals;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
+import org.junit.After;
 import org.junit.Test;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
 
@@ -34,5 +37,11 @@ public class TurtleStarReaderEmbeddedYagoTest {
         RDFDataMgr.read(model, filename);
         
 		assertEquals(true, true);
+	}
+	
+	@After
+	public void tearDown() {
+		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
 	}
 }

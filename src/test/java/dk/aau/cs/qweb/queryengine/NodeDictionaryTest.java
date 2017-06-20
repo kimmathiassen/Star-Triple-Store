@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
+import org.junit.After;
 import org.junit.Test;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.triple.Key;
@@ -18,6 +20,12 @@ import dk.aau.cs.qweb.triple.TripleStarBuilder;
 
 public class NodeDictionaryTest {
 
+	@After
+	public void tearDown() {
+		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
+	}
+	
 	@Test
 	public void writeAndReadTriple() {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
@@ -96,7 +104,6 @@ public class NodeDictionaryTest {
 		dict.createKey(embeddedNode1);
 		dict.createKey(embeddedNode2);
 		dict.createKey(embeddedNode3);
-		System.out.println(dict);
 		
 		assertEquals(3, dict.getNumberOfReferenceTriples());
 		assertEquals(3, dict.getNumberOfEmbeddedTriples());

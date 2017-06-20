@@ -16,9 +16,8 @@ public class PrefixDictionaryTest {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
 	}
-	
-	
 	
 	@Test
 	public void multipleCommonPrefixes() {
