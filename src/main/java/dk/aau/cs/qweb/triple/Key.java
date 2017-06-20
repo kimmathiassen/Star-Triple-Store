@@ -5,9 +5,10 @@ import java.util.Objects;
 import dk.aau.cs.qweb.helper.BitHelper;
 
 public class Key implements StarNode, Comparable<Key>{
-	@SuppressWarnings("unused")
-	private long maxReferenceTripleId = -5764607523034234879l;
-	private long maxEmbeddedTripleId = -1152921504606846975l;
+	private long maxReferenceTripleId = -3458764513820540929l; // 1100-111111111111111111111111111111111111111111111111111111111111 
+	private long minReferenceTripleId = -4611686018427387904l; // 1100-000000000000000000000000000000000000000000000000000000000000
+	private long maxEmbeddedTripleId  = -8070450532247928833l; // 1000-11111111111111111111-11111111111111111111-11111111111111111111
+	private long minEmbeddedTripleId  = -9223372036854775808l; // 1000-00000000000000000000-00000000000000000000-00000000000000000000
 	private final long id;
 	
 	public Key(final long id) {
@@ -20,12 +21,12 @@ public class Key implements StarNode, Comparable<Key>{
 	
 	@Override
 	public String toString() {
-		if (id < maxEmbeddedTripleId) {
+		if (id > minReferenceTripleId && id < maxReferenceTripleId) {
 			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
 			String body = String.format("%60s",Long.toBinaryString(BitHelper.getOverflowBody(id))).replace(' ', '0');
 			return header + "-"+body;
 		}
-		else if (id < 0) { //is embedded triple
+		else if (id > minEmbeddedTripleId && id < maxEmbeddedTripleId) { //is embedded triple
 			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
 			String subject = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedSubject(id))).replace(' ', '0');
 			String predicate = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedPredicate(id))).replace(' ', '0');
