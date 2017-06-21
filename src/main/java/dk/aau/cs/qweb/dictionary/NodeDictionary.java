@@ -72,11 +72,11 @@ public class NodeDictionary {
 			}  else {
 				return registerEmbeddedNode(subject, predicate, object,node);
 			}
-		} else if (isThereAnySpecialReferenceTripleDistributionConditions && numberOfEmbeddedTriples != 0) {
-			float currentDistribtuion = (float)id2ReferenceTriple.size()/(float)numberOfEmbeddedTriples*(float)100;
+		} else if (isThereAnySpecialReferenceTripleDistributionConditions) {
+			float currentDistribtuion = (float)id2ReferenceTriple.size()/((float)numberOfEmbeddedTriples+1)*(float)100;
 			if (referenceTriple2Id.containsKey(node)) {
 				return referenceTriple2Id.get(node);
-			} else if(currentDistribtuion <= referenceTripleDistributionPercentage) {
+			} else if(currentDistribtuion < referenceTripleDistributionPercentage) {
 				Key key = KeyFactory.createReferenceTriple();
 				addReferenceTriple(node, key);
 				return key;
