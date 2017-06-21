@@ -44,4 +44,12 @@ public class SimpleURINode extends SimpleNode {
 	public String toString() {
 		return getURI();
 	}
+	
+	public boolean hasPrefix() {
+		return hasPrefix;
+	}
+	
+	public int getPrefixId(){
+		return urlBodyId;
+	}
 }

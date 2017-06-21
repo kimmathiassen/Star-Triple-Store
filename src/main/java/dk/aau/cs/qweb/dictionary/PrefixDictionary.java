@@ -34,6 +34,10 @@ public class PrefixDictionary
 
 		return v;
 	}
+	
+	public boolean contains(int id) {
+		return Id2Prefix.contains(id);
+	}
 
 	/**
 	 * Returns the identifier that identifies the given query variable.
