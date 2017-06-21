@@ -58,7 +58,7 @@ public class App {
 		options.addOption("q", "query", true, "the sparql* query");
 		options.addOption("f", "query-folder", true, "path to folder with .sparqls files");
 		options.addOption("l", "location", true, "path to the turtle* file");
-		options.addOption("e", "explain", false, "prints the query plan");
+		options.addOption("p", "disable-prefix-dictionary", false, "disable the prefix dictionary (default on)");
 		
 		try {
 		    CommandLine line = parser.parse( options, args );
@@ -88,8 +88,8 @@ public class App {
 		    	filename = line.getOptionValue("location");
 		    }
 		    
-		    if (line.hasOption("explain")) {
-		    	Config.setExplainFlag();
+		    if (line.hasOption("disable-prefix-dictionary")) {
+		    	Config.enablePrefixDictionary(false);
 		    }
 		    
 		} catch( ParseException exp ) {
