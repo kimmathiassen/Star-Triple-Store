@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.queryengine;
+package dk.aau.cs.qweb.dictionary;
 
 import static org.junit.Assert.assertEquals;
 
