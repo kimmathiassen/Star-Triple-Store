@@ -24,7 +24,7 @@ import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
 
-public class queriesWithEmbeddedTriplePatterns {
+public class queriesWithReferenceTriplePatterns {
 
 	Graph g;
 	String prolog;
@@ -60,7 +60,8 @@ public class queriesWithEmbeddedTriplePatterns {
 //        		"PREFIX ex: <http://example.org/>  " + 
 //        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
 		
-		
+		PrefixDictionary.getInstance().clear();
+		NodeDictionary.getInstance().clear();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
@@ -287,6 +288,8 @@ public class queriesWithEmbeddedTriplePatterns {
 	    int count = 0;
 	    RDFNode s = null;
 	    
+	    System.out.println(NodeDictionary.getInstance());
+	    
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
 	        
@@ -365,6 +368,5 @@ public class queriesWithEmbeddedTriplePatterns {
 	    }
 		assertEquals(0,count);
 	}
-	
 }
 
