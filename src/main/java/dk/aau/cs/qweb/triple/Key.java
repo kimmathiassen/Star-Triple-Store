@@ -23,7 +23,7 @@ public class Key implements StarNode, Comparable<Key>{
 	public String toString() {
 		if (id > minReferenceTripleId && id < maxReferenceTripleId) {
 			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
-			String body = String.format("%60s",Long.toBinaryString(BitHelper.getOverflowBody(id))).replace(' ', '0');
+			String body = Long.toBinaryString(BitHelper.getOverflowBody(id));
 			return header + "-"+body;
 		}
 		else if (id > minEmbeddedTripleId && id < maxEmbeddedTripleId) { //is embedded triple
