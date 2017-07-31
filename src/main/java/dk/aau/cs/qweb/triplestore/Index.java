@@ -118,4 +118,9 @@ public class Index   {
 			tripleBunch.eliminateDuplicates();
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return indexMap.toString();
+	}
 }
