@@ -1,6 +1,6 @@
 package dk.aau.cs.qweb.triple;
 
-import dk.aau.cs.qweb.helper.BitHelper;
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.SimpleNode;
 
 //First bit in key is set if key is an embedded triple.
@@ -28,9 +28,9 @@ public class KeyFactory {
 			throw new IllegalArgumentException("identifier must not be negative, (MSB is set)");
 		}
 		
-		if (subject > BitHelper.getLargest20BitNumber() || 
-				predicate > BitHelper.getLargest20BitNumber() ||
-				object > BitHelper.getLargest20BitNumber()) {
+		if (subject > Config.getLargestSubjectId() || 
+				predicate > Config.getLargestSubjectId() ||
+				object > Config.getLargestSubjectId()) {
 			return createReferenceTriple();
 		} else {
 			return createEmbeddedTriple(subject, predicate, object);
