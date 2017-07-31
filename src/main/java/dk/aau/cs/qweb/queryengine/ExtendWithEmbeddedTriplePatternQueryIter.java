@@ -129,8 +129,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
 
-		result.set(var,createBindKey(currentQueryPattern.getSubject().getKey(), currentQueryPattern.getPredicate().getKey(), currentQueryPattern.getObject().getKey()));
-
+		result.set(var,createBindKey(currentMatch.subjectId, currentMatch.predicateId, currentMatch.objectId));
 		return result;
 	}
 
