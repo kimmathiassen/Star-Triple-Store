@@ -8,7 +8,7 @@ public class BitHelper {
 	private static final long PREDICATE_MASK = 	Long.parseLong("0000000000000000000000001111111111111111111100000000000000000000", 2);
 	private static final long SUBJECT_MASK =	Long.parseLong("0000111111111111111111110000000000000000000000000000000000000000", 2);
 	private static final long BODY_MASK =		Long.parseLong("0000111111111111111111111111111111111111111111111111111111111111", 2);
-	private static final long LARGEST_20_BIT_NUMBER = 1048575;
+	public static final long LARGEST_20_BIT_NUMBER = 1048575;
 	private static final long REFERENCE_TRIPLE_HEADER = 12;
 	private static final long EMBEDDED_TRIPLE_HEADER = 8;
 
@@ -94,9 +94,5 @@ public class BitHelper {
 
 	public static long getOverflowBody(long id) {
 		return (id & BODY_MASK );
-	}
-
-	public static long getLargest20BitNumber() {
-		return LARGEST_20_BIT_NUMBER;
 	}
 }
