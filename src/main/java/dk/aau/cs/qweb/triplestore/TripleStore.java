@@ -168,4 +168,14 @@ public class TripleStore {
 	public int getNumberOfLookups() {
 		return numberOfLookups;
 	}
+
+	public Index getSPO() {
+		return SPO;
+	}
+	public Index getPOS() {
+		return POS;
+	}
+	public Index getOSP() {
+		return OSP;
+	}
 }

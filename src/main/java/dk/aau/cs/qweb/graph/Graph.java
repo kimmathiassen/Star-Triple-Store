@@ -21,7 +21,7 @@ import dk.aau.cs.qweb.triplestore.TripleStore;
 public class Graph extends GraphBase {
 
 	protected int count;
-	public final TripleStore store;
+	private final TripleStore store;
 	
 	public Graph() {
 		store = createTripleStore();
@@ -55,6 +55,9 @@ public class Graph extends GraphBase {
 	   { return t.isConcrete() && !t.getObject().isLiteral(); 
 	}
 
+	public TripleStore getStore() {
+		return store;
+	}
 
 	protected TripleStore createTripleStore()
     { return new TripleStore( this ); }
@@ -186,16 +189,30 @@ public class Graph extends GraphBase {
 		return new DecodingTriplesIterator(store.find(tripleStarPattern),tripleStarPattern );
     }
     
-    public ExtendedIterator<KeyContainer> graphBaseFind( TripleStarPattern triplePattern ) {
-		return store.find(triplePattern);
+    public ExtendedIterator<KeyContainer> graphBaseFind( TripleStarPattern t ) {
+		return store.find(t);
     }
     
     public boolean graphBaseContains( TripleStarPattern t ) {
-    	if (t.isConcrete()) {
-			return store.contains(t);
-		}
-    	throw new IllegalArgumentException("tp is not concrete "+t);
+		return store.contains(t);
     }
+
+//	private boolean doesReferenceDictionaryContainTriple(TripleStarPattern t) {
+//		return NodeDictionary.getInstance().containsReferernceTripleKey(t.getSubject().getKey(), t.getPredicate().getKey(), t.getObject().getKey());
+//	}
+//
+//	private boolean isReferenceTriple(TripleStarPattern t) {
+//		if (t.getSubject().getKey().getId() > Config.getLargestSubjectId() ||
+//				t.getPredicate().getKey().getId() > Config.getLargestPredicateId() ||
+//				t.getObject().getKey().getId() > Config.getLargestObjectId()) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+    
+    
+    
     
     /**
          Answer true iff this graph contains <code>t</code>. If <code>t</code>
