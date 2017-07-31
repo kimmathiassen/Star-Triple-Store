@@ -14,7 +14,7 @@ public class NodeFactoryStar extends NodeFactory {
 		return new Node_Triple(node1,node2,node3);
 	}
 
-	public static Node createSimpleURINode(String label) {
+	public static SimpleURINode createSimpleURINode(String label) {
 		String normalized = normalizeURI(label);
 		if (Config.isPrefixDictionaryEnabled()) {
 			if (normalized.startsWith("http")) {
@@ -22,18 +22,20 @@ public class NodeFactoryStar extends NodeFactory {
 				if (hashTagSplit.length == 2) {
 					int prefix = PrefixDictionary.getInstance().createId(hashTagSplit[0]);
 					return new SimpleURINode(prefix,hashTagSplit[1]);
-				}
-				String[] slashSplit = normalized.split("/");
-				if (slashSplit[slashSplit.length-1].equals("")) {
-					String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
-					int prefix = PrefixDictionary.getInstance().createId(body);
-					String head = slashSplit[slashSplit.length-2];
-					return new SimpleURINode(prefix,head);
 				} else {
-					String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
-					int prefix = PrefixDictionary.getInstance().createId(body);
-					String head = slashSplit[slashSplit.length-1];
-					return new SimpleURINode(prefix,head);
+					String[] slashSplit = normalized.split("/");
+					if (slashSplit[slashSplit.length-1].equals("")) {
+						String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
+						int prefix = PrefixDictionary.getInstance().createId(body);
+						String head = slashSplit[slashSplit.length-2];
+						return new SimpleURINode(prefix,head);
+					} else {
+						String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
+						int prefix = PrefixDictionary.getInstance().createId(body);
+						String head = slashSplit[slashSplit.length-1];
+						return new SimpleURINode(prefix,head);
+					}
+					
 				}
 			} else {
 				return new SimpleURINode(normalized);
