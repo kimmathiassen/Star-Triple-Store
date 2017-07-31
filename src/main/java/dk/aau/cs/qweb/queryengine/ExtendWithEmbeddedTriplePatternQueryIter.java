@@ -10,7 +10,7 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.graph.Graph;
-import dk.aau.cs.qweb.helper.BitHelper;
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.StarNode;
@@ -129,13 +129,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
 
-		if (BitHelper.isReferenceBitSet(currentMatch.subjectId)|
-				BitHelper.isReferenceBitSet(currentMatch.objectId)) {
-			result.set(var,NodeDictionary.getInstance().getReferernceTripleKey(currentMatch.subjectId, currentMatch.predicateId, currentMatch.objectId));
-		} else {
-			result.set(var,KeyFactory.createKey(currentMatch.subjectId, currentMatch.predicateId ,currentMatch.objectId ));
-		}
-		
+		result.set(var,createBindKey(currentQueryPattern.getSubject().getKey(), currentQueryPattern.getPredicate().getKey(), currentQueryPattern.getObject().getKey()));
 
 		return result;
 	}
@@ -223,10 +217,35 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			}
 			
 		} else if (sNew.isConcrete() && pNew.isConcrete() && oNew.isConcrete()) {
-			solutionMapping.set(var, KeyFactory.createKey(tp.getSubject().getKey(), tp.getPredicate().getKey(), tp.getObject().getKey()));
+			
+			solutionMapping.set(var, createBindKey(sNew.getKey(), pNew.getKey(), oNew.getKey()));
 		}
-
 		return tp;
+	}
+
+
+	private static Key createBindKey(Key sNew, Key pNew, Key oNew) {
+		if (isReferenceTriple(sNew,pNew,oNew)) {
+			return NodeDictionary.getInstance().getReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
+		} else if (NodeDictionary.getInstance().isThereAnySpecialReferenceTripleDistributionConditions()) {
+			if (NodeDictionary.getInstance().containsReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey())) {
+				return NodeDictionary.getInstance().getReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
+			} else {
+				return  KeyFactory.createKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
+			}
+		} else {
+			return KeyFactory.createKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
+		}
+	}
+	
+	private static boolean isReferenceTriple(StarNode s, StarNode p , StarNode o) {
+		if (s.getKey().getId() > Config.getLargestSubjectId() ||
+				p.getKey().getId() > Config.getLargestPredicateId() ||
+				o.getKey().getId() > Config.getLargestObjectId()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private static boolean triplePatternIsConcrete(TripleStarPattern tp2) {
