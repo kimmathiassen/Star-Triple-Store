@@ -7,6 +7,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.helper.BitHelper;
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.node.Node_Triple;
 import dk.aau.cs.qweb.node.SimpleNode;
@@ -18,17 +19,26 @@ public class NodeDictionary {
 	private static NodeDictionary instance;
 	HashMap<Key, Node> id2Node;
 	HashMap<Node, Key> node2Id;
-	HashMap<Key,Node_Triple > id2ReferenceTriple;
-	HashMap<Node_Triple, Key> referenceTriple2Id;
+	HashMap<Key,Node > id2ReferenceNode;
+	HashMap<Node, Key> referenceNode2Id;
 	private boolean isThereAnySpecialReferenceTripleDistributionConditions;
 	private int referenceTripleDistributionPercentage;
 	private int numberOfEmbeddedTriples;
 
+	public boolean isThereAnySpecialReferenceTripleDistributionConditions() {
+		return isThereAnySpecialReferenceTripleDistributionConditions ;
+	}
+	
+	private boolean shouldNextNodeBeAnReference() {
+		float currentDistribtuion = (float)id2ReferenceNode.size()/((float)numberOfEmbeddedTriples+1)*(float)100;
+		return (currentDistribtuion < referenceTripleDistributionPercentage);
+	}
+	
 	private NodeDictionary() {
 		id2Node = new HashMap<Key, Node>();
 		node2Id = new HashMap<Node, Key>();
-		id2ReferenceTriple = new HashMap<Key, Node_Triple>();
-		referenceTriple2Id = new HashMap<Node_Triple, Key>();
+		id2ReferenceNode = new HashMap<Key, Node>();
+		referenceNode2Id = new HashMap<Node, Key>();
 		numberOfEmbeddedTriples = 0;
 	}
 	
@@ -40,7 +50,7 @@ public class NodeDictionary {
 	}
 	
 	public int size() {
-		return id2Node.size()+id2ReferenceTriple.size();
+		return id2Node.size()+id2ReferenceNode.size();
 	}
 	
 	public int getNumberOfEmbeddedTriples() {
@@ -64,19 +74,18 @@ public class NodeDictionary {
 	}
 
 	private Key registerOrGetEmbeddedNode(Key subject, Key predicate, Key object, Node node) {
-		if (subject.getId() > BitHelper.getLargest20BitNumber() || 
-				predicate.getId() > BitHelper.getLargest20BitNumber() ||
-				object.getId() > BitHelper.getLargest20BitNumber()) {
-			if (referenceTriple2Id.containsKey(node)) {
-				return referenceTriple2Id.get(node);
+		if (subject.getId() > Config.getLargestSubjectId() || 
+				predicate.getId() > Config.getLargestSubjectId() ||
+				object.getId() > Config.getLargestSubjectId()) {
+			if (referenceNode2Id.containsKey(node)) {
+				return referenceNode2Id.get(node);
 			}  else {
 				return registerEmbeddedNode(subject, predicate, object,node);
 			}
-		} else if (isThereAnySpecialReferenceTripleDistributionConditions) {
-			float currentDistribtuion = (float)id2ReferenceTriple.size()/((float)numberOfEmbeddedTriples+1)*(float)100;
-			if (referenceTriple2Id.containsKey(node)) {
-				return referenceTriple2Id.get(node);
-			} else if(currentDistribtuion < referenceTripleDistributionPercentage) {
+		} else if (isThereAnySpecialReferenceTripleDistributionConditions()) {
+			if (referenceNode2Id.containsKey(node)) {
+				return referenceNode2Id.get(node);
+			} else if (shouldNextNodeBeAnReference()){
 				Key key = KeyFactory.createReferenceTriple();
 				addReferenceTriple(node, key);
 				return key;
@@ -85,7 +94,6 @@ public class NodeDictionary {
 			}
 		} else {
 			if (node2Id.containsKey(node)) {
-				
 				return node2Id.get(node);
 			} else {
 				return registerEmbeddedNode(subject, predicate, object,node);
@@ -106,8 +114,8 @@ public class NodeDictionary {
 
 	private void addReferenceTriple(Node node, final Key key) {
 		numberOfEmbeddedTriples++;
-		id2ReferenceTriple.put(key, (Node_Triple)node);
-		referenceTriple2Id.put((Node_Triple)node,key);
+		id2ReferenceNode.put(key, node);
+		referenceNode2Id.put(node,key);
 	}
 
 	private void addNode(Node node, final Key key) {
@@ -128,6 +136,16 @@ public class NodeDictionary {
 	private Key registerOrGetNode(SimpleNode node) {
 		if (node2Id.containsKey(node)) {
 			return node2Id.get(node);
+//		} if (isThereAnySpecialReferenceTripleDistributionConditions()) {
+//			if (referenceNode2Id.containsKey(node)) {
+//				return referenceNode2Id.get(node);
+//			} else if (shouldNextNodeBeAnReference()){
+//				Key key = KeyFactory.createReferenceTriple();
+//				addReferenceTriple(node, key);
+//				return key;
+//			} else {
+//				return registerNode(node);
+//			}
 		} else {
 			return registerNode(node);
 		}
@@ -135,7 +153,7 @@ public class NodeDictionary {
 
 	public Node getNode(Key id) {
 		if (BitHelper.isReferenceBitSet(id)) {
-			return id2ReferenceTriple.get(id);
+			return id2ReferenceNode.get(id);
 		} else {
 			return id2Node.get(id);
 		}
@@ -147,7 +165,7 @@ public class NodeDictionary {
 		Node object = getNode(objectId);
 		Node referenceTriple =  NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		return referenceTriple2Id.get(referenceTriple);
+		return referenceNode2Id.get(referenceTriple);
 	}
 	
 	private Key registerNode(SimpleNode node) {
@@ -171,7 +189,7 @@ public class NodeDictionary {
 		}
 		
 		sb.append("\nReference Triple Dict\n");
-		for (Entry<Key, Node_Triple> iterable_element : id2ReferenceTriple.entrySet()) {
+		for (Entry<Key, Node> iterable_element : id2ReferenceNode.entrySet()) {
 			sb.append(iterable_element.getKey()+": "+ iterable_element.getValue()+"\n");
 		}
 		return sb.toString();
@@ -193,8 +211,8 @@ public class NodeDictionary {
 	public void clear() {
 		id2Node.clear();
 		node2Id.clear();
-		referenceTriple2Id.clear();
-		id2ReferenceTriple.clear();
+		referenceNode2Id.clear();
+		id2ReferenceNode.clear();
 		KeyFactory.reset();
 		numberOfEmbeddedTriples = 0;
 		isThereAnySpecialReferenceTripleDistributionConditions = false;
@@ -202,7 +220,16 @@ public class NodeDictionary {
 	}
 
 	public int getNumberOfReferenceTriples() {
-		return id2ReferenceTriple.size();
+		return id2ReferenceNode.size();
+	}
+
+	public boolean containsReferernceTripleKey(Key subjectId, Key predicateId, Key objectId) {
+		Node subject = getNode(subjectId);
+		Node predicate = getNode(predicateId);
+		Node object = getNode(objectId);
+		Node referenceTriple =  NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
+		
+		return referenceNode2Id.containsKey(referenceTriple);
 	}
 }
 
