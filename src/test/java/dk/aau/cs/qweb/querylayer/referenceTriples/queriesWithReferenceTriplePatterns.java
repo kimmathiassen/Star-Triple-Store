@@ -270,6 +270,9 @@ public class queriesWithReferenceTriplePatterns {
 	    int count = 0;
 	    RDFNode s = null;
 	    
+	    //System.out.println(NodeDictionary.getInstance());
+	    //System.out.println(g.getStore().getSPO());
+	    
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
 	        
@@ -292,8 +295,6 @@ public class queriesWithReferenceTriplePatterns {
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
 	    RDFNode s = null;
-	    
-	    System.out.println(NodeDictionary.getInstance());
 	    
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
