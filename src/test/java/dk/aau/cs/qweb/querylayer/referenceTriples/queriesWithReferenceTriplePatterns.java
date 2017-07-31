@@ -92,7 +92,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryEmbeddedPlusOtherVariable() {
+	public void queryReferencePlusOtherVariable() {
 		String queryString = prolog +
         		"SELECT ?t ?date WHERE {?t ex:started  ?date }" ; 
        
@@ -117,7 +117,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryMixOfEmbeddedAndNormalTriples() {
+	public void queryMixOfReferenceAndNormalTriples() {
 		String queryString = prolog +
 				"SELECT ?o WHERE {ex:kim ex:worksAt ?o} order by ?o" ; 
        
@@ -140,7 +140,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithBind() {
+	public void queryWithBindWithReferenceTriple() {
 		String queryString = prolog +
 				"SELECT ?date ?t WHERE {BIND(<<ex:kim ex:worksAt ex:aau>> as ?t) .  ?t ex:started  ?date . }" ; 
        
@@ -162,10 +162,12 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithBindContainingUnusedVariable() {
+	public void queryWithBindContainingUnusedVariableOnReferenceTriple() {
 		String queryString = prolog +
 				"SELECT ?date WHERE {BIND(<<ex:kim ex:worksAt ?o>> as ?t) .  ?t ex:started  ?date . }" ; 
        
+	    
+		
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
 	    RDFNode date = null;
@@ -184,10 +186,13 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithBindContainingUsedVariableUnusedBindVar() {
+	public void queryWithBindContainingUsedVariableUnusedBindVarOnReference() {
 		String queryString = prolog +
 				"SELECT ?s WHERE {BIND(<<?s ex:worksAt ex:aau>> as ?t) .  ?s ex:worksAt ex:LiU .}" ; 
        
+		System.out.println(NodeDictionary.getInstance());
+	    System.out.println(g.getStore().getPOS());
+		
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
 	    RDFNode s = null;
@@ -205,7 +210,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithBindThatDoNotMatchDataUsedInTriple() {
+	public void queryWithBindThatDoNotMatchDataUsedInTripleWithReference() {
 		String queryString = prolog +
 				"SELECT ?date ?t WHERE {BIND(<<ex:kim ex:worksAt ex:LiU>> as ?t) .  ?t ex:started  ?date . }" ; 
        
@@ -223,7 +228,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queriesWithPrefixAndFullURI() {
+	public void queriesWithPrefixAndFullURIOnReferenceTriples() {
 		String queryString1 = prolog +
 				"SELECT ?t WHERE {BIND(<<ex:kim ex:worksAt ex:LiU>> as ?t) }" ; 
        
@@ -256,7 +261,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithMultipleEmbeddedTriplePatternsWithDot() {
+	public void queryWithMultipleEmbeddedTriplePatternsWithDotWithReference() {
 		String queryString = prolog +
         		"SELECT ?s WHERE {<<?s ex:worksAt ex:aau>> ex:is \"Not a lie\" . \n"+ 
         "<<?s ex:worksAt ex:aau>> ex:started \"1999-08-16\"^^xsd:date . }" ; 
@@ -279,7 +284,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithMultipleEmbeddedTriplePatternsWithSemicolon() {
+	public void queryWithMultipleEmbeddedTriplePatternsWithSemicolonWithRef() {
 		String queryString = prolog +
         		"SELECT ?s WHERE {<<?s ex:worksAt ex:aau>> ex:is \"Not a lie\" ; "+ 
         " ex:started \"1999-08-16\"^^xsd:date . }" ; 
@@ -304,7 +309,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryWithTwoTriplePatternsOneBind() {
+	public void queryWithTwoTriplePatternsOneBindWithRef() {
 		String queryString = prolog +
         		"SELECT ?s WHERE {Bind(<<?s ex:worksAt ex:aau>> AS ?t1) . ?t1 ex:is \"Not a lie\" ."+ 
         "?t1 ex:started \"1999-08-16\"^^xsd:date }" ; 
@@ -328,7 +333,7 @@ public class queriesWithReferenceTriplePatterns {
 	
 	
 	@Test
-	public void queryTriplePatternsWithDotSubjectSubjectJoin() {
+	public void queryTriplePatternsWithDotSubjectSubjectJoinWithRef() {
 		String queryString = prolog +
         		"SELECT ?s WHERE {?s ex:is \"Not a lie\" . "+ 
         "?s ex:started \"1999-08-16\"^^xsd:date . }" ; 
@@ -351,7 +356,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@Test
-	public void queryTriplePatternsWithDotSubjectObjectJoin() {
+	public void queryTriplePatternsWithDotSubjectObjectJoinWithRef() {
 		String queryString = prolog +
         		"SELECT ?s WHERE {?s ex:is \"Not a lie\" . "+ 
         "<http://example.org/kim> ex:started ?s . }" ; 
@@ -364,6 +369,7 @@ public class queriesWithReferenceTriplePatterns {
 	        
 	        while ( results.hasNext() ) {
 	            count++;
+	            results.next();
 	        }
 	    }
 		assertEquals(0,count);
