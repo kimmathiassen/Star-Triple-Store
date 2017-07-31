@@ -130,7 +130,6 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 		}
 
 		if (BitHelper.isReferenceBitSet(currentMatch.subjectId)|
-				BitHelper.isReferenceBitSet(currentMatch.predicateId)|
 				BitHelper.isReferenceBitSet(currentMatch.objectId)) {
 			result.set(var,NodeDictionary.getInstance().getReferernceTripleKey(currentMatch.subjectId, currentMatch.predicateId, currentMatch.objectId));
 		} else {
