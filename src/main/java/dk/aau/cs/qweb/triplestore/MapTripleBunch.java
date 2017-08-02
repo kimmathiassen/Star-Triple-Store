@@ -55,7 +55,7 @@ public abstract class MapTripleBunch  {
 	//One variable
 	public Iterator<KeyContainer> iterator(Key key, Field f) {
 		if (innerMap.containsKey(key)) {
-			return new AddKeyToIteratorWrapper(innerMap.get(key).iterator(),key,f);
+			return new IteratorWrapper(innerMap.get(key).iterator(),key,f);
 		}
 		return Collections.emptyIterator();
 	}
@@ -64,7 +64,7 @@ public abstract class MapTripleBunch  {
 	public Iterator<KeyContainer> iterator(Field f) {
 		IteratorChain<KeyContainer> chain = new IteratorChain<KeyContainer>();
 		for (Entry<Key, ArrayList<KeyContainer>> iterable_element : innerMap.entrySet()) {
-			chain.addIterator(new AddKeyToIteratorWrapper(iterable_element.getValue().iterator(),iterable_element.getKey(),f));
+			chain.addIterator(new IteratorWrapper(iterable_element.getValue().iterator(),iterable_element.getKey(),f));
 		}
 		return chain;
 	}
