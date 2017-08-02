@@ -6,6 +6,8 @@ public class Config {
 	private static int subjectSize = 20;
 	private static int predicateSize = 20;
 	private static int objectSize = 20;
+	private static int nodeDictionaryInitialSize = 10000;
+	private static int nodeReferenceDictionaryInitialSize = 10000;
 	
 	public static void enablePrefixDictionary(boolean flag) {
 		prefixDictionaryState = flag;
@@ -25,5 +27,13 @@ public class Config {
 	
 	public static long getLargestObjectId() {
 		return (long) Math.pow(2, objectSize);
+	}
+
+	public static int getNodeDictionaryInitialSize() {
+		return nodeDictionaryInitialSize;
+	}
+
+	public static int getReferenceNodeDictionaryInitialSize() {
+		return nodeReferenceDictionaryInitialSize;
 	}
 }
