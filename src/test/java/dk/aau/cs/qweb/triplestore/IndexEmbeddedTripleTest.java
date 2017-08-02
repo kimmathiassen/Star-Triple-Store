@@ -10,11 +10,10 @@ import org.junit.Test;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
-import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triplestore.Index;
-import dk.aau.cs.qweb.triplestore.Index.Field;
+import dk.aau.cs.qweb.triplestore.MapIndex.Field;
 
 public class IndexEmbeddedTripleTest {
 	static Index SPO;
@@ -26,9 +25,9 @@ public class IndexEmbeddedTripleTest {
 	
 	@BeforeClass
     public static void runOnceBeforeClass() {
-    	SPO = new Index(Field.S,Field.P,Field.O);
-    	POS = new Index(Field.P,Field.O,Field.S);
-    	OSP = new Index(Field.P,Field.O,Field.S);
+    	SPO = new HashIndex(Field.S,Field.P,Field.O);
+    	POS = new HashIndex(Field.P,Field.O,Field.S);
+    	OSP = new HashIndex(Field.P,Field.O,Field.S);
     	
 //    	KeyFactory kf = new KeyFactory();
 //		Key embeddedTriple1 = kf.createKey(1, 2, 3);

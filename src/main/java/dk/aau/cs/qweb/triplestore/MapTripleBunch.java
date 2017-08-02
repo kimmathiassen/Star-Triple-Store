@@ -12,12 +12,12 @@ import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triplestore.Index.Field;
+import dk.aau.cs.qweb.triplestore.MapIndex.Field;
 
-public class TripleBunch  {
+public abstract class MapTripleBunch  {
 	Map<Key, ArrayList<KeyContainer>> innerMap;
 	
-	public TripleBunch() {
+	public MapTripleBunch() {
 		innerMap = new TreeMap<Key,ArrayList<KeyContainer>>();
 	}
 
@@ -69,19 +69,6 @@ public class TripleBunch  {
 		return chain;
 	}
 
-	//Zero varialbes 
-	//When a tp without variables are given, contains should be used instaed.
-//	@Deprecated
-//	public Iterator<KeyContainer> iterator(Key key, TripleStarPattern triple) {
-//		KeyContainer ts = new KeyContainer(triple.getSubject().getKey(),triple.getPredicate().getKey(),triple.getObject().getKey());
-//		if (innerMap.get(key).contains(ts)) {
-//			HashSet<KeyContainer> set = new HashSet<KeyContainer>();
-//			set.add(ts);
-//			return set.iterator();
-//		}
-//		return Collections.emptyIterator();
-//	}
-
 	public void eliminateDuplicates() {
 		for (Entry<Key, ArrayList<KeyContainer>> list : innerMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
@@ -101,6 +88,7 @@ public class TripleBunch  {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		return "TripleBunch( "+innerMap+")";
 	}

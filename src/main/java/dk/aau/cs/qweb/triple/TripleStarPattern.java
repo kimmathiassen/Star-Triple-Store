@@ -2,7 +2,7 @@ package dk.aau.cs.qweb.triple;
 
 import org.apache.jena.reasoner.IllegalParameterException;
 
-import dk.aau.cs.qweb.triplestore.Index.Field;
+import dk.aau.cs.qweb.triplestore.MapIndex.Field;
 
 public class TripleStarPattern implements StarNode{
 	
@@ -94,7 +94,6 @@ public class TripleStarPattern implements StarNode{
 		}
 		return subjectExistInDict && predicateExistInDict && objectExistInDict;
 	}
-
 
 	@Override
 	public boolean isKey() {

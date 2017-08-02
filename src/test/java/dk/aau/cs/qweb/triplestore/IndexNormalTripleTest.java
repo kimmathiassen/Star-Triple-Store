@@ -12,7 +12,7 @@ import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
-import dk.aau.cs.qweb.triplestore.Index.Field;
+import dk.aau.cs.qweb.triplestore.MapIndex.Field;
 
 public class IndexNormalTripleTest {
 	static Index SPO;
@@ -24,9 +24,9 @@ public class IndexNormalTripleTest {
     public static void runOnceBeforeClass() {
     	var = new Variable(2);
     	
-    	SPO = new Index(Field.S,Field.P,Field.O);
-    	POS = new Index(Field.P,Field.O,Field.S);
-    	OSP = new Index(Field.O,Field.S,Field.P);
+    	SPO = new HashIndex(Field.S,Field.P,Field.O);
+    	POS = new HashIndex(Field.P,Field.O,Field.S);
+    	OSP = new HashIndex(Field.O,Field.S,Field.P);
     	
     	TripleStar t1 = new TripleStar(new Key(1),new Key(2),new Key(3));
     	TripleStar t2 = new TripleStar(new Key(1),new Key(2),new Key(4));
@@ -185,7 +185,7 @@ public class IndexNormalTripleTest {
 	@Test
 	public void doubeInsertOfIdenticalTriples() 
 	{
-		Index test = new Index(Field.S,Field.P,Field.O);
+		Index test = new HashIndex(Field.S,Field.P,Field.O);
 		TripleStar t1 = new TripleStar(new Key(1),new Key(2),new Key(3));
 		TripleStar t2 = new TripleStar(new Key(1),new Key(2),new Key(3));
 		test.add(t1);

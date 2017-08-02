@@ -3,7 +3,7 @@ package dk.aau.cs.qweb.triplestore;
 import java.util.Iterator;
 
 import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triplestore.Index.Field;
+import dk.aau.cs.qweb.triplestore.MapIndex.Field;
 
 public class AddKeyToIteratorWrapper implements Iterator<KeyContainer> {
 
