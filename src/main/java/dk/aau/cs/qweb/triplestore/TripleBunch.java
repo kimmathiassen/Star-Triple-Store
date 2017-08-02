@@ -2,10 +2,10 @@ package dk.aau.cs.qweb.triplestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.jena.ext.com.google.common.collect.Lists;
@@ -18,7 +18,7 @@ public class TripleBunch  {
 	Map<Key, ArrayList<KeyContainer>> innerMap;
 	
 	public TripleBunch() {
-		innerMap = new HashMap<Key,ArrayList<KeyContainer>>();
+		innerMap = new TreeMap<Key,ArrayList<KeyContainer>>();
 	}
 
 	public void put(Field field2, final TripleStar triple) {
@@ -96,7 +96,7 @@ public class TripleBunch  {
 			}
 			//Remove dup in reverse order to avoid changeing the indexs
 			for (Integer integer : Lists.reverse(duplicates)) {
-				innerMap.get(values.remove((int)integer));
+				list.getValue().remove((int)integer);
 			}
 		}
 	}
