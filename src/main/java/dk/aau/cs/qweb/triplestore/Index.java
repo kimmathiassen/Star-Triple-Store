@@ -7,23 +7,23 @@ import dk.aau.cs.qweb.triple.TripleStarPattern;
 
 public interface Index   {
 	
-	public void add(final TripleStar t) ;
+	void add(final TripleStar t) ;
 
-	public boolean remove(TripleStar t) ;
+	boolean remove(TripleStar t) ;
 
-	public void clear() ;
+	void clear() ;
 
-	public long size() ;
+	long size() ;
 
-	public boolean isEmpty() ;
+	boolean isEmpty() ;
 
-	public boolean contains(TripleStarPattern t) ;
+	boolean contains(TripleStarPattern t) ;
 
-	public Iterator<KeyContainer> iterator(TripleStarPattern triple) ;
+	Iterator<KeyContainer> iterator(TripleStarPattern triple) ;
 
-	public void removedOneViaIterator() ;
+	void removedOneViaIterator() ;
 
-	public Iterator<KeyContainer> iterateAll() ;
+	Iterator<KeyContainer> iterateAll() ;
 
-	public void eliminateDuplicates() ;
+	void eliminateDuplicates() ;
 }
