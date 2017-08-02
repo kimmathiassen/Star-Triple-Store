@@ -51,10 +51,10 @@ public abstract class MapIndex  implements Index {
 	}
 
 	public boolean contains(TripleStarPattern t) {
-		if (indexMap.containsKey(t.getSubject())) {
-			MapTripleBunch map = indexMap.get(t.getSubject());
-			if (map.innerMap.containsKey(t.getPredicate())) {
-				return map.innerMap.get(t.getPredicate()).contains(new KeyContainer(t.getObject().getKey(),Field.O));
+		if (indexMap.containsKey(t.getField(field1))) {
+			MapTripleBunch map = indexMap.get(t.getField(field1));
+			if (map.innerMap.containsKey(t.getField(field2))) {
+				return map.innerMap.get(t.getField(field2)).contains(new KeyContainer(t.getField(field3).getKey(),field3));
 			}
 		}
 		return false;
@@ -70,11 +70,11 @@ public abstract class MapIndex  implements Index {
 			} 
 			// One variable
 			else if (triple.isFieldConcrete(field2)) {
-				return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),field2),firstKey,field1);
+				return new IteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),field2),firstKey,field1);
 			}
 			// Two variables
 			else {
-				return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(field2),firstKey,field1);
+				return new IteratorWrapper(indexMap.get(firstKey).iterator(field2),firstKey,field1);
 			}
 		}
 		return Collections.emptyIterator();
@@ -87,7 +87,7 @@ public abstract class MapIndex  implements Index {
 	public Iterator<KeyContainer> iterateAll() {
 		IteratorChain<KeyContainer> chain = new IteratorChain<KeyContainer>();
 		for (Entry<Key, MapTripleBunch> iterable_element : indexMap.entrySet()) {
-			chain.addIterator(new AddKeyToIteratorWrapper(iterable_element.getValue().iterator(field2),iterable_element.getKey(),field1));
+			chain.addIterator(new IteratorWrapper(iterable_element.getValue().iterator(field2),iterable_element.getKey(),field1));
 		}
 		return chain;
 	}
