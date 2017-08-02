@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.lang3.NotImplementedException;
@@ -28,7 +29,7 @@ public class Index   {
 		this.field1 = field1;
 		this.field2 = field2;
 		this.field3 = field3;
-		indexMap = new HashMap<Key,TripleBunch>();
+		indexMap = new TreeMap<Key,TripleBunch>();
 		size = 0;
 	}
 
