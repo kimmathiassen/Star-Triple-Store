@@ -17,7 +17,6 @@ import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.IteratorWrapper;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
-import dk.aau.cs.qweb.triplestore.hashindex.MapIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class FlatIndex implements Index {
