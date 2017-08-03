@@ -1,30 +1,39 @@
-package dk.aau.cs.qweb.triplestore;
+package dk.aau.cs.qweb.triplestore.flatindex;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.Index;
+import dk.aau.cs.qweb.triplestore.IteratorWrapper;
+import dk.aau.cs.qweb.triplestore.KeyContainer;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class FlatIndex implements Index {
 
-	protected Map<Pair<Key,Key>, ArrayList<KeyContainer>> indexMap;
-	protected long size;
+	protected Map<FlatKey, ArrayList<KeyContainer>> indexMap;
 	protected Field field1;
 	protected Field field2;
 	protected Field field3;
 	
+	public FlatIndex(Field field1, Field field2, Field field3) {
+		this.field1 = field1;
+		this.field2 = field2;
+		this.field3 = field3;
+		indexMap = new HashMap<FlatKey,ArrayList<KeyContainer>>();
+	}
+
 	protected Key getFieldKey(Field field,TripleStar t) {
 		if (field == Field.S) {
 			return t.subjectId;
@@ -41,25 +50,24 @@ public class FlatIndex implements Index {
 
 	public void clear() {
 		indexMap.clear();
-		size = 0;
 	}
 
 	public long size() {
-		return size;
+		return indexMap.size();
 	}
 
 	public boolean isEmpty() {
-		return (size == 0 ? true : false);
+		return indexMap.isEmpty();
 	}
 
 	public boolean contains(TripleStarPattern t) {
-		Pair<Key,Key> key ;
+		FlatKey key ;
 		Key firstKey = t.getField(field1).getKey();
 		
 		if (t.isFieldConcrete(field2)) {
-			key = new ImmutablePair<Key,Key>(firstKey,t.getField(field2).getKey());
+			key = new FlatKey(firstKey,t.getField(field2).getKey());
 		} else {
-			key = new ImmutablePair<Key,Key>(firstKey,null);
+			key = new FlatKey(firstKey);
 		}
 		
 		if (indexMap.containsKey(key)) {
@@ -69,13 +77,13 @@ public class FlatIndex implements Index {
 	}
 
 	public Iterator<KeyContainer> iterator(TripleStarPattern triple) {
-		Pair<Key,Key> key ;
+		FlatKey key ;
 		Key firstKey = triple.getField(field1).getKey();
 		
 		if (triple.isFieldConcrete(field2)) {
-			key = new ImmutablePair<Key,Key>(firstKey,triple.getField(field2).getKey());
+			key = new FlatKey(firstKey,triple.getField(field2).getKey());
 		} else {
-			key = new ImmutablePair<Key,Key>(firstKey,null);
+			key = new FlatKey(firstKey);
 		}
 		
 		
@@ -90,6 +98,10 @@ public class FlatIndex implements Index {
 					Key secondKey = triple.getField(field2).getKey();
 					return new IteratorWrapper(indexMap.get(key).iterator(), firstKey, field1, secondKey, field2);
 				} else {
+					System.out.println(indexMap);
+					for (KeyContainer iterable_element : indexMap.get(key)) {
+						System.out.println(iterable_element);
+					}
 					return new IteratorWrapper(indexMap.get(key).iterator(), firstKey, field1);
 				}
 			}
@@ -103,14 +115,14 @@ public class FlatIndex implements Index {
 
 	public Iterator<KeyContainer> iterateAll() {
 		IteratorChain<KeyContainer> chain = new IteratorChain<KeyContainer>();
-		for (Entry<Pair<Key, Key>, ArrayList<KeyContainer>> iterable_element : indexMap.entrySet()) {
-			Key firstKey = iterable_element.getKey().getLeft();
+		for (Entry<FlatKey, ArrayList<KeyContainer>> iterable_element : indexMap.entrySet()) {
+			Key firstKey = iterable_element.getKey().getFirstField();
 			Iterator<KeyContainer> iterator = iterable_element.getValue().iterator();
-			if (iterable_element.getKey().getRight() == null) {
+			if (iterable_element.getKey().getSecondField() == null) {
 				
 				chain.addIterator(new IteratorWrapper(iterator,firstKey,field1));
 			} else {
-				Key secondKey = iterable_element.getKey().getRight();
+				Key secondKey = iterable_element.getKey().getSecondField();
 				chain.addIterator(new IteratorWrapper(iterator,firstKey,field1,secondKey,field2));
 			}
 		}
@@ -118,7 +130,7 @@ public class FlatIndex implements Index {
 	}
 
 	public void eliminateDuplicates() {
-		for (Entry<Pair<Key, Key>, ArrayList<KeyContainer>> list : indexMap.entrySet()) {
+		for (Entry<FlatKey, ArrayList<KeyContainer>> list : indexMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
 			ArrayList<KeyContainer> values = list.getValue();
 			Collections.sort(values);
@@ -146,15 +158,29 @@ public class FlatIndex implements Index {
 		Key firstKey = getFieldKey(field1,t);
 		Key secondKey = getFieldKey(field2,t);
 		Key thirdKey = getFieldKey(field3,t);
-		Pair<Key,Key> key = new ImmutablePair<Key,Key>(firstKey,secondKey);
+		FlatKey doubleKey = new FlatKey(firstKey,secondKey);
+		FlatKey singleKey = new FlatKey(firstKey);
 		
-		if (indexMap.containsKey(key)) {
-			indexMap.get(key).add(new KeyContainer(thirdKey,field3));
+		//Add general key e.g. S??
+		if (indexMap.containsKey(singleKey)) {
+			KeyContainer kc = new KeyContainer(thirdKey,field3);
+			kc.addKey(secondKey, field2);
+			indexMap.get(singleKey).add(kc);
+		} else {
+			ArrayList<KeyContainer> array = new ArrayList<KeyContainer>();
+			KeyContainer kc = new KeyContainer(thirdKey,field3);
+			kc.addKey(secondKey, field2);
+			array.add(kc);
+			indexMap.put(singleKey, array);
+		}
+		
+		//Add specific key e.g. SP?
+		if (indexMap.containsKey(doubleKey)) {
+			indexMap.get(doubleKey).add(new KeyContainer(thirdKey,field3));
 		} else {
 			ArrayList<KeyContainer> array = new ArrayList<KeyContainer>();
 			array.add(new KeyContainer(thirdKey,field3));
-			indexMap.put(key, array);
+			indexMap.put(doubleKey, array);
 		}
-		size++;
 	}
 }
