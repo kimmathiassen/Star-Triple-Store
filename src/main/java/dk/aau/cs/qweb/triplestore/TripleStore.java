@@ -12,7 +12,8 @@ import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.flatindex.FlatIndex;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class TripleStore {
 	protected final Graph parent;
@@ -25,9 +26,9 @@ public class TripleStore {
     int numberOfLookups = 0;
     
     public TripleStore ( Graph parent) { 
-    	this.SPO = new HashIndex(Field.S, Field.P, Field.O );
-    	this.POS = new HashIndex(Field.P, Field.O, Field.S );
-        this.OSP = new HashIndex(Field.O, Field.S, Field.P);
+    	this.SPO = new FlatIndex(Field.S, Field.P, Field.O );
+    	this.POS = new FlatIndex(Field.P, Field.O, Field.S );
+        this.OSP = new FlatIndex(Field.O, Field.S, Field.P);
         this.parent = parent; 
     }   
     

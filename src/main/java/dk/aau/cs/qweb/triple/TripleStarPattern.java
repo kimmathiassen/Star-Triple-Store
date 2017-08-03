@@ -2,7 +2,7 @@ package dk.aau.cs.qweb.triple;
 
 import org.apache.jena.reasoner.IllegalParameterException;
 
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class TripleStarPattern implements StarNode{
 	

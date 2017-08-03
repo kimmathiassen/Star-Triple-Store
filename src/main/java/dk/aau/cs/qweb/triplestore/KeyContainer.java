@@ -3,7 +3,7 @@ package dk.aau.cs.qweb.triplestore;
 import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class KeyContainer implements Comparable<KeyContainer> {
 	
@@ -84,7 +84,7 @@ public class KeyContainer implements Comparable<KeyContainer> {
 	}
 	@Override
 	public String toString() {
-		return (containsSubject() ? "S: " + subject+", " : "")+(containsPredicate() ? "P: " + predicate+", " : "")+(containsObject() ? "O: " + object : "");
+		return "("+(containsSubject() ? "S: " + subject+", " : "")+(containsPredicate() ? "P: " + predicate+", " : "")+(containsObject() ? "O: " + object : "")+")";
 	}
 	
 	@Override

@@ -59,6 +59,9 @@ public class TurtleStarReaderEmbeddedTest {
 		String queryString = prolog +
 	        		"SELECT ?p ?o WHERE {<<ex:kim ex:worksAt ex:aau>> ?p ?o .}" ; 
 	       
+		System.out.println(NodeDictionary.getInstance());
+		System.out.println(g.getStore().getSPO());
+		
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
 	    

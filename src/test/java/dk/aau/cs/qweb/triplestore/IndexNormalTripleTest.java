@@ -12,7 +12,8 @@ import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.hashindex.HashIndex;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class IndexNormalTripleTest {
 	static Index SPO;

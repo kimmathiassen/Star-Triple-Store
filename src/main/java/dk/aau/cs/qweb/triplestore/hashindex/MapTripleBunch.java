@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.triplestore;
+package dk.aau.cs.qweb.triplestore.hashindex;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,10 +12,12 @@ import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.IteratorWrapper;
+import dk.aau.cs.qweb.triplestore.KeyContainer;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public abstract class MapTripleBunch  {
-	Map<Key, ArrayList<KeyContainer>> innerMap;
+	protected Map<Key, ArrayList<KeyContainer>> innerMap;
 	
 	public MapTripleBunch() {
 		innerMap = new TreeMap<Key,ArrayList<KeyContainer>>();

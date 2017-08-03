@@ -13,7 +13,8 @@ import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
-import dk.aau.cs.qweb.triplestore.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.hashindex.HashIndex;
+import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class IndexEmbeddedTripleTest {
 	static Index SPO;
