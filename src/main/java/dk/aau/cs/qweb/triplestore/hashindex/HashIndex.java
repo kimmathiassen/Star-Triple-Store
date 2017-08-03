@@ -4,7 +4,6 @@ import java.util.TreeMap;
 
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class HashIndex extends MapIndex  {
 	public HashIndex(Field field1,Field field2,Field field3) {
@@ -26,6 +25,4 @@ public class HashIndex extends MapIndex  {
 		}
 		size++;
 	}
-
-	
 }
