@@ -12,7 +12,7 @@ import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triplestore.flatindex.FlatIndex;
+import dk.aau.cs.qweb.triplestore.hashindex.HashIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class TripleStore {
@@ -26,9 +26,9 @@ public class TripleStore {
     int numberOfLookups = 0;
     
     public TripleStore ( Graph parent) { 
-    	this.SPO = new FlatIndex(Field.S, Field.P, Field.O );
-    	this.POS = new FlatIndex(Field.P, Field.O, Field.S );
-        this.OSP = new FlatIndex(Field.O, Field.S, Field.P);
+    	this.SPO = new HashIndex(Field.S, Field.P, Field.O );
+    	this.POS = new HashIndex(Field.P, Field.O, Field.S );
+        this.OSP = new HashIndex(Field.O, Field.S, Field.P);
         this.parent = parent; 
     }   
     
@@ -57,7 +57,7 @@ public class TripleStore {
 			int overflow = NodeDictionary.getInstance().getNumberOfReferenceTriples();
 			int size = NodeDictionary.getInstance().size();
 			System.out.println("Node Dictionary size: " + size);
-			System.out.println("+ Normal triples: " + (size-(embeddedTriples+overflow)));
+			System.out.println("+ Normal triples: " + (size-(embeddedTriples)));
 			System.out.println("+ Embedded triples: " + (embeddedTriples));
 			System.out.println("+ Overflow triples: " + (overflow));
 			System.out.println("Prefix Dictionary size: " + PrefixDictionary.getInstance().size());
