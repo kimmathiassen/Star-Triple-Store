@@ -8,6 +8,7 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
+import org.apache.jena.sparql.algebra.op.OpSequence;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -42,7 +43,12 @@ public class OpStarExecutor extends OpExecutor{
 	}
 
 	// operations
-
+	
+	@Override
+	protected QueryIterator execute(OpSequence opSequence, QueryIterator input) {
+		return new DecodeBindingsIterator(execute((OpSequence)opSequence, new EncodeBindingsIterator( input, execCxt )),execCxt);
+    }
+	
 	@Override
 	protected QueryIterator execute(OpExtend opExtend, QueryIterator input) {
 		return new DecodeBindingsIterator(execute((OpExtend)opExtend, new EncodeBindingsIterator( input, execCxt )),execCxt);
@@ -134,6 +140,22 @@ public class OpStarExecutor extends OpExecutor{
 		} else {
 			throw new NotImplementedException("There is no id-based iterator implemented for "+opRight);
 		}
+	}
+	
+	private Iterator<SolutionMapping> execute(OpSequence opSequence, Iterator<SolutionMapping> solutionMappingIter) {
+		Iterator<SolutionMapping> iterator = solutionMappingIter;
+		for (Op element : opSequence.getElements()) {
+			if (element instanceof OpTriple) {
+				iterator = execute((OpTriple)element,iterator);
+			} else if (element instanceof OpJoin) {
+				iterator = execute((OpJoin)element,iterator);
+			} else if (element instanceof OpExtend) {
+				iterator = execute((OpExtend)element,iterator);
+			}  else {
+				throw new NotImplementedException("There is no id-based iterator implemented for "+element);
+			}
+		}
+		return iterator;
 	}
 	
 	private Iterator<SolutionMapping> execute(OpExtend opExtend, Iterator<SolutionMapping> solutionMappingIter) {
