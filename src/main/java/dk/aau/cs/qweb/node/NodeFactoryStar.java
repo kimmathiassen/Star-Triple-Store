@@ -24,7 +24,7 @@ public class NodeFactoryStar extends NodeFactory {
 					return new SimpleURINode(prefix,hashTagSplit[1]);
 				} else {
 					String[] slashSplit = normalized.split("/");
-					if (slashSplit[slashSplit.length-1].equals("")) {
+					if (slashSplit[slashSplit.length-1].equals("")) { //If end on slash
 						String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
 						int prefix = PrefixDictionary.getInstance().createId(body);
 						String head = slashSplit[slashSplit.length-2];
@@ -35,7 +35,25 @@ public class NodeFactoryStar extends NodeFactory {
 						String head = slashSplit[slashSplit.length-1];
 						return new SimpleURINode(prefix,head);
 					}
-					
+				}
+			} else if (normalized.startsWith("file:///")) {
+				String[] slashSplit = normalized.split("/");
+				String head = "";
+				int prefix;
+				if (slashSplit[slashSplit.length-1].equals("")) { //If end on slash
+					String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
+					prefix = PrefixDictionary.getInstance().createId(body);
+					head = slashSplit[slashSplit.length-2];
+				} else {
+					String body = normalized.substring(0, normalized.length()-slashSplit[slashSplit.length-1].length());
+					prefix = PrefixDictionary.getInstance().createId(body);
+					head = slashSplit[slashSplit.length-1];
+				}
+				
+				if (Config.ignoreFilePrefixInQueries()) {
+					return new SimpleURINode(head);
+				} else {
+					return new SimpleURINode(prefix,head);
 				}
 			} else {
 				return new SimpleURINode(normalized);
