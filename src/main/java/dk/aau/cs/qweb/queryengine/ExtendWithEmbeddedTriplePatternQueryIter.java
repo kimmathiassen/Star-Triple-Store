@@ -8,7 +8,8 @@ import java.util.NoSuchElementException;
 import org.apache.jena.atlas.lib.Closeable;
 import org.apache.jena.sparql.engine.ExecutionContext;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triple.Key;
@@ -224,11 +225,12 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 
 
 	private static Key createBindKey(Key sNew, Key pNew, Key oNew) {
+		NodeDictionary nd = NodeDictionaryFactory.getDictionary();
 		if (isReferenceTriple(sNew,pNew,oNew)) {
-			return HashNodeDictionary.getInstance().getReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
-		} else if (HashNodeDictionary.getInstance().isThereAnySpecialReferenceTripleDistributionConditions()) {
-			if (HashNodeDictionary.getInstance().containsReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey())) {
-				return HashNodeDictionary.getInstance().getReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
+			return nd.getReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
+		} else if (nd.isThereAnySpecialReferenceTripleDistributionConditions()) {
+			if (nd.containsReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey())) {
+				return nd.getReferernceTripleKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
 			} else {
 				return  KeyFactory.createKey(sNew.getKey(), pNew.getKey(), oNew.getKey());
 			}

@@ -8,7 +8,8 @@ import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.binding.BindingHashMap;
 import org.apache.jena.sparql.engine.iterator.QueryIter;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.triple.Key;
 
@@ -39,7 +40,7 @@ public class DecodeBindingsIterator extends QueryIter
 
 	protected Binding moveToNextBinding () {
 		SolutionMapping curInput = input.next();
-		HashNodeDictionary nodeDict = HashNodeDictionary.getInstance();
+		NodeDictionary nodeDict = NodeDictionaryFactory.getDictionary();
 		VarDictionary varDict = VarDictionary.getInstance();
 		
 		BindingHashMap curOutput = new BindingHashMap();

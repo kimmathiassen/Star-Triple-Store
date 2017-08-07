@@ -7,14 +7,15 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.util.iterator.NiceIterator;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 
 public class DecodingTriplesIterator extends NiceIterator<Triple>
 implements ExtendedIterator<Triple>
 {
-	final protected HashNodeDictionary nodeDict;
+	final protected NodeDictionary nodeDict;
 	final protected Iterator<KeyContainer> inputIterator;
 	final protected TripleStarPattern tripleStarPattern;
 	
@@ -26,7 +27,7 @@ implements ExtendedIterator<Triple>
 	
 	public DecodingTriplesIterator(ExtendedIterator<KeyContainer> inputIterator, TripleStarPattern tripleStarPattern) {
 		this.tripleStarPattern = tripleStarPattern;
-		this.nodeDict = HashNodeDictionary.getInstance();
+		this.nodeDict = NodeDictionaryFactory.getDictionary();
 		this.inputIterator = inputIterator;
 	}
 

@@ -9,7 +9,8 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 
 
@@ -31,7 +32,7 @@ public class EncodeBindingsIterator implements Iterator<SolutionMapping>, Closea
 	public SolutionMapping next ()
 	{
 		Binding curInput = input.next();
-		HashNodeDictionary nodeDict = HashNodeDictionary.getInstance();
+		NodeDictionary nodeDict = NodeDictionaryFactory.getDictionary();
 		VarDictionary varDict = VarDictionary.getInstance();
 
 		SolutionMapping curOutput = new SolutionMapping( varDict.size() );

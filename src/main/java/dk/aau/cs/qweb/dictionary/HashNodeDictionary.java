@@ -15,7 +15,7 @@ import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
-public class HashNodeDictionary {
+public class HashNodeDictionary implements NodeDictionary {
 	private static HashNodeDictionary instance;
 	HashBiMap<Key,Node> nodeDictionary;
 	HashBiMap<Key,Node> referenceNodeDictionary;
@@ -39,7 +39,7 @@ public class HashNodeDictionary {
 		numberOfEmbeddedTriples = 0;
 	}
 	
-	public static HashNodeDictionary getInstance() {
+	protected static HashNodeDictionary getInstance() {
 		if(instance == null) {
 	         instance = new HashNodeDictionary();
 	    }
@@ -213,4 +213,6 @@ public class HashNodeDictionary {
 		
 		return referenceNodeDictionary.containsValue(referenceTriple);
 	}
+
+
 }

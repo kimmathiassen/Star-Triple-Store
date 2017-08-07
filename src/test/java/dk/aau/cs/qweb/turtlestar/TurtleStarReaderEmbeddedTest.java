@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
@@ -29,7 +29,7 @@ public class TurtleStarReaderEmbeddedTest {
 	@Before
 	public void setup() {
 		PrefixDictionary.getInstance().clear();
-		HashNodeDictionary.getInstance().clear();
+		NodeDictionaryFactory.getDictionary().clear();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
@@ -50,7 +50,7 @@ public class TurtleStarReaderEmbeddedTest {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		HashNodeDictionary.getInstance().clear();
+		NodeDictionaryFactory.getDictionary().clear();
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class TurtleStarReaderEmbeddedTest {
 	    
 	    
 		assertEquals(2,count);
-		assertEquals(0, HashNodeDictionary.getInstance().getNumberOfReferenceTriples());
+		assertEquals(0, NodeDictionaryFactory.getDictionary().getNumberOfReferenceTriples());
 	}
 	
 //	@Test
