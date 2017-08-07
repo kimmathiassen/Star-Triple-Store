@@ -1,11 +1,13 @@
 package dk.aau.cs.qweb.main;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -69,7 +71,13 @@ public class App {
 			} 
 				    
 		    if (line.hasOption("query")) {
-		    	String queryString = prolog + line.getOptionValue("query"); 
+		    	Scanner in = new Scanner(new FileReader(line.getOptionValue("query")));
+		    	StringBuilder sb = new StringBuilder();
+		    	while(in.hasNext()) {
+		    	    sb.append(in.next());
+		    	}
+		    	in.close();
+		    	String queryString = prolog + sb.toString(); 
 		    	queries.add(queryString);
 		    }
 		    
@@ -103,18 +111,30 @@ public class App {
         ModelFactory.createDefaultModel();
         
      
-    	
+    	System.out.println("Loading file: "+filename);
+    	long start_time = System.nanoTime();
         RDFDataMgr.read(model, filename);
-        g.eliminateDuplicates();
+        System.out.println("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
         
+        System.out.println();
+        System.out.println("Deleting duplicates");
+        start_time = System.nanoTime();
+        g.eliminateDuplicates();
+        System.out.println("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+        
+        System.out.println();
+        System.out.println("Evaluating queries:");
         for (String queryString : queries) {
         	System.out.println(queryString);
+        	start_time = System.nanoTime();
         	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
              
              try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
                  ResultSet rs = qexec.execSelect() ;
                  ResultSetFormatter.out(System.out, rs, query) ;
              }
+             System.out.println("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+             System.out.println();
 		}
     }
 
