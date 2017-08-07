@@ -28,7 +28,7 @@ public class MyTransform extends TransformCopy {
 	@Override
 	public Op transform(OpBGP opBGP) {
 		Op op = createJoinTree(opBGP);
-		//print(op,0);
+		print(op,0);
 		return op;
 	}
 	
@@ -77,12 +77,31 @@ public class MyTransform extends TransformCopy {
 
 	private Op createJoinTree(Op op) {
 		List<OpWrapper> triplePatterns = addToList(op);
+		OpWrapper result = getOpWithHighestSelectivity(triplePatterns);;
 		
-		OpWrapper tree = getOpWithHighestSelectivity(triplePatterns);
-		while(triplePatterns.size() > 0) {
-			tree = opJoin(tree,getOpWithHighestSelectivityThatJoins(tree,triplePatterns));
+		while(containsJoin(result,triplePatterns)) {
+			result = opJoin(result,getOpWithHighestSelectivityThatJoins(result,triplePatterns));
 		}
-		return tree.asOp();
+		
+		while (triplePatterns.size() > 0) {
+			Op seq = OpSequence.create(result.asOp(), triplePatterns.get(0).asOp());
+			result = new OpWrapper(seq);
+			triplePatterns.remove(0);
+		}
+		
+		return result.asOp();
+	}
+
+	private boolean containsJoin(OpWrapper op, List<OpWrapper> triplePatterns) {
+		List<Var> variables = new ArrayList<Var>();
+		variables.addAll(op.getVariables());
+		
+		for (OpWrapper opWrapper : triplePatterns) {
+			if (!Collections.disjoint(variables,opWrapper.getVariables())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private OpWrapper opJoin(OpWrapper left, OpWrapper right) {
@@ -211,20 +230,34 @@ public class MyTransform extends TransformCopy {
 			}
 		} else if (op instanceof OpJoin) {
 			System.out.print(insertDepth(depth));
-			System.out.println("Join:");
+			System.out.println("Join: \n");
 			depth++;
 			print(((OpJoin) op).getRight(),depth);
 			print(((OpJoin) op).getLeft(),depth);
-			
-			
 		} else if (op instanceof OpTriple) {
 			OpTriple triple = (OpTriple)op;
 			System.out.print(insertDepth(depth));
 			System.out.print("Triple: "+ triple.getTriple().getSubject()+" ");
 			System.out.print(triple.getTriple().getPredicate()+" ");
 			System.out.println(triple.getTriple().getObject());
+		} else if (op instanceof OpSequence) {
+			System.out.print(insertDepth(depth));
+			System.out.print("Sequence: \n");
+			depth++;
+			for (Op element : ((OpSequence) op).getElements()) {
+				if (element instanceof OpJoin) {
+					print((OpJoin) element,depth);
+				} else if (element instanceof OpTriple) {
+					print((OpTriple) element,depth);
+				} else if (element instanceof OpExtend) {
+					print((OpExtend)element,depth);
+				} else if (element instanceof OpSequence) {
+					print((OpSequence)element,depth);
+				} else {
+					throw new NotImplementedException("support of op "+element.getClass()+" has not been implemented");
+				}
+			}
 		}
-		
 		else {
 			throw new NotImplementedException("no support of "+op.getName());
 		}
