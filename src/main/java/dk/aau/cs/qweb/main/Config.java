@@ -36,4 +36,8 @@ public class Config {
 	public static int getReferenceNodeDictionaryInitialSize() {
 		return nodeReferenceDictionaryInitialSize;
 	}
+	
+	public static boolean ignoreFilePrefixInQueries() {
+		return true;
+	}
 }
