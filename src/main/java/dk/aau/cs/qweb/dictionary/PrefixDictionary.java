@@ -27,6 +27,12 @@ public class PrefixDictionary
 	final public String getPrefix ( int id ) throws IllegalArgumentException
 	{
 		String v = Id2Prefix.get( id );
+//		
+//		if (Config.ignoreFilePrefixInQueries()) {
+//			if (v.startsWith("file:///")) {
+//				v = "";
+//			} 
+//		}
 
 		if ( v == null ) {
 			throw new IllegalArgumentException( "The given identifier (" + String.valueOf(id) + ") is unknown." );
