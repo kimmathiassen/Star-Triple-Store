@@ -11,6 +11,7 @@ import org.apache.jena.reasoner.IllegalParameterException;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpJoin;
+import org.apache.jena.sparql.algebra.op.OpSequence;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
@@ -43,11 +44,13 @@ public class OpWrapper {
 			calculateSelectivity((OpExtend) op);
 			extractVariables((OpExtend) op);
 			isOpExtend = true;
+		} else if (op instanceof OpSequence) {
+			extractVariables((OpSequence) op);
 		} else {
 			throw new NotImplementedException("support of op "+op.getClass()+" has not been implemented");
 		}
 	}
-	
+
 	public boolean isTripleOverflown() {
 		Triple triple =  getTriple(op);
 		NodeDictionary dict = NodeDictionary.getInstance();
@@ -117,6 +120,20 @@ public class OpWrapper {
 		}
 		if (!triple.getObject().isConcrete()) {
 			variables.add((Var)triple.getObject());
+		}
+	}
+	
+	private void extractVariables(OpSequence op) {
+		for (Op element : op.getElements()) {
+			if (element instanceof OpJoin) {
+				extractVariables((OpJoin) element);
+			} else if (element instanceof OpTriple) {
+				extractVariables((OpTriple) element);
+			} else if (element instanceof OpExtend) {
+				extractVariables((OpExtend)element);
+			} else {
+				throw new NotImplementedException("support of op "+element.getClass()+" has not been implemented");
+			}
 		}
 	}
 	
