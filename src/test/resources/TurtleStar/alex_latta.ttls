@@ -1,0 +1,26 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+
+<<<Alex_Latta> <hasGivenName> "Alex"@eng>> <extractionSource> <yagoTheme_yagoTransitiveType> .
+<<<Alex_Latta> rdfs:label "Alex Latta"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> <hasFamilyName> "Latta"@eng>> <extractionSource> <yagoTheme_yagoTransitiveType> .
+<<<Alex_Latta> <isAffiliatedTo> <Scotland_national_football_team>>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> skos:prefLabel "Alex Latta"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> <diedOnDate> "1928-08-25"^^xsd:date>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> <diedOnDate> "1928-08-25"^^xsd:date>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> <playsFor> <Scotland_national_football_team>>> <occursUntil> "1898-##-##"^^xsd:date .
+<<<Alex_Latta> <playsFor> <Scotland_national_football_team>>> <occursSince> "1888-##-##"^^xsd:date .
+<<<Alex_Latta> <playsFor> <Scotland_national_football_team>>> <extractionSource> <Alex_Latta> .
+<<<Alex_Latta> <wasBornOnDate> "1867-09-01"^^xsd:date>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> <wasBornOnDate> "1867-09-01"^^xsd:date>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> rdf:type <wikicategory_Liverpool_F.C._players>>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> rdf:type <wikicategory_Scottish_footballers>>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> rdf:type <wikicategory_Everton_F.C._players>>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> rdf:type <wikicategory_Scotland_international_footballers>>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<<<Alex_Latta> <isPreferredMeaningOf> "Alex Latta"@eng>> <extractionSource> <http://en.wikipedia.org/wiki/Alex_Latta> .
+<Alex_Latta> <hasGender> <male> .
