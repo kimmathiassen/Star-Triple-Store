@@ -6,7 +6,6 @@ import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.MapTripleBunch;
-import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class TreeIndex extends MapIndex  {
 	
