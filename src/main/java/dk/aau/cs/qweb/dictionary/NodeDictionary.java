@@ -16,7 +16,6 @@ import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
 public class NodeDictionary {
-	
 	private static NodeDictionary instance;
 	HashBiMap<Key,Node> nodeDictionary;
 	HashBiMap<Key,Node> referenceNodeDictionary;
@@ -132,16 +131,6 @@ public class NodeDictionary {
 	private Key registerOrGetNode(SimpleNode node) {
 		if (nodeDictionary.containsValue(node)) {
 			return nodeDictionary.inverse().get(node);
-//		} if (isThereAnySpecialReferenceTripleDistributionConditions()) {
-//			if (referenceNode2Id.containsKey(node)) {
-//				return referenceNode2Id.get(node);
-//			} else if (shouldNextNodeBeAnReference()){
-//				Key key = KeyFactory.createReferenceTriple();
-//				addReferenceTriple(node, key);
-//				return key;
-//			} else {
-//				return registerNode(node);
-//			}
 		} else {
 			return registerNode(node);
 		}
