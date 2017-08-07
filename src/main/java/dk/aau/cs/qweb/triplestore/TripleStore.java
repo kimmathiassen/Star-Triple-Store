@@ -8,7 +8,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
@@ -53,9 +53,9 @@ public class TripleStore {
         
         if (triplesAddedCount % 10000000 == 0) {
 			System.out.println("Index contains: " + SPO.size() );
-			int embeddedTriples = NodeDictionary.getInstance().getNumberOfEmbeddedTriples();
-			int overflow = NodeDictionary.getInstance().getNumberOfReferenceTriples();
-			int size = NodeDictionary.getInstance().size();
+			int embeddedTriples = HashNodeDictionary.getInstance().getNumberOfEmbeddedTriples();
+			int overflow = HashNodeDictionary.getInstance().getNumberOfReferenceTriples();
+			int size = HashNodeDictionary.getInstance().size();
 			System.out.println("Node Dictionary size: " + size);
 			System.out.println("+ Normal triples: " + (size-(embeddedTriples)));
 			System.out.println("+ Embedded triples: " + (embeddedTriples));

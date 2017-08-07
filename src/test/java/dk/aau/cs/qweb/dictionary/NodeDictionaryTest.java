@@ -10,7 +10,7 @@ import org.apache.jena.graph.Triple;
 import org.junit.After;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
@@ -23,7 +23,7 @@ public class NodeDictionaryTest {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		NodeDictionary.getInstance().clear();
+		HashNodeDictionary.getInstance().clear();
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class NodeDictionaryTest {
 		List<TripleStar> idTriples = builder.createTriple(original);
 		TripleStar idTriple = idTriples.get(0);
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		Node subjectNode = dict.getNode(idTriple.subjectId);
 		Node predicateNode = dict.getNode(idTriple.predicateId);
 		Node objectNode = dict.getNode(idTriple.objectId);
@@ -54,7 +54,7 @@ public class NodeDictionaryTest {
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 	
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(100);
 		
@@ -70,7 +70,7 @@ public class NodeDictionaryTest {
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(0);
 		
@@ -96,7 +96,7 @@ public class NodeDictionaryTest {
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
 	
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(100);
 		
@@ -126,7 +126,7 @@ public class NodeDictionaryTest {
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
 	
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(0);
 		
@@ -164,7 +164,7 @@ public class NodeDictionaryTest {
 		Node embeddedNode6 = NodeFactoryStar.createEmbeddedNode(subject6, predicate, object);
 		
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(50);
 		

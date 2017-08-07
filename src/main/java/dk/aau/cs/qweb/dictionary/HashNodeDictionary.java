@@ -15,8 +15,8 @@ import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
-public class NodeDictionary {
-	private static NodeDictionary instance;
+public class HashNodeDictionary {
+	private static HashNodeDictionary instance;
 	HashBiMap<Key,Node> nodeDictionary;
 	HashBiMap<Key,Node> referenceNodeDictionary;
 	private boolean isThereAnySpecialReferenceTripleDistributionConditions;
@@ -32,16 +32,16 @@ public class NodeDictionary {
 		return (currentDistribtuion < referenceTripleDistributionPercentage);
 	}
 	
-	private NodeDictionary() {
+	private HashNodeDictionary() {
 		
 		nodeDictionary = HashBiMap.create(Config.getNodeDictionaryInitialSize());
 		referenceNodeDictionary = HashBiMap.create(Config.getReferenceNodeDictionaryInitialSize());
 		numberOfEmbeddedTriples = 0;
 	}
 	
-	public static NodeDictionary getInstance() {
+	public static HashNodeDictionary getInstance() {
 		if(instance == null) {
-	         instance = new NodeDictionary();
+	         instance = new HashNodeDictionary();
 	    }
 	    return instance;
 	}

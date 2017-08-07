@@ -6,7 +6,7 @@ import org.apache.jena.graph.Node;
 import org.junit.After;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
@@ -18,7 +18,7 @@ public class PrefixDictionaryTest {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		NodeDictionary.getInstance().clear();
+		HashNodeDictionary.getInstance().clear();
 		Config.enablePrefixDictionary(true);
 	}
 	
@@ -42,7 +42,7 @@ public class PrefixDictionaryTest {
 		Node embeddedNode4 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
 		
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		dict.createKey(embeddedNode);
@@ -63,7 +63,7 @@ public class PrefixDictionaryTest {
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		dict.createKey(embeddedNode);
@@ -90,7 +90,7 @@ public class PrefixDictionaryTest {
 		Node subject4 = NodeFactoryStar.createSimpleURINode("http://example.fgg/product/41");
 		Node embeddedNode4 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		dict.createKey(embeddedNode);
@@ -106,7 +106,7 @@ public class PrefixDictionaryTest {
 	public void simpleURIs() {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		Key key = dict.createKey(subject);
@@ -120,7 +120,7 @@ public class PrefixDictionaryTest {
 		Config.enablePrefixDictionary(false);
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		assertEquals(false,((SimpleURINode)subject).hasPrefix());

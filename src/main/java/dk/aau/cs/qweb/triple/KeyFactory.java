@@ -1,6 +1,6 @@
 package dk.aau.cs.qweb.triple;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.SimpleNode;
 
@@ -28,7 +28,7 @@ public class KeyFactory {
 		if (subject < 0 || 	predicate < 0 || object < 0) {
 			throw new IllegalArgumentException("identifier must not be negative, (MSB is set)");
 		}
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		
 		if (subject > Config.getLargestSubjectId() || 
 				predicate > Config.getLargestSubjectId() ||

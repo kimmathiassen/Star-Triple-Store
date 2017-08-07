@@ -15,7 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
@@ -33,7 +33,7 @@ public class queriesWithBGP {
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/spiderman.ttls" ;
 
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(100);
 		
@@ -52,7 +52,7 @@ public class queriesWithBGP {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		NodeDictionary.getInstance().clear();
+		HashNodeDictionary.getInstance().clear();
 	}
 	
 	@Test

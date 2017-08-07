@@ -3,7 +3,7 @@ package dk.aau.cs.qweb.triple;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Var;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.node.Node_Triple;
 
@@ -22,7 +22,7 @@ public class TriplePatternBuilder {
 			if (node instanceof Node_Triple) {
 				this.subject = createEmbeddedTriplePattern(node);
 			} else {
-				NodeDictionary dict = NodeDictionary.getInstance();
+				HashNodeDictionary dict = HashNodeDictionary.getInstance();
 				this.subject = dict.createKey(node);
 			}
 		} else {
@@ -43,7 +43,7 @@ public class TriplePatternBuilder {
 
 	public void setPredicate(final Node node) {
 		if (node.isConcrete()) {
-			NodeDictionary dict = NodeDictionary.getInstance();
+			HashNodeDictionary dict = HashNodeDictionary.getInstance();
 			this.predicate = dict.createKey(node);
 		} else {
 			VarDictionary varDict = VarDictionary.getInstance();
@@ -56,7 +56,7 @@ public class TriplePatternBuilder {
 			if (node instanceof Node_Triple) {
 				this.object = createEmbeddedTriplePattern(node);
 			} else {
-				NodeDictionary dict = NodeDictionary.getInstance();
+				HashNodeDictionary dict = HashNodeDictionary.getInstance();
 				this.object = dict.createKey(node);
 			}
 		} else {

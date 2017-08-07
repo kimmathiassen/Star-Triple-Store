@@ -18,7 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
@@ -61,12 +61,12 @@ public class queriesWithReferenceTriplePatterns {
 //        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
 		
 		PrefixDictionary.getInstance().clear();
-		NodeDictionary.getInstance().clear();
+		HashNodeDictionary.getInstance().clear();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
 
-		NodeDictionary dict = NodeDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		dict.setReferenceTripleDistribution(100);
 		
@@ -88,7 +88,7 @@ public class queriesWithReferenceTriplePatterns {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		NodeDictionary.getInstance().clear();
+		HashNodeDictionary.getInstance().clear();
 	}
 	
 	@Test
@@ -190,7 +190,7 @@ public class queriesWithReferenceTriplePatterns {
 		String queryString = prolog +
 				"SELECT ?s WHERE {BIND(<<?s ex:worksAt ex:aau>> as ?t) .  ?s ex:worksAt ex:LiU .}" ; 
        
-		System.out.println(NodeDictionary.getInstance());
+		System.out.println(HashNodeDictionary.getInstance());
 	    System.out.println(g.getStore().getPOS());
 		
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
