@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import dk.aau.cs.qweb.helper.BitHelper;
 
-public class Key implements StarNode, Comparable<Key>{
+public class Key implements StarElement, Comparable<Key>{
 	private long maxReferenceTripleId = -3458764513820540929l; // 1100-111111111111111111111111111111111111111111111111111111111111 
 	private long minReferenceTripleId = -4611686018427387904l; // 1100-000000000000000000000000000000000000000000000000000000000000
 	private long maxEmbeddedTripleId  = -8070450532247928833l; // 1000-11111111111111111111-11111111111111111111-11111111111111111111

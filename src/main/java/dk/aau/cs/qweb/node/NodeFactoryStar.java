@@ -10,11 +10,11 @@ import dk.aau.cs.qweb.main.Config;
 
 public class NodeFactoryStar extends NodeFactory {
 
-	public static Node createEmbeddedNode(Node node1, Node node2, Node node3) {
-		return new Node_Triple(node1,node2,node3);
+	public static StarNode createEmbeddedNode(Node node1, Node node2, Node node3) {
+		return new EmbeddedNode(node1,node2,node3);
 	}
 
-	public static SimpleURINode createSimpleURINode(String label) {
+	public static StarNode createSimpleURINode(String label) {
 		String normalized = normalizeURI(label);
 		if (Config.isPrefixDictionaryEnabled()) {
 			if (normalized.startsWith("http")) {
@@ -63,11 +63,12 @@ public class NodeFactoryStar extends NodeFactory {
 		}
 	}
 	
-	public static Node createSimpleLiteralNode(String label, XSDDatatype xsdinteger) {
+	//This seems wrong
+	public static StarNode createSimpleLiteralNode(String label, XSDDatatype xsdinteger) {
 		return new SimpleLiteralNode(label);
 	}
 
-	public static Node createSimpleLiteralNode(java.lang.String lexicalForm, RDFDatatype dType) {
+	public static StarNode createSimpleLiteralNode(String lexicalForm, RDFDatatype dType) {
 		if (dType.equals(XSDDatatype.XSDstring) || dType.equals(XSDDatatype.XSD)) {
 			return new SimpleLiteralNode("\""+lexicalForm+"\"^^"+dType.getURI());
 		} else {
@@ -75,16 +76,24 @@ public class NodeFactoryStar extends NodeFactory {
 		}
 	}
 
-	public static Node createSimpleLiteralNode(String lexicalForm, String langTag) {
-		return new SimpleLiteralNode("\""+lexicalForm+"\"^^"+langTag);
+	public static StarNode createSimpleLiteralNode(String lexicalForm, String langTag) {
+		return new SimpleLiteralNode("\""+lexicalForm+"\"@"+langTag);
 	}
 
-	public static Node createSimpleLiteralNode(String lexicalForm) {
+	public static StarNode createSimpleLiteralNode(String lexicalForm) {
 		return new SimpleLiteralNode("\""+lexicalForm+"\"");
 	}
 
-	public static Node createSimpleBlankNode(Node blankNode) {
-		return new SimpleBlankNode(blankNode.getBlankNodeLabel());
+	public static StarNode createSimpleBlankNode(Node blankNode) {
+		return createSimpleBlankNode(blankNode.getBlankNodeLabel());
+	}
+	
+	public static StarNode createSimpleLiteralNodeRaw(String raw) {
+		return new SimpleLiteralNode(raw);
+	}
+	
+	private static StarNode createSimpleBlankNode(String label) {
+		return new SimpleBlankNode(label);
 	}
 	
 	private static String normalizeURI(String uri) {
@@ -95,5 +104,53 @@ public class NodeFactoryStar extends NodeFactory {
 			uri = uri.trim().substring(0, uri.trim().length()-1);
 		}
 		return uri;
+	}
+
+	//This is only used for serializing to disk
+	public static StarNode createNode(String serializedNodeString) {
+		if (serializedNodeString.startsWith("B")) {
+			return createSimpleBlankNode(serializedNodeString.substring(1));
+		} else if(serializedNodeString.startsWith("L")) {
+			return unserialize(serializedNodeString.substring(1));
+		} else if(serializedNodeString.startsWith("U")) {
+			return createSimpleURINode(serializedNodeString.substring(1));
+		} else if (serializedNodeString.startsWith("E")) {
+			return createReferenceNode(serializedNodeString.substring(1));
+		} else {
+			throw new IllegalArgumentException("Unknown node serialization type "+serializedNodeString);
+		}
+	}
+
+	//This is to simple and will fail in some corner cases.
+	private static StarNode unserialize(String string) {
+		System.out.println(string);
+		return createSimpleLiteralNodeRaw(string);
+//		if (string.contains("^^")) {
+//			String[] split = string.split("\\^\\^");
+//			return createSimpleLiteralNode(removeQuotes(split[0]),XSDDatatype.(removeQuotes(split[1])));
+//		} else if (string.contains("\"@")) {
+//			String[] split = string.split("@");
+//			return createSimpleLiteralNode(removeQuotes(split[0]),split[1]);
+//		} else {
+//			return createSimpleLiteralNode(removeQuotes(string));
+//		}
+	}
+	
+//	private static String removeQuotes(String string) {
+//		if (string.startsWith("\"") && string.endsWith("\"")) {
+//			return string.substring(1, string.length()-1);
+//		} else {
+//			return string;
+//		}
+//		
+//	}
+	
+	//This is only used for serializing to disk
+	private static StarNode createReferenceNode(String serializedNodeString) {
+		String[] split = serializedNodeString.substring(2, serializedNodeString.length()-2).split(" ");
+		Node subject =  createNode(split[0]);
+		Node predicate =  createNode(split[1]);
+		Node object =  createNode(split[2]);
+		return createEmbeddedNode(subject,predicate,object);
 	}
 }

@@ -1,6 +1,6 @@
 package dk.aau.cs.qweb.triple;
 
-public class Variable implements StarNode {
+public class Variable implements StarElement {
 
 	private final int id;
 	

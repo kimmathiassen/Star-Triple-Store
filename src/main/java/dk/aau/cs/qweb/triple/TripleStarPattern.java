@@ -4,18 +4,18 @@ import org.apache.jena.reasoner.IllegalParameterException;
 
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
-public class TripleStarPattern implements StarNode{
+public class TripleStarPattern implements StarElement{
 	
-	private final StarNode subject;
-	private final StarNode predicate;
-	private final StarNode object;
+	private final StarElement subject;
+	private final StarElement predicate;
+	private final StarElement object;
 
-	public StarNode getSubject() { return subject;}
-	public StarNode getPredicate() { return predicate;}
-	public StarNode getObject() { return object;}
+	public StarElement getSubject() { return subject;}
+	public StarElement getPredicate() { return predicate;}
+	public StarElement getObject() { return object;}
 	
 
-	public TripleStarPattern(StarNode subject, StarNode predicate, StarNode object) {
+	public TripleStarPattern(StarElement subject, StarElement predicate, StarElement object) {
 		this.subject = subject;
 		this.predicate = predicate;
 		this.object = object;
@@ -48,7 +48,7 @@ public class TripleStarPattern implements StarNode{
 		}
 	}
 
-	public StarNode getField(Field field) {
+	public StarElement getField(Field field) {
 		if (field == Field.S) {
 			if (subject.isConcrete()) {
 				return subject;

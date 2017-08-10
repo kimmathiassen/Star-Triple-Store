@@ -1,6 +1,6 @@
 package dk.aau.cs.qweb.triple;
 
-public interface StarNode {
+public interface StarElement {
 
 	boolean isKey();
 	Key getKey();

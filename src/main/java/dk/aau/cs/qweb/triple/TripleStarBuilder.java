@@ -8,7 +8,7 @@ import org.apache.jena.graph.Triple;
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.helper.BitHelper;
-import dk.aau.cs.qweb.node.Node_Triple;
+import dk.aau.cs.qweb.node.EmbeddedNode;
 
 public class TripleStarBuilder {
 
@@ -21,9 +21,9 @@ public class TripleStarBuilder {
 		Key object = dict.createKey(t.getObject());
 		
 		if (BitHelper.isReferenceBitSet(subject)) {
-			Key s1 = dict.createKey(((Node_Triple)t.getSubject()).getSubject());
-			Key p1 = dict.createKey(((Node_Triple)t.getSubject()).getPredicate());
-			Key o1 = dict.createKey(((Node_Triple)t.getSubject()).getObject());
+			Key s1 = dict.createKey(((EmbeddedNode)t.getSubject()).getSubject());
+			Key p1 = dict.createKey(((EmbeddedNode)t.getSubject()).getPredicate());
+			Key o1 = dict.createKey(((EmbeddedNode)t.getSubject()).getObject());
 			triples.add(new TripleStar(s1,p1,o1));
 		} else if (BitHelper.isIdAnEmbeddedTriple(subject)) {
 			Key s1 = new Key(BitHelper.getEmbeddedSubject(subject));
@@ -33,9 +33,9 @@ public class TripleStarBuilder {
 		}
 		
 		if (BitHelper.isReferenceBitSet(object)) {
-			Key s2 = dict.createKey(((Node_Triple)t.getObject()).getSubject());
-			Key p2 = dict.createKey(((Node_Triple)t.getObject()).getPredicate());
-			Key o2 = dict.createKey(((Node_Triple)t.getObject()).getObject());
+			Key s2 = dict.createKey(((EmbeddedNode)t.getObject()).getSubject());
+			Key p2 = dict.createKey(((EmbeddedNode)t.getObject()).getPredicate());
+			Key o2 = dict.createKey(((EmbeddedNode)t.getObject()).getObject());
 			triples.add(new TripleStar(s2,p2,o2)); 
 		} else if (BitHelper.isIdAnEmbeddedTriple(object)) {
 			Key s2 = new Key(BitHelper.getEmbeddedSubject(object));

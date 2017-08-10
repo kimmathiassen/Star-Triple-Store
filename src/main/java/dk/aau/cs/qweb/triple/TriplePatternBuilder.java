@@ -6,13 +6,13 @@ import org.apache.jena.sparql.core.Var;
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
-import dk.aau.cs.qweb.node.Node_Triple;
+import dk.aau.cs.qweb.node.EmbeddedNode;
 
 public class TriplePatternBuilder {
 
-	private StarNode subject;
-	private StarNode predicate;
-	private StarNode object;
+	private StarElement subject;
+	private StarElement predicate;
+	private StarElement object;
 
 	public TripleStarPattern createTriplePatter() {
 		return new TripleStarPattern(subject, predicate, object);
@@ -20,7 +20,7 @@ public class TriplePatternBuilder {
 
 	public void setSubject(final Node node) {
 		if (node.isConcrete()) {
-			if (node instanceof Node_Triple) {
+			if (node instanceof EmbeddedNode) {
 				this.subject = createEmbeddedTriplePattern(node);
 			} else {
 				NodeDictionary dict = NodeDictionaryFactory.getDictionary();;
@@ -33,7 +33,7 @@ public class TriplePatternBuilder {
 	}
 
 	private TripleStarPattern createEmbeddedTriplePattern(final Node node) {
-		Node_Triple embeddedNode = (Node_Triple) node;
+		EmbeddedNode embeddedNode = (EmbeddedNode) node;
 		
 		TriplePatternBuilder builder = new TriplePatternBuilder();
 		builder.setSubject(embeddedNode.getSubject());
@@ -54,7 +54,7 @@ public class TriplePatternBuilder {
 
 	public void setObject(final Node node) {
 		if (node.isConcrete()) {
-			if (node instanceof Node_Triple) {
+			if (node instanceof EmbeddedNode) {
 				this.object = createEmbeddedTriplePattern(node);
 			} else {
 				NodeDictionary dict = NodeDictionaryFactory.getDictionary();;
