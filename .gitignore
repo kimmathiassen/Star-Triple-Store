@@ -16,3 +16,7 @@ local.properties
 
 /target/
 /.classpath
+/openId2Node.db
+/openId2ReferenceNode.db
+/openNode2Id.db
+/openReferenceNode2Id.db
