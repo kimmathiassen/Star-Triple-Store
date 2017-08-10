@@ -29,6 +29,7 @@ public class queriesWithBGP {
 	
 	@Before
 	public void setup() {
+		NodeDictionaryFactory.getDictionary().open();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/spiderman.ttls" ;
@@ -49,6 +50,8 @@ public class queriesWithBGP {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
+		
 	}
 	
 	

@@ -4,10 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.TripleStar;
@@ -23,22 +26,23 @@ public class IndexEmbeddedTripleTest {
 	static KeyFactory kf;
 	static Variable var;
 	
+	@Before
+	public void setup(){
+		NodeDictionaryFactory.getDictionary().open();
+	}
+	
+	@After
+	public void tearDown(){
+		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
+	}
+	
 	
 	@BeforeClass
     public static void runOnceBeforeClass() {
     	SPO = new HashIndex(Field.S,Field.P,Field.O);
     	POS = new HashIndex(Field.P,Field.O,Field.S);
     	OSP = new HashIndex(Field.P,Field.O,Field.S);
-    	
-//    	KeyFactory kf = new KeyFactory();
-//		Key embeddedTriple1 = kf.createKey(1, 2, 3);
-//		Key embeddedTriple2 = kf.createKey(4, 5, 6);
-    	
-//    	IdTriple t1 = new IdTriple(embeddedTriple1,new Key(2),new Key(3));
-//    	IdTriple t2 = new IdTriple(kf.createKey(1),new Key(2),embeddedTriple2);
-//    	IdTriple t3 = new IdTriple(new Key(1),new Key(2),new Key(3));
-//    	IdTriple t4 = new IdTriple(new Key(4),new Key(5),new Key(6));
-//    	IdTriple t5 = new IdTriple(embeddedTriple1,new Key(2),embeddedTriple2);
     	
     	var = new Variable(1);
     }

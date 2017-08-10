@@ -31,6 +31,7 @@ public class queriesWithEmbeddedTriplePatternsAlexLatta {
 	@Before
 	public void setup() {
 		g = new Graph();
+		NodeDictionaryFactory.getDictionary().open();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/alex_latta.ttls" ;
 
@@ -52,6 +53,7 @@ public class queriesWithEmbeddedTriplePatternsAlexLatta {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test
@@ -74,7 +76,7 @@ public class queriesWithEmbeddedTriplePatternsAlexLatta {
 	            count++;
 	        }
 	    }
-	    assertEquals("\"Alex\"^^eng",name.toString());
+	    assertEquals("\"Alex\"@eng",name.toString());
 	    assertEquals("male",gender.toString());
 		assertEquals(1,count);
 	}

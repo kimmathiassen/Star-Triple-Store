@@ -18,7 +18,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
@@ -61,7 +60,7 @@ public class queriesWithReferenceTriplePatterns {
 //        		"PREFIX foaf: <http://xmlns.com/foaf/0.1/>  " + 
 //        		"PREFIX ex: <http://example.org/>  " + 
 //        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
-		
+		NodeDictionaryFactory.getDictionary().open();
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
 		g = new Graph();
@@ -91,6 +90,7 @@ public class queriesWithReferenceTriplePatterns {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test

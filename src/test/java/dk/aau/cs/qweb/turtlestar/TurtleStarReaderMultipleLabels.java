@@ -29,6 +29,7 @@ public class TurtleStarReaderMultipleLabels {
 	@Before
 	public void setup() {
 		g = new Graph();
+		NodeDictionaryFactory.getDictionary().open();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/multipleLabels.ttls" ;
 
@@ -48,6 +49,7 @@ public class TurtleStarReaderMultipleLabels {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test

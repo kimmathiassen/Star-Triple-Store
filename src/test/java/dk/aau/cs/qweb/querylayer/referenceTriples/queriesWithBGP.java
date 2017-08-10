@@ -31,6 +31,7 @@ public class queriesWithBGP {
 	@Before
 	public void setup() {
 		g = new Graph();
+		NodeDictionaryFactory.getDictionary().open();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/spiderman.ttls" ;
 
@@ -54,6 +55,7 @@ public class queriesWithBGP {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test
@@ -65,7 +67,6 @@ public class queriesWithBGP {
 	    
 	    try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
 	        ResultSet results = qexec.execSelect() ;
-	        
 	        
 	        results.hasNext();
             QuerySolution solution = results.next();

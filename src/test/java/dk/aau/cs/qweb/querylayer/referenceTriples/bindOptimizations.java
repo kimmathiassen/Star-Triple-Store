@@ -29,6 +29,7 @@ public class bindOptimizations {
 
 	@Before
 	public void setUpBefore() throws Exception {
+		NodeDictionaryFactory.getDictionary().open();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
@@ -54,6 +55,7 @@ public class bindOptimizations {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 
 

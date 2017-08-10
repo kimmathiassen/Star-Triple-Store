@@ -28,6 +28,7 @@ public class TurtleStarReaderDavidTest {
 	
 	@Before
 	public void setup() {
+		NodeDictionaryFactory.getDictionary().open();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/david.ttls" ;
@@ -48,6 +49,7 @@ public class TurtleStarReaderDavidTest {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 

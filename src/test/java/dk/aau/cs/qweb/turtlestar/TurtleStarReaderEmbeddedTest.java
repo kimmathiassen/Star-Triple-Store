@@ -28,8 +28,7 @@ public class TurtleStarReaderEmbeddedTest {
 	
 	@Before
 	public void setup() {
-		PrefixDictionary.getInstance().clear();
-		NodeDictionaryFactory.getDictionary().clear();
+	  	NodeDictionaryFactory.getDictionary().open();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
@@ -51,6 +50,7 @@ public class TurtleStarReaderEmbeddedTest {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test

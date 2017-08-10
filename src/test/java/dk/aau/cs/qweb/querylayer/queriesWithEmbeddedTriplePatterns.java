@@ -60,7 +60,7 @@ public class queriesWithEmbeddedTriplePatterns {
 //        		"PREFIX ex: <http://example.org/>  " + 
 //        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
 		
-		
+		NodeDictionaryFactory.getDictionary().open();
 		g = new Graph();
 		model = ModelFactory.createModelForGraph(g);
 		String filename = "src/test/resources/TurtleStar/embedded.ttls" ;
@@ -83,6 +83,7 @@ public class queriesWithEmbeddedTriplePatterns {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test

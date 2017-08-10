@@ -2,14 +2,29 @@ package dk.aau.cs.qweb.triplestore;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
 public class KeyFactoryTest {
+	
+	@Before 
+	public void setup() {
+		NodeDictionaryFactory.getDictionary().open();
+	}
+	
+	@After 
+	public void tearDown() {
+		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
+	}
+	
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 

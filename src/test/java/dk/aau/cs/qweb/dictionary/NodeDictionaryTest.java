@@ -8,10 +8,9 @@ import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
-import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.triple.Key;
@@ -20,10 +19,16 @@ import dk.aau.cs.qweb.triple.TripleStarBuilder;
 
 public class NodeDictionaryTest {
 
+	@Before
+	public void setUp() {
+		NodeDictionaryFactory.getDictionary().open();
+	}
+	
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		HashNodeDictionary.getInstance().clear();
+		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 	
 	@Test
@@ -37,7 +42,7 @@ public class NodeDictionaryTest {
 		List<TripleStar> idTriples = builder.createTriple(original);
 		TripleStar idTriple = idTriples.get(0);
 		
-		HashNodeDictionary dict = HashNodeDictionary.getInstance();
+		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		Node subjectNode = dict.getNode(idTriple.subjectId);
 		Node predicateNode = dict.getNode(idTriple.predicateId);
 		Node objectNode = dict.getNode(idTriple.objectId);
@@ -54,7 +59,7 @@ public class NodeDictionaryTest {
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 	
-		HashNodeDictionary dict = HashNodeDictionary.getInstance();
+		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		dict.clear();
 		dict.setReferenceTripleDistribution(100);
 		
@@ -70,7 +75,7 @@ public class NodeDictionaryTest {
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		HashNodeDictionary dict = HashNodeDictionary.getInstance();
+		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		dict.clear();
 		dict.setReferenceTripleDistribution(0);
 		
@@ -96,7 +101,7 @@ public class NodeDictionaryTest {
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
 	
-		HashNodeDictionary dict = HashNodeDictionary.getInstance();
+		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		dict.clear();
 		dict.setReferenceTripleDistribution(100);
 		
@@ -110,7 +115,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void countUniqueEmbeddedNodes() {
+	public void countEmbeddedNodes() {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -126,7 +131,7 @@ public class NodeDictionaryTest {
 		Node embeddedNode3 = NodeFactoryStar.createEmbeddedNode(subject3, predicate, object);
 		
 	
-		HashNodeDictionary dict = HashNodeDictionary.getInstance();
+		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		dict.clear();
 		dict.setReferenceTripleDistribution(0);
 		
@@ -135,8 +140,9 @@ public class NodeDictionaryTest {
 		dict.createKey(embeddedNode2);
 		dict.createKey(embeddedNode3);
 		
+		//Duplicates are counted
 		assertEquals(0, dict.getNumberOfReferenceTriples());
-		assertEquals(3, dict.getNumberOfEmbeddedTriples());
+		assertEquals(4, dict.getNumberOfEmbeddedTriples());
 	}
 	
 	@Test
@@ -164,7 +170,7 @@ public class NodeDictionaryTest {
 		Node embeddedNode6 = NodeFactoryStar.createEmbeddedNode(subject6, predicate, object);
 		
 		
-		HashNodeDictionary dict = HashNodeDictionary.getInstance();
+		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		dict.clear();
 		dict.setReferenceTripleDistribution(50);
 		

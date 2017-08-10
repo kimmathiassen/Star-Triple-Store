@@ -8,10 +8,12 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
@@ -22,6 +24,13 @@ public class QueryEngineStarTest {
 	private static VarDictionary varDict;
 	private static Model model;
 
+	@After
+	public void tearDown() {
+		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
+	}
+	
+	
 	@BeforeClass
 	public static void setUpBeforeClass() {
         App.registerQueryEngine();
@@ -33,6 +42,7 @@ public class QueryEngineStarTest {
 	@Before
 	public void setUp() throws Exception {
 		varDict.clear();
+		NodeDictionaryFactory.getDictionary().open();
 	}
 
 	@Test

@@ -28,6 +28,7 @@ public class TurtleStarReaderSpidermanTest {
 	@Before
 	public void setup() {
 		g = new Graph();
+		NodeDictionaryFactory.getDictionary().open();
 		String filename = "src/test/resources/TurtleStar/spiderman.ttls" ;
 		model = ModelFactory.createModelForGraph(g);
 		 
@@ -46,6 +47,7 @@ public class TurtleStarReaderSpidermanTest {
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
+		NodeDictionaryFactory.getDictionary().close();
 	}
 
 	@Test

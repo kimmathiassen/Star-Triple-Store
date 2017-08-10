@@ -4,10 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.jena.graph.Node;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import dk.aau.cs.qweb.dictionary.HashNodeDictionary;
-import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.node.SimpleURINode;
@@ -15,10 +14,18 @@ import dk.aau.cs.qweb.triple.Key;
 
 public class PrefixDictionaryTest {
 
+	@Before
+	public void setup() {
+		NodeDictionaryFactory.getDictionary().open();
+		
+	}
+	
+	
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
 		HashNodeDictionary.getInstance().clear();
+		NodeDictionaryFactory.getDictionary().close();
 		Config.enablePrefixDictionary(true);
 	}
 	
