@@ -8,6 +8,7 @@ public class Config {
 	private static int objectSize = 20;
 	private static int nodeDictionaryInitialSize = 10000;
 	private static int nodeReferenceDictionaryInitialSize = 10000;
+	private static String dictionaryType = "DiskBTree";
 	
 	public static void enablePrefixDictionary(boolean flag) {
 		prefixDictionaryState = flag;
@@ -39,5 +40,13 @@ public class Config {
 	
 	public static boolean ignoreFilePrefixInQueries() {
 		return true;
+	}
+
+	public static String getDictionaryType() {
+		return dictionaryType ;
+	}
+	
+	public static void setDictionaryType(String value) {
+		dictionaryType = value;
 	}
 }
