@@ -5,12 +5,12 @@ import dk.aau.cs.qweb.main.Config;
 public class NodeDictionaryFactory {
 
 	static public NodeDictionary getDictionary() {
-		switch (Config.getDictionaryType()) {
-		case "InMemoryHashMap":
+		if (Config.getDictionaryType().equals("InMemoryHashMap")) {
 			return HashNodeDictionary.getInstance();
-
-		default:
-			return HashNodeDictionary.getInstance();
+		} else if  (Config.getDictionaryType().equals("DiskBTree")) {
+			return BTreePhysicalDictionary.getInstance(); 
+		} else {
+			throw new IllegalArgumentException("unknown dictionary datastructure "+Config.getDictionaryType());
 		}
 	}
 }
