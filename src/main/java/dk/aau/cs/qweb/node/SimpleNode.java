@@ -2,9 +2,8 @@ package dk.aau.cs.qweb.node;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.NodeVisitor;
-import org.apache.jena.graph.Node_Concrete;
 
-public abstract class SimpleNode extends Node_Concrete {
+public abstract class SimpleNode extends StarNode {
 
 	protected SimpleNode(String label) {
 		super(label);

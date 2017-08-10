@@ -52,4 +52,9 @@ public class SimpleURINode extends SimpleNode {
 	public int getPrefixId(){
 		return urlBodyId;
 	}
+	
+	@Override
+	public String serialize() {
+		return "U"+toString();
+	}
 }

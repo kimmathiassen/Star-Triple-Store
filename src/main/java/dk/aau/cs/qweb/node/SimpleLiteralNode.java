@@ -24,4 +24,14 @@ public class SimpleLiteralNode extends SimpleNode {
 	public String getLiteralLexicalForm() {
 		return (String)label;
 	}
+	
+	@Override
+	public String toString() {
+		return getLiteralLexicalForm();
+	}
+	
+	@Override
+	public String serialize() {
+		return "L"+toString();
+	}
 }

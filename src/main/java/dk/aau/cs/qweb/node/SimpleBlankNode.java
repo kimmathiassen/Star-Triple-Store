@@ -20,4 +20,14 @@ public class SimpleBlankNode extends  SimpleNode {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return (String) label;
+	}
+	
+	@Override
+	public String serialize() {
+		return "B"+toString();
+	}
 }
