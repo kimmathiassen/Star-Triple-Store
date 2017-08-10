@@ -32,6 +32,7 @@ import org.apache.jena.riot.ReaderRIOTFactory;
 import org.apache.jena.sparql.lang.SPARQLParserRegistry;
 import org.apache.jena.sparql.serializer.SerializerRegistry;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.queryparser.SPARQLParserFactoryStar;
 import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
@@ -109,13 +110,17 @@ public class App {
         registerTTLS();
         registerQueryEngine();
         ModelFactory.createDefaultModel();
+        long start_time;
         
-     
-    	System.out.println("Loading file: "+filename);
-    	long start_time = System.nanoTime();
-        RDFDataMgr.read(model, filename);
-        System.out.println("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
-        
+        try {
+        	NodeDictionaryFactory.getDictionary().open();
+        	System.out.println("Loading file: "+filename);
+        	start_time = System.nanoTime();
+            RDFDataMgr.read(model, filename);
+            System.out.println("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+		} finally {
+			NodeDictionaryFactory.getDictionary().close();
+		}
         System.out.println();
         System.out.println("Deleting duplicates");
         start_time = System.nanoTime();
@@ -126,12 +131,16 @@ public class App {
         System.out.println("Evaluating queries:");
         for (String queryString : queries) {
         	System.out.println(queryString);
-        	start_time = System.nanoTime();
-        	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
              
-             try(QueryExecution qexec = QueryExecutionFactory.create(query, model)){
+            try{
+            	 start_time = System.nanoTime();
+            	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+            	 QueryExecution qexec = QueryExecutionFactory.create(query, model);
+            	 NodeDictionaryFactory.getDictionary().open();
                  ResultSet rs = qexec.execSelect() ;
                  ResultSetFormatter.out(System.out, rs, query) ;
+             } finally {
+            	 NodeDictionaryFactory.getDictionary().close();
              }
              System.out.println("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
              System.out.println();
