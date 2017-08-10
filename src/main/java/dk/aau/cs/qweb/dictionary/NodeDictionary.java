@@ -5,6 +5,10 @@ import org.apache.jena.graph.Node;
 import dk.aau.cs.qweb.triple.Key;
 
 public interface NodeDictionary {
+	public void close();
+	
+	public void open();
+
 	public boolean isThereAnySpecialReferenceTripleDistributionConditions() ;
 	
 	public int size() ;
