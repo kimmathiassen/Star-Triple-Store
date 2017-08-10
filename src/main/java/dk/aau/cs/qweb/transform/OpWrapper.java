@@ -20,7 +20,7 @@ import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.helper.BitHelper;
-import dk.aau.cs.qweb.node.Node_Triple;
+import dk.aau.cs.qweb.node.EmbeddedNode;
 
 public class OpWrapper {
 	
@@ -56,13 +56,13 @@ public class OpWrapper {
 		Triple triple =  getTriple(op);
 		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		if (triple != null) {
-			if(triple.getSubject() instanceof Node_Triple) {
+			if(triple.getSubject() instanceof EmbeddedNode) {
 				if (BitHelper.isReferenceBitSet(dict.createKey(triple.getSubject()))) {
 					return true;
 				}
 			}
 			
-			if(triple.getObject() instanceof Node_Triple) {
+			if(triple.getObject() instanceof EmbeddedNode) {
 				if (BitHelper.isReferenceBitSet(dict.createKey(triple.getObject()))) {
 					return true;
 				}
@@ -86,7 +86,7 @@ public class OpWrapper {
 			for (Expr expr : expressions) {
 				//This only works for embedded triples
 				NodeValueNode node = (NodeValueNode) expr;
-				Node_Triple t = (Node_Triple) node.getNode();
+				EmbeddedNode t = (EmbeddedNode) node.getNode();
 				return new Triple(t.getSubject(),t.getPredicate(),t.getObject());
 			}
 			return null; //Can never be called
@@ -106,7 +106,7 @@ public class OpWrapper {
 		}
 		for (Expr expr : expressions) {
 			NodeValueNode node = (NodeValueNode) expr;
-			Node_Triple t = (Node_Triple) node.getNode();
+			EmbeddedNode t = (EmbeddedNode) node.getNode();
 			selectivity = SelectivityMap.getSelectivityScore(new Triple(t.getSubject(),t.getPredicate(),t.getObject()));
 		}
 	}
@@ -142,7 +142,7 @@ public class OpWrapper {
 		for (Expr exp : op.getVarExprList().getExprs().values()) {
 			if (exp instanceof NodeValueNode) {
 				NodeValueNode node = (NodeValueNode) exp;
-				Node_Triple triple = (Node_Triple) node.asNode();
+				EmbeddedNode triple = (EmbeddedNode) node.asNode();
 				Node subject = triple.getSubject();
 				Node predicate = triple.getPredicate();
 				Node object = triple.getObject();

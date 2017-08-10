@@ -21,14 +21,14 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
 import dk.aau.cs.qweb.dictionary.VarDictionary;
-import dk.aau.cs.qweb.node.Node_Triple;
+import dk.aau.cs.qweb.node.EmbeddedNode;
 
 public class MyTransform extends TransformCopy {
 
 	@Override
 	public Op transform(OpBGP opBGP) {
 		Op op = createJoinTree(opBGP);
-		print(op,0);
+		//print(op,0);
 		return op;
 	}
 	
@@ -43,17 +43,17 @@ public class MyTransform extends TransformCopy {
 		Node subject = triple.getSubject();
 		Node predicate = triple.getPredicate();
 		Node object = triple.getObject();
-		if (triple.getSubject() instanceof Node_Triple) {
+		if (triple.getSubject() instanceof EmbeddedNode) {
 			
-			Node_Triple s = (Node_Triple)triple.getSubject();
+			EmbeddedNode s = (EmbeddedNode)triple.getSubject();
 			NodeValueNode exp = new NodeValueNode(s);
 			VarDictionary varDict = VarDictionary.getInstance();
 			
 			subject = varDict.getFreshVariable();
 			split.add(OpExtend.create(OpTable.empty() , (Var) subject, exp));
 		} 
-		if (triple.getObject() instanceof Node_Triple) {
-			Node_Triple o = (Node_Triple)triple.getObject();
+		if (triple.getObject() instanceof EmbeddedNode) {
+			EmbeddedNode o = (EmbeddedNode)triple.getObject();
 			NodeValueNode exp = new NodeValueNode(o);
 			VarDictionary varDict = VarDictionary.getInstance();
 			
@@ -66,9 +66,9 @@ public class MyTransform extends TransformCopy {
 	}
 
 	private boolean containsEmbeddedTriple(Triple triple) {
-		if (triple.getSubject() instanceof Node_Triple) {
+		if (triple.getSubject() instanceof EmbeddedNode) {
 			return true;
-		} else if (triple.getObject() instanceof Node_Triple) {
+		} else if (triple.getObject() instanceof EmbeddedNode) {
 			return true;
 		} else {
 			return false;
@@ -224,7 +224,7 @@ public class MyTransform extends TransformCopy {
 					System.out.print(insertDepth(depth));
 					System.out.print( "Bind: "+ entry.getKey()+" ");
 					NodeValueNode node = (NodeValueNode) entry.getValue();
-					Node_Triple t = (Node_Triple) node.getNode();
+					EmbeddedNode t = (EmbeddedNode) node.getNode();
 					System.out.println("<"+t.getSubject()+" "+t.getPredicate()+" "+t.getObject()+">");
 				}
 			}

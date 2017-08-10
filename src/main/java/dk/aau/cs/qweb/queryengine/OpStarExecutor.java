@@ -19,7 +19,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
 import dk.aau.cs.qweb.dictionary.VarDictionary;
-import dk.aau.cs.qweb.node.Node_Triple;
+import dk.aau.cs.qweb.node.EmbeddedNode;
 import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 
@@ -168,7 +168,7 @@ public class OpStarExecutor extends OpExecutor{
 		for (Expr iterable_element : opExtend.getVarExprList().getExprs().values()) {
 			if (iterable_element instanceof NodeValueNode) {
 				NodeValueNode temp = (NodeValueNode)iterable_element;
-				Node_Triple node = (Node_Triple)temp.asNode();
+				EmbeddedNode node = (EmbeddedNode)temp.asNode();
 				Var var = opExtend.getVarExprList().getVars().get(0);
 
 				//Note that children of OpExtend are not expected and are not handled
@@ -198,7 +198,7 @@ public class OpStarExecutor extends OpExecutor{
 		return builder.createTriplePatter();
 	}
 	
-	final protected TripleStarPattern encode (Node_Triple tp) {
+	final protected TripleStarPattern encode (EmbeddedNode tp) {
 		TriplePatternBuilder builder = new TriplePatternBuilder();
 		builder.setSubject(tp.getSubject());
 		builder.setPredicate(tp.getPredicate());
