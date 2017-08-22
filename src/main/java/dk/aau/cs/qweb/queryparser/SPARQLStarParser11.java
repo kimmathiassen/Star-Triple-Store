@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.main.queryparser;
+package dk.aau.cs.qweb.queryparser;
 
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;

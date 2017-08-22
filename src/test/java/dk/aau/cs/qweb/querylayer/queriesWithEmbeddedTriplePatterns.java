@@ -22,7 +22,7 @@ import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.App;
-import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
+import dk.aau.cs.qweb.queryparser.SyntaxStar;
 
 public class queriesWithEmbeddedTriplePatterns {
 

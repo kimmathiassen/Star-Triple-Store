@@ -34,10 +34,10 @@ import org.apache.jena.sparql.serializer.SerializerRegistry;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.graph.Graph;
-import dk.aau.cs.qweb.main.queryparser.SPARQLParserFactoryStar;
-import dk.aau.cs.qweb.main.queryparser.SyntaxStar;
-import dk.aau.cs.qweb.main.queryserializer.QuerySerializerFactoryStar;
 import dk.aau.cs.qweb.queryengine.QueryEngineStar;
+import dk.aau.cs.qweb.queryparser.SPARQLParserFactoryStar;
+import dk.aau.cs.qweb.queryparser.SyntaxStar;
+import dk.aau.cs.qweb.resultserializer.QuerySerializerFactoryStar;
 import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
