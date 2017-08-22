@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 
 import org.apache.jena.atlas.lib.Closeable;
 import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.util.iterator.WrappedIterator;
 
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.triple.Key;
@@ -15,7 +16,6 @@ import dk.aau.cs.qweb.triplepattern.Element;
 import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplepattern.Variable;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
-import dk.aau.cs.qweb.triplestore.TripleStoreIterator;
 
 
 public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closeable
@@ -81,9 +81,9 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 												currentQueryPattern.getPredicate().getKey(),
 												currentQueryPattern.getObject().getKey()));
 					
-					currentMatches = new TripleStoreIterator(graph,list.iterator());
+					currentMatches = WrappedIterator.create(list.iterator());
 				} else {
-					currentMatches = new TripleStoreIterator( graph, Collections.<KeyContainer>emptyList().iterator());
+					currentMatches = WrappedIterator.create(Collections.<KeyContainer>emptyList().iterator());
 				}
 			}  else {
 				currentMatches = graph.graphBaseFind( currentQueryPattern);

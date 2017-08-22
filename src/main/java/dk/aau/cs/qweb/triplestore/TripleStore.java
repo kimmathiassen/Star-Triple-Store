@@ -7,18 +7,20 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.util.iterator.WrappedIterator;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
+import dk.aau.cs.qweb.triplestore.flatindex.FlatIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.HashIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
+import dk.aau.cs.qweb.triplestore.treeindex.TreeIndex;
 
 public class TripleStore {
 	protected final Graph parent;
-	
     protected Index SPO;
     protected Index POS;
     protected Index OSP;
@@ -127,41 +129,40 @@ public class TripleStore {
      /** 
          Answer an ExtendedIterator returning all the triples from this store that
          match the pattern <code>m = (S, P, O)</code>.
+         The order of the indexes are: SPO, OSP, POS (this ordering is based 
+         on experiments described in the Jena documentation).
          
-         <p>Because the node-to-triples maps index on each of subject, predicate,
-         and (non-literal) object, concrete S/P/O patterns can immediately select
-         an appropriate map. Because the match for literals must be by sameValueAs,
-         not equality, the optimisation is not applied for literals. [This is probably a
-         Bad Thing for strings.]
+         SPO answers triple patterns: SP* and S**
          
-         <p>Practice suggests doing the predicate test <i>last</i>, because there are
-         "usually" many more statements than predicates, so the predicate doesn't
-         cut down the search space very much. By "practice suggests" I mean that
-         when the order went, accidentally, from S/O/P to S/P/O, performance on
-         (ANY, P, O) searches on largish models with few predicates declined
-         dramatically - specifically on the not-galen.owl ontology.
+         OSP answers triple patterns: OS* and O**
+         
+         POS answers triple patterns: PO* and P**
      */
-    public ExtendedIterator<KeyContainer> find( TripleStarPattern t ) {
+    public ExtendedIterator<KeyContainer> find( TripleStarPattern tp ) {
     	numberOfLookups++;
-    	if (!t.doesAllKeysExistInDictionary()) {
-			return new TripleStoreIterator( parent, Collections.<KeyContainer>emptyList().iterator());
+    	if (!tp.doesAllKeysExistInDictionary()) {
+			return WrappedIterator.create(Collections.<KeyContainer>emptyList().iterator());
 		}
     	
-    	if (t.getSubject().isConcrete() && t.getPredicate().isConcrete())
-		    return new TripleStoreIterator( parent, SPO.iterator( t ));
-		else if (t.getObject().isConcrete() && t.getSubject().isConcrete())
-		    return new TripleStoreIterator( parent, OSP.iterator( t ));
-		else if (t.getPredicate().isConcrete() && t.getObject().isConcrete())
-		    return new TripleStoreIterator( parent, POS.iterator( t ));
-		else if (t.getSubject().isConcrete()) 
-			return new TripleStoreIterator( parent, SPO.iterator( t ));
-		else if (t.getObject().isConcrete()) 
-			return new TripleStoreIterator( parent, OSP.iterator( t ));
-		else if (t.getPredicate().isConcrete()) 
-			return new TripleStoreIterator( parent, POS.iterator( t ));
-		else return new TripleStoreIterator( parent, SPO.iterateAll());
+    	if (tp.getSubject().isConcrete() && tp.getPredicate().isConcrete())
+		    return WrappedIterator.create(SPO.iterator( tp ));
+		else if (tp.getObject().isConcrete() && tp.getSubject().isConcrete())
+		    return WrappedIterator.create(OSP.iterator( tp ));
+		else if (tp.getPredicate().isConcrete() && tp.getObject().isConcrete())
+		    return WrappedIterator.create(POS.iterator( tp ));
+		else if (tp.getSubject().isConcrete()) 
+			return WrappedIterator.create(SPO.iterator( tp ));
+		else if (tp.getObject().isConcrete()) 
+			return WrappedIterator.create(OSP.iterator( tp ));
+		else if (tp.getPredicate().isConcrete()) 
+			return WrappedIterator.create(POS.iterator( tp ));
+		else return WrappedIterator.create(SPO.iterateAll());
     }
 
+	/**
+	 * 	Foreach of the materialized indexes (SPO, POS, OSP) duplicates are eliminated.
+	 * See the implementation of Index ({@link Index}) for more details {@link HashIndex}, {@link FlatIndex}, {@link TreeIndex}
+	 */
 	public void eliminateDuplicates() {
 		SPO.eliminateDuplicates();
 		POS.eliminateDuplicates();
@@ -172,13 +173,25 @@ public class TripleStore {
 		return numberOfLookups;
 	}
 
-	public Index getSPO() {
+	
+	/**
+	 * Returns the SPO index, used for testing purposes.
+	 */
+	protected Index getSPO() {
 		return SPO;
 	}
-	public Index getPOS() {
+	
+	/**
+	 * Returns the SPO index, used for testing purposes.
+	 */
+	protected Index getPOS() {
 		return POS;
 	}
-	public Index getOSP() {
+	
+	/**
+	 * Returns the SPO index, used for testing purposes.
+	 */
+	protected Index getOSP() {
 		return OSP;
 	}
 }
