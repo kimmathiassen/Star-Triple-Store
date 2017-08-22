@@ -14,10 +14,10 @@ import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
-import dk.aau.cs.qweb.triple.Element;
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triple.Variable;
+import dk.aau.cs.qweb.triplepattern.Element;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.Variable;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 import dk.aau.cs.qweb.triplestore.TripleStoreIterator;
 

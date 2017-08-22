@@ -1,5 +1,13 @@
-package dk.aau.cs.qweb.triple;
+package dk.aau.cs.qweb.triplepattern;
 
+import org.apache.jena.reasoner.TriplePattern;
+
+import dk.aau.cs.qweb.triple.Key;
+
+/**
+ * A variable as part of a triple star pattern {@link TriplePattern}
+ *
+ */
 public class Variable implements Element {
 
 	private final int id;

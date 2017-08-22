@@ -3,7 +3,7 @@ package dk.aau.cs.qweb.triplestore;
 import java.util.Iterator;
 
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 
 public interface Index   {
 	

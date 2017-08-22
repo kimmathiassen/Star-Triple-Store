@@ -5,39 +5,60 @@ import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.SimpleNode;
 
-//First bit in key is set if key is an embedded triple.
-//Second bit is set if embedded key does not fit in dictionary, otherwise it is part of the id.
+/**
+ * Class for creating keys. It will perform a lookup in the appropriate dictionary to ensure 
+ * that existing keys receive the same internal id.  
+ * In the case of either the subject, predicate or object of an embedded triple
+ * is represented using a key that is to large, a reference is created instead.
+ * 
+ * All keys should be created using this factory. 
+ * This class should be used to combine keys into embedded keys.
+ * It also create references keys if need be.
+ * It also contains counters for creating new keys. It is not thread safe. 
+ * However, not that this class is not responsible for adding keys to the dictionary.
+ */
 public class KeyFactory {
-	
 	private static final long EMBEDDED_BIT = Long.MIN_VALUE;
 	private static final long REFERENCE_BIT =	-Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2);
 	private static long elementId = 1l;
 	private static long referenceTripleId = 1l;
-	//private static final long EMBEDDED_IDENTIFIER_TO_LARGE_BIT = Long.MIN_VALUE >>> 1;
 
+	/**
+	 * create a new or retrieve an existing embedded triple key
+	 * 
+	 * @param subject
+	 * @param predicate
+	 * @param object
+	 * @return an existing or new key, depending on if the embedded triple already existed.
+	 */
 	public static Key createKey(final Key subject,final Key predicate,final Key object) {
 	
 		return createKey(subject.getId(),predicate.getId(),object.getId());
 	}
 	
-//	public static Key createReferenceTriple(long subject, long predicate, long object) {
-//		return createReferenceTriple(subject,predicate,object);
-//	}
-	
+	/**
+	 * create a new or retrieve an existing embedded triple key
+	 * 
+	 * @param subject
+	 * @param predicate
+	 * @param object
+	 * @return an existing or new key, depending on if the embedded triple already existed.
+	 */
 	public static Key createKey(long subject, long predicate, long object) {
 		
 		if (subject < 0 || 	predicate < 0 || object < 0) {
-			throw new IllegalArgumentException("identifier must not be negative, (MSB is set)");
+			throw new IllegalArgumentException("identifier must not be negative, (Most significant bit (MSB) must be set)");
 		}
 		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		
-		if (subject > Config.getLargestSubjectId() || 
-				predicate > Config.getLargestSubjectId() ||
-				object > Config.getLargestSubjectId()) {
+		if (isElementsTooLargeToEncode(subject, predicate, object)) {
 			return createReferenceTriple();
-		} else if ( dict.isThereAnySpecialReferenceTripleDistributionConditions() ) {
-			//If this flag is set we have to check if the keys already exist as an reference key
+		} else if ( dict.isThereAnySpecialReferenceTripleDistributionConditions() ) { 
+		/**
+		 * For information about this flag, see {@link NodeDictionary}
+		 */
 			Key s = new Key(subject); Key p = new Key(predicate); Key o = new Key(object);
+			
 			if (dict.containsReferernceTripleKey(s, p, o)) {
 				return dict.getReferernceTripleKey(s, p,o);
 			} else {
@@ -49,13 +70,20 @@ public class KeyFactory {
 		}
 	}
 
+	private static boolean isElementsTooLargeToEncode(long subject, long predicate, long object) {
+		return subject > Config.getLargestSubjectId() || 
+				predicate > Config.getLargestSubjectId() ||
+				object > Config.getLargestSubjectId();
+	}
+
+	
 	public static Key createReferenceTriple() {
 		Key key = new Key(REFERENCE_BIT + referenceTripleId);
 		referenceTripleId++;
 		
 		return key;
 	}
-
+	
 	private static Key createEmbeddedTriple(long subject, long predicate, long object) {
 		subject = subject << 40;
 		predicate = predicate << 20;
@@ -80,8 +108,4 @@ public class KeyFactory {
 		}
 		return new Key(id);
 	}
-
-//	public static Key createReferenceTriple(Key subject, Key predicate, Key object) {
-//		return createReferenceTriple(subject.getId(),predicate.getId(),object.getId());
-//	}
 }

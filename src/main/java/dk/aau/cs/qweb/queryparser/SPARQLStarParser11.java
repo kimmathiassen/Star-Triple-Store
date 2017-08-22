@@ -131,7 +131,7 @@ import org.apache.jena.sparql.syntax.TripleCollectorMark;
 import org.apache.jena.update.Update;
 
 import dk.aau.cs.qweb.node.NodeFactoryStar;
-import dk.aau.cs.qweb.triple.TriplePatternBuilder;
+import dk.aau.cs.qweb.triplepattern.TriplePatternBuilder;
 
 @SuppressWarnings("unused")
 public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser11Constants {

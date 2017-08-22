@@ -10,5 +10,4 @@ public class TTLSReaderFactory implements ReaderRIOTFactory {
 	public ReaderRIOT create(Lang language) {
         return new TTLSReader() ;
     }
-
 }

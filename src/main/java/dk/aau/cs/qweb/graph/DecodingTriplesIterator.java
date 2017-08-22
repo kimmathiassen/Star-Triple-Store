@@ -9,7 +9,7 @@ import org.apache.jena.util.iterator.NiceIterator;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 
 public class DecodingTriplesIterator extends NiceIterator<Triple>

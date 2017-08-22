@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.jena.sparql.core.Var;
 
-import dk.aau.cs.qweb.triple.Variable;
+import dk.aau.cs.qweb.triplepattern.Variable;
 
 public class VarDictionary
 {

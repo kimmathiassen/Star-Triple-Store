@@ -14,8 +14,8 @@ import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 import dk.aau.cs.qweb.triple.TripleStar;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
-import dk.aau.cs.qweb.triple.Variable;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.Variable;
 import dk.aau.cs.qweb.triplestore.hashindex.HashIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 

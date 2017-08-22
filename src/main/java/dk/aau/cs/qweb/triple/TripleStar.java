@@ -2,7 +2,10 @@ package dk.aau.cs.qweb.triple;
 
 import java.util.Objects;
 
-//This class is a triple and a triple pattern
+/**
+ * A triple, consisting of three key. Not a key can be an embedded key.
+ * To create a StarTriple based on a Jena Triple please use the builder class {@link TripleStarBuilder}
+ */
 public class TripleStar implements Comparable<TripleStar> {
 	public Key subjectId;
 	public Key predicateId;

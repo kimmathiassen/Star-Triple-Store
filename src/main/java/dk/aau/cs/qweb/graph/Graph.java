@@ -11,10 +11,10 @@ import org.apache.jena.graph.impl.GraphBase;
 import org.apache.jena.graph.impl.SimpleEventManager;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import dk.aau.cs.qweb.triple.TriplePatternBuilder;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarBuilder;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.TriplePatternBuilder;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 import dk.aau.cs.qweb.triplestore.TripleStore;
 

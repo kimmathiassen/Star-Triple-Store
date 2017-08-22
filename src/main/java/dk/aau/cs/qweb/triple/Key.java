@@ -2,8 +2,25 @@ package dk.aau.cs.qweb.triple;
 
 import java.util.Objects;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
+import dk.aau.cs.qweb.triplepattern.Element;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.Variable;
 
+/**
+ * A key encompasses three types of triple elements. 
+ * 1) a URI or Literal
+ * 2) an embedded triple that encodes a subject, predicate, and object. These can have the form URI, Literal, or Embedded triple
+ * 3) a reference, this can either be to an embedded triple, URI, or Literal. {@link NodeDictionary} 
+ * 
+ * The supported encodings are as follows:
+ * 1000- the key is an embedded triple. 
+ * 1100- the key is a reference.
+ * 0- the key is an URI or Literal. Because of the way negative numbers are encoded in Java, then this means that all 
+ * positive numbers are encoded URIs or Literals 
+ *
+ */
 public class Key implements Element, Comparable<Key>{
 	private long maxReferenceTripleId = -3458764513820540929l; // 1100-111111111111111111111111111111111111111111111111111111111111 
 	private long minReferenceTripleId = -4611686018427387904l; // 1100-000000000000000000000000000000000000000000000000000000000000

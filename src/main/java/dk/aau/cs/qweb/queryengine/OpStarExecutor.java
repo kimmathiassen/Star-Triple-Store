@@ -20,8 +20,8 @@ import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.node.EmbeddedNode;
-import dk.aau.cs.qweb.triple.TriplePatternBuilder;
-import dk.aau.cs.qweb.triple.TripleStarPattern;
+import dk.aau.cs.qweb.triplepattern.TriplePatternBuilder;
+import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 
 
 public class OpStarExecutor extends OpExecutor{

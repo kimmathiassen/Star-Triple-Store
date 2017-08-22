@@ -1,9 +1,18 @@
-package dk.aau.cs.qweb.triple;
+package dk.aau.cs.qweb.triplepattern;
 
 import org.apache.jena.reasoner.IllegalParameterException;
 
+import dk.aau.cs.qweb.triple.Key;
+import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
+/**
+ * A triple star pattern 
+ * The subject, predicate, or object can be either a Key, Variable, or another Triple star pattern.
+ * Note that it is vulnerable to circular references. 
+ * 
+ *
+ */
 public class TripleStarPattern implements Element{
 	
 	private final Element subject;
@@ -14,7 +23,6 @@ public class TripleStarPattern implements Element{
 	public Element getPredicate() { return predicate;}
 	public Element getObject() { return object;}
 	
-
 	public TripleStarPattern(Element subject, Element predicate, Element object) {
 		this.subject = subject;
 		this.predicate = predicate;
@@ -35,8 +43,6 @@ public class TripleStarPattern implements Element{
 	public String toString () {
 		return "("+subject + ", " + predicate + ", " + object+")";
 	}
-	
-
 	
 	@Override
 	public boolean equals(Object other) {
@@ -75,6 +81,7 @@ public class TripleStarPattern implements Element{
 		boolean subjectExistInDict = false;
 		boolean predicateExistInDict = false;
 		boolean objectExistInDict = false;
+		
 		if (subject.isConcrete()) {
 			if (subject.isEmbeddedTriplePattern()) {
 				subjectExistInDict = subject.getTriplePattern().check();
@@ -82,9 +89,11 @@ public class TripleStarPattern implements Element{
 				subjectExistInDict = subject.getKey().getId() == 0 ? true : false;
 			}
 		}
+		
 		if (predicate.isConcrete()) {
 			predicateExistInDict = predicate.getKey().getId() == 0 ? true : false;
 		}
+		
 		if (object.isConcrete()) {
 			if (object.isEmbeddedTriplePattern()) {
 				objectExistInDict = object.getTriplePattern().check();
@@ -121,10 +130,9 @@ public class TripleStarPattern implements Element{
 	}
 
 	@Override
-	public dk.aau.cs.qweb.triple.Variable getVariable() {
-		throw new IllegalArgumentException("Is not of the type TripleStarPattern");
+	public dk.aau.cs.qweb.triplepattern.Variable getVariable() {
+		throw new IllegalArgumentException("Is not of the type Variable");
 	}
-
 
 	@Override
 	public boolean isConcrete() {
