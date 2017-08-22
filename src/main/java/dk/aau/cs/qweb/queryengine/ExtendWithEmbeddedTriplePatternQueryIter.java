@@ -14,7 +14,7 @@ import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
-import dk.aau.cs.qweb.triple.StarElement;
+import dk.aau.cs.qweb.triple.Element;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
@@ -179,7 +179,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 	 */
 	static public TripleStarPattern substitute (int var, TripleStarPattern triplePattern, SolutionMapping solutionMapping )
 	{
-		StarElement sNew, pNew, oNew;
+		Element sNew, pNew, oNew;
 		
 		if (!triplePattern.getSubject().isConcrete() )
 		{
@@ -239,7 +239,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 		}
 	}
 	
-	private static boolean isReferenceTriple(StarElement s, StarElement p , StarElement o) {
+	private static boolean isReferenceTriple(Element s, Element p , Element o) {
 		if (s.getKey().getId() > Config.getLargestSubjectId() ||
 				p.getKey().getId() > Config.getLargestPredicateId() ||
 				o.getKey().getId() > Config.getLargestObjectId()) {

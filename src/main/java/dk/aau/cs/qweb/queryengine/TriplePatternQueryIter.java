@@ -10,7 +10,7 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.triple.Key;
-import dk.aau.cs.qweb.triple.StarElement;
+import dk.aau.cs.qweb.triple.Element;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triple.TripleStarPattern;
 import dk.aau.cs.qweb.triple.Variable;
@@ -169,7 +169,7 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 	 */
 	static public TripleStarPattern substitute ( TripleStarPattern triplePattern, SolutionMapping solutionMapping )
 	{
-		StarElement sNew, pNew, oNew;
+		Element sNew, pNew, oNew;
 		if (!triplePattern.getSubject().isConcrete() )
 		{
 			int variable = triplePattern.getSubject().getVariable().getId();

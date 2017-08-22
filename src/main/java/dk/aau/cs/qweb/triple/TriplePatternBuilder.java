@@ -10,9 +10,9 @@ import dk.aau.cs.qweb.node.EmbeddedNode;
 
 public class TriplePatternBuilder {
 
-	private StarElement subject;
-	private StarElement predicate;
-	private StarElement object;
+	private Element subject;
+	private Element predicate;
+	private Element object;
 
 	public TripleStarPattern createTriplePatter() {
 		return new TripleStarPattern(subject, predicate, object);
