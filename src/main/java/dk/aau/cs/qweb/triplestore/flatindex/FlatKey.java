@@ -17,39 +17,39 @@ import dk.aau.cs.qweb.triple.Key;
  *
  */
 public class FlatKey {
-	private Key field1;
-	private Key field2;
+	private Key key1;
+	private Key key2;
 
 	public FlatKey(Key field1) {
-		this.field1 = field1;
-		this.field2 = null;
+		this.key1 = field1;
+		this.key2 = null;
 	}
 	
 	public FlatKey(Key field1, Key field2) {
-		this.field1 = field1;
-		this.field2 = field2;
+		this.key1 = field1;
+		this.key2 = field2;
 	}
 	
 	public Key getFirstField() {
-		return field1;
+		return key1;
 	}
 	
 	public Key getSecondField() {
-		return field2;
+		return key2;
 	}
 	
 	@Override
 	public int hashCode() {
-		return field1.hashCode()+(field2 != null ? field2.hashCode() : 0);
+		return key1.hashCode()+(key2 != null ? key2.hashCode() : 0);
 	}
 	
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof FlatKey) {
-			if (field2 == null) {
-				return field1.equals(((FlatKey) o).getFirstField());
+			if (key2 == null) {
+				return key1.equals(((FlatKey) o).getFirstField());
 			} else {
-				return field1.equals(((FlatKey) o).getFirstField()) && field2.equals(((FlatKey) o).getSecondField());
+				return key1.equals(((FlatKey) o).getFirstField()) && key2.equals(((FlatKey) o).getSecondField());
 			}
 		  }
 		return false;
@@ -57,10 +57,10 @@ public class FlatKey {
 	
 	@Override
 	public String toString() {
-		if (field2 == null) {
-			return "("+field1+",*)";
+		if (key2 == null) {
+			return "("+key1+",*)";
 		} else {
-			return "("+field1+","+field2+")";
+			return "("+key1+","+key2+")";
 		}
 	}
 }

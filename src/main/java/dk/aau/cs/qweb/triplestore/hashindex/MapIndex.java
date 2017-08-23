@@ -14,7 +14,13 @@ import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 
+/**
+ * Class with methods used by index that use implementations of Java Map.
+ */
 public abstract class MapIndex  implements Index {
+	/**
+	 * A field is used to denote the position of a element in a triple.
+	 */
 	public enum Field {
 		 S, P, O, 
 		}

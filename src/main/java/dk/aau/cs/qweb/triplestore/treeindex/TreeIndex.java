@@ -7,6 +7,9 @@ import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.MapTripleBunch;
 
+/**
+ * A map based index using tree maps both as the outer and inner map.
+ */
 public class TreeIndex extends MapIndex  {
 	
 	public TreeIndex(Field field1,Field field2,Field field3) {
@@ -17,13 +20,13 @@ public class TreeIndex extends MapIndex  {
 		size = 0;
 	}
 	
-	public void add(final TripleStar t) {
-		Key firstKey = getFieldKey(field1,t);
+	public void add(final TripleStar triple) {
+		Key firstKey = getFieldKey(field1,triple);
 		if (indexMap.containsKey(firstKey)) {
-			indexMap.get(firstKey).put(field2,t);
+			indexMap.get(firstKey).put(field2,triple);
 		} else {
 			TreeTripleBunch tripleBunch = new TreeTripleBunch();
-			tripleBunch.put(field2,t);
+			tripleBunch.put(field2,triple);
 			indexMap.put(firstKey, tripleBunch);
 		}
 		size++;
