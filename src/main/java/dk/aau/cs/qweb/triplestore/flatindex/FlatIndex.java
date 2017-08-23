@@ -16,11 +16,19 @@ import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
+import dk.aau.cs.qweb.triplestore.hashindex.HashIndex;
 import dk.aau.cs.qweb.triplestore.hashindex.IteratorWrapper;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
+/**
+ * This index is build on using only a single hashmap (to reduce overhead from multiple hashmaps)
+ * Each triple is stored in the index twice, once where the first element is the key and again where the first and second is the key.
+ * They key is implemented as the class FlatKey {@link FlatKey}.
+ * 
+ * No proper performance test have been made, but some initial test suggest that is performs strictly worse 
+ * than the HashIndex {@link HashIndex} in terms of space consumption.
+ */
 public class FlatIndex implements Index {
-
 	protected Map<FlatKey, ArrayList<KeyContainer>> indexMap;
 	protected Field field1;
 	protected Field field2;
@@ -33,13 +41,13 @@ public class FlatIndex implements Index {
 		indexMap = new HashMap<FlatKey,ArrayList<KeyContainer>>();
 	}
 
-	protected Key getFieldKey(Field field,TripleStar t) {
+	protected Key getFieldKey(Field field,TripleStar triple) {
 		if (field == Field.S) {
-			return t.subjectId;
+			return triple.subjectId;
 		} else if (field == Field.P) {
-			return t.predicateId;
+			return triple.predicateId;
 		} else {
-			return t.objectId;
+			return triple.objectId;
 		}
 	}
 
@@ -59,18 +67,18 @@ public class FlatIndex implements Index {
 		return indexMap.isEmpty();
 	}
 
-	public boolean contains(TripleStarPattern t) {
+	public boolean contains(TripleStarPattern triple) {
 		FlatKey key ;
-		Key firstKey = t.getField(field1).getKey();
+		Key firstKey = triple.getField(field1).getKey();
 		
-		if (t.isFieldConcrete(field2)) {
-			key = new FlatKey(firstKey,t.getField(field2).getKey());
+		if (triple.isFieldConcrete(field2)) {
+			key = new FlatKey(firstKey,triple.getField(field2).getKey());
 		} else {
 			key = new FlatKey(firstKey);
 		}
 		
 		if (indexMap.containsKey(key)) {
-			return indexMap.get(key).contains(new KeyContainer(t.getObject().getKey(),Field.O));
+			return indexMap.get(key).contains(new KeyContainer(triple.getObject().getKey(),Field.O));
 		}
 		return false;
 	}
@@ -85,22 +93,15 @@ public class FlatIndex implements Index {
 			key = new FlatKey(firstKey);
 		}
 		
-		
 		if (indexMap.containsKey(key)) {
 			//Zero variables
 			if (triple.isFieldConcrete(field3)) {
 				throw new IllegalArgumentException("No varialbes found in triple "+triple+", use graph.contains instead");
-				//return new AddKeyToIteratorWrapper(indexMap.get(firstKey).iterator(triple.getField(field2).getKey(),triple),firstKey,field1);
-			} 
-			else {
+			} else {
 				if (triple.isFieldConcrete(field2)) {
 					Key secondKey = triple.getField(field2).getKey();
 					return new IteratorWrapper(indexMap.get(key).iterator(), firstKey, field1, secondKey, field2);
 				} else {
-					System.out.println(indexMap);
-					for (KeyContainer iterable_element : indexMap.get(key)) {
-						System.out.println(iterable_element);
-					}
 					return new IteratorWrapper(indexMap.get(key).iterator(), firstKey, field1);
 				}
 			}
@@ -113,8 +114,8 @@ public class FlatIndex implements Index {
 		for (Entry<FlatKey, ArrayList<KeyContainer>> iterable_element : indexMap.entrySet()) {
 			Key firstKey = iterable_element.getKey().getFirstField();
 			Iterator<KeyContainer> iterator = iterable_element.getValue().iterator();
+			
 			if (iterable_element.getKey().getSecondField() == null) {
-				
 				chain.addIterator(new IteratorWrapper(iterator,firstKey,field1));
 			} else {
 				Key secondKey = iterable_element.getKey().getSecondField();
@@ -149,14 +150,14 @@ public class FlatIndex implements Index {
 	}
 
 	@Override
-	public void add(final TripleStar t) {
-		Key firstKey = getFieldKey(field1,t);
-		Key secondKey = getFieldKey(field2,t);
-		Key thirdKey = getFieldKey(field3,t);
+	public void add(final TripleStar triple) {
+		Key firstKey = getFieldKey(field1,triple);
+		Key secondKey = getFieldKey(field2,triple);
+		Key thirdKey = getFieldKey(field3,triple);
 		FlatKey doubleKey = new FlatKey(firstKey,secondKey);
 		FlatKey singleKey = new FlatKey(firstKey);
 		
-		//Add general key e.g. S??
+		//Add general key e.g. S**
 		if (indexMap.containsKey(singleKey)) {
 			KeyContainer kc = new KeyContainer(thirdKey,field3);
 			kc.addKey(secondKey, field2);
@@ -169,7 +170,7 @@ public class FlatIndex implements Index {
 			indexMap.put(singleKey, array);
 		}
 		
-		//Add specific key e.g. SP?
+		//Add specific key e.g. SP*
 		if (indexMap.containsKey(doubleKey)) {
 			indexMap.get(doubleKey).add(new KeyContainer(thirdKey,field3));
 		} else {

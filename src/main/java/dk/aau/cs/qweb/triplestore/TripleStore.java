@@ -40,6 +40,7 @@ public class TripleStore {
      
      /**
           Add a triple to this triple store.
+          This method is also responsible for outputting a status to the command line.
      */
     public void add( TripleStar t ) {
     	triplesAddedCount++;
@@ -120,7 +121,6 @@ public class TripleStore {
     
      public boolean containsByEquality( Triple t ) { 
     	 throw new NotImplementedException("MyTripleStore.containsByEquality");
-    	 //return SPO.contains( t ); 
      }
      
      /** 
