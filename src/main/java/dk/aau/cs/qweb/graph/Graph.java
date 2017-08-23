@@ -60,7 +60,7 @@ public class Graph extends GraphBase {
 	}
 
 	protected TripleStore createTripleStore()
-    { return new TripleStore( this ); }
+    { return new TripleStore(); }
 
     protected void destroy()
     { store.close(); }
@@ -76,102 +76,11 @@ public class Graph extends GraphBase {
     public void performDelete( Triple t )
     { 
     	throw new NotImplementedException("MyGraph.performAdd");
-    	//store.delete( t );
     }
 
     public int graphBaseSize() { 
     	throw new NotImplementedException("MyGraph.graphBaseSize");
-    	//return store.size(); 
     }
-
-//    protected GraphStatisticsHandler createStatisticsHandler()
-//    { return new GraphMemStatisticsHandler( (MyTripleStore) store ); }
-
-    /**
-        The GraphMemStatisticsHandler exploits the existing TripleStoreMem
-        indexes to deliver statistics information for single-concrete-node queries
-        and for trivial cases of two-concrete-node queries.        
-     */
-//    protected static class GraphMemStatisticsHandler implements GraphStatisticsHandler
-//    {
-//        protected final MyTripleStore store;
-//
-//        public GraphMemStatisticsHandler( MyTripleStore store )
-//        { this.store = store; }
-//
-//        private static class C 
-//        {
-//            static final int NONE = 0;
-//            static final int S = 1, P = 2, O = 4;
-//            static final int SP = S + P, SO = S + O, PO = P + O;
-//            static final int SPO = S + P + O;
-//        }
-//
-//        /**
-//            Answer a good estimate of the number of triples matching (S, P, O)
-//            if cheaply possible.
-//
-//            <p>If there are any reifier triples, return -1. (We may be able to
-//            improve this later.)
-//
-//            <p>If only one of S, P, O is concrete, answers the number of triples
-//            with that value in that field.
-//
-//            <p>If two of S, P, P are concrete and at least one of them has no
-//            corresponding triples, answers 0.
-//
-//            <p>Otherwise answers -1, ie, no information available. (May change;
-//            the two degenerate cases might deserve an answer.)
-//
-//         	@see org.apache.jena.graph.GraphStatisticsHandler#getStatistic(org.apache.jena.graph.Node, org.apache.jena.graph.Node, org.apache.jena.graph.Node)
-//         */
-//        @Override
-//        public long getStatistic( Node S, Node P, Node O )
-//        {
-//            int concrete = (S.isConcrete() ? C.S : 0) + (P.isConcrete() ? C.P : 0) + (O.isConcrete() ? C.O : 0);
-//            switch (concrete)
-//            {
-//                case C.NONE:
-//                    return store.size();
-//
-//                case C.S:
-//                    return countInMap( S, store.getSubjects() );
-//
-//                case C.SP:
-//                    return countsInMap( S, store.getSubjects(), P, store.getPredicates() );
-//
-//                case C.SO:
-//                    return countsInMap( S, store.getSubjects(), O, store.getObjects() );
-//
-//                case C.P:
-//                    return countInMap( P, store.getPredicates() );
-//
-//                case C.PO:
-//                    return countsInMap( P, store.getPredicates(), O, store.getObjects() );
-//
-//                case C.O:
-//                    return countInMap( O, store.getObjects() );
-//
-//                case C.SPO:
-//                    return store.contains( Triple.create( S, P, O ) ) ? 1 : 0;
-//            }
-//            return -1;
-//        }
-//
-//        public long countsInMap( Node a, NodeToTriplesMapMem mapA, Node b, NodeToTriplesMapMem mapB )
-//        {
-//            long countA = countInMap( a, mapA ), countB = countInMap( b, mapB );
-//            return countA == 0 || countB == 0 ? 0 : -1L;
-//        }
-//
-//        public long countInMap( Node n, NodeToTriplesMapMem map )
-//        {
-//            //TripleBunch b = map.get( n.getIndexingValue() );
-//            //return b == null ? 0 : b.size();
-//        	//TODO
-//        	return 0;
-//        }
-//    }
 
     /**
          Answer an ExtendedIterator over all the triples in this graph that match the
@@ -197,22 +106,6 @@ public class Graph extends GraphBase {
 		return store.contains(t);
     }
 
-//	private boolean doesReferenceDictionaryContainTriple(TripleStarPattern t) {
-//		return NodeDictionary.getInstance().containsReferernceTripleKey(t.getSubject().getKey(), t.getPredicate().getKey(), t.getObject().getKey());
-//	}
-//
-//	private boolean isReferenceTriple(TripleStarPattern t) {
-//		if (t.getSubject().getKey().getId() > Config.getLargestSubjectId() ||
-//				t.getPredicate().getKey().getId() > Config.getLargestPredicateId() ||
-//				t.getObject().getKey().getId() > Config.getLargestObjectId()) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
-    
-    
-    
     
     /**
          Answer true iff this graph contains <code>t</code>. If <code>t</code>

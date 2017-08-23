@@ -3,7 +3,6 @@ package dk.aau.cs.qweb.triplestore;
 import java.util.Collections;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -20,7 +19,6 @@ import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 import dk.aau.cs.qweb.triplestore.treeindex.TreeIndex;
 
 public class TripleStore {
-	protected final Graph parent;
     protected Index SPO;
     protected Index POS;
     protected Index OSP;
@@ -28,11 +26,10 @@ public class TripleStore {
     long millis = System.currentTimeMillis();
     int numberOfLookups = 0;
     
-    public TripleStore ( Graph parent) { 
-    	this.SPO = new HashIndex(Field.S, Field.P, Field.O );
-    	this.POS = new HashIndex(Field.P, Field.O, Field.S );
-        this.OSP = new HashIndex(Field.O, Field.S, Field.P);
-        this.parent = parent; 
+    public TripleStore () { 
+    	this.SPO = IndexFactory.getIndex(Field.S, Field.P, Field.O );
+    	this.POS = IndexFactory.getIndex(Field.P, Field.O, Field.S );
+        this.OSP = IndexFactory.getIndex(Field.O, Field.S, Field.P );
     }   
     
     /**
