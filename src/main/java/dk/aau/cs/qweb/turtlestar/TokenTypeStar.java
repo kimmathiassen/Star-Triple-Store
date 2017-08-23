@@ -1,5 +1,12 @@
 package dk.aau.cs.qweb.turtlestar;
 
+import org.apache.jena.riot.tokens.TokenType;
+
+/**
+ * The types of tokens
+ * This file is based on {@link TokenType}, we added EMBEDDED
+ *
+ */
 public enum TokenTypeStar {
     NODE, IRI, PREFIXED_NAME, BNODE,EMBEDDED,
     // BOOLEAN,

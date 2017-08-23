@@ -31,6 +31,13 @@ import org.apache.jena.sparql.graph.NodeConst;
 
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 
+/**
+ * Class that facilitate the reading of turtle star files (.ttls)
+ * This file is mostly a copy of the corresponding language file for the turtle format.
+ * The only significant change is the addition of support for embedded triples.
+ * The {@link ParserProfileStar} does most of the actual parsing of the file.
+ *
+ */
 public class LangTurtleStar {
 
     protected final StreamRDF dest ; 

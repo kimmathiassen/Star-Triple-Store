@@ -19,6 +19,10 @@ import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.SyntaxLabels;
 import org.apache.jena.sparql.util.Context;
 
+/**
+ * Class used when registering the TurtleStar language
+ * It ensure that the StarTokenizer is called instaed of the Tokenzier and the StarProfiler is called instead of the Profiler.
+ */
 public class TTLSReader implements ReaderRIOT {
 	Prologue prologue = null;
 	ErrorHandler handler = null;

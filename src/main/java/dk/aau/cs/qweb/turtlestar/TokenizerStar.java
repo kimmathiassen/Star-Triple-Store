@@ -52,7 +52,14 @@ import org.apache.jena.atlas.lib.Closeable;
 import org.apache.jena.riot.RiotParseException;
 import org.apache.jena.riot.system.RiotChars;
 import org.apache.jena.sparql.ARQInternalErrorException;
+import org.apache.jena.util.Tokenizer;
 
+/**
+ * The tokenizer class
+ * This is mostly a copy of {@link Tokenizer}
+ * Only significant change is that addition of support for the EMBEDDED token
+ *
+ */
 public class TokenizerStar implements Iterator<TokenStar>, Closeable {
 	// TODO Remove CNTL and make SYMBOLS
     // Drop through to final general symbol/keyword reader, including <=, != 

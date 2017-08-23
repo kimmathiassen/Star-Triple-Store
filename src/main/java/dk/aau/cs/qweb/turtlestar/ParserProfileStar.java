@@ -13,12 +13,22 @@ import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.SysRIOT;
 import org.apache.jena.riot.system.ErrorHandler;
 import org.apache.jena.riot.system.FactoryRDF;
+import org.apache.jena.riot.system.ParserProfileBase;
 import org.apache.jena.riot.system.Prologue;
 import org.apache.jena.riot.system.RiotLib;
 import org.apache.jena.sparql.core.Quad;
 
+import dk.aau.cs.qweb.node.EmbeddedNode;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
+import dk.aau.cs.qweb.node.SimpleNode;
 
+/**
+ * The parser for turtle star files.
+ * It parses a tree of tokens and create "nodes" that correspond to the elements of a triple.
+ * This class is mostly a copy of the {@link ParserProfileBase}, however, with custom handling of embedded triples and instead of generating Jena {@link Node} we create {@link SimpleNode} and {@link EmbeddedNode}.
+ * This is essential because the Jena nodes used some string caching that consumed to much memory. Instead we use a dictionary.  
+ *
+ */
 public class ParserProfileStar {
 	protected ErrorHandler errorHandler ;
     protected Prologue     prologue ;
