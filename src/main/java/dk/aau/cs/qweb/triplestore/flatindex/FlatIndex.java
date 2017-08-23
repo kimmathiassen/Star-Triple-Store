@@ -15,8 +15,8 @@ import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.TripleStar;
 import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.Index;
-import dk.aau.cs.qweb.triplestore.IteratorWrapper;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
+import dk.aau.cs.qweb.triplestore.hashindex.IteratorWrapper;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
 public class FlatIndex implements Index {
@@ -106,10 +106,6 @@ public class FlatIndex implements Index {
 			}
 		}
 		return Collections.emptyIterator();
-	}
-
-	public void removedOneViaIterator() {
-		throw new NotImplementedException("Index.removedOneViaIterator");
 	}
 
 	public Iterator<KeyContainer> iterateAll() {

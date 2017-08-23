@@ -5,9 +5,13 @@ import org.apache.jena.reasoner.IllegalParameterException;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 
+/**
+ * A structure to store a subject, predicate, and/or object. 
+ * This is not a triple or a triple pattern and unlike them it is a mutable data structure.
+ * It is used to store the key of elements in the indexes and the object of the iterators. 
+ * It can be converted into a triple.
+ */
 public class KeyContainer implements Comparable<KeyContainer> {
-	
-
 	private Key subject;
 	private Key predicate;
 	private Key object;

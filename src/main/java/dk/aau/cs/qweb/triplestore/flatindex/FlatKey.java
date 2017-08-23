@@ -26,15 +26,6 @@ public class FlatKey {
 	
 	@Override
 	public int hashCode() {
-//		int result = 17;
-//		
-//		result = 31 * result + (int)(field1.getId() ^ (field1.getId() >>> 32));
-//		if (field2 == null) {
-//			result = 31 * result + 0; 
-//		} else {
-//			result = 31 * result + (int)(field2.getId() ^ (field2.getId() >>> 32)); 
-//		}
-		
 		return field1.hashCode()+(field2 != null ? field2.hashCode() : 0);
 	}
 	
