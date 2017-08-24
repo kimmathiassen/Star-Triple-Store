@@ -21,6 +21,7 @@ import dk.aau.cs.qweb.triple.KeyFactory;
  * 
  * For more info about reference keys and none-reference keys see {@link NodeDictionary}
  * For more info about "special reference triple distrubution conditions" see {@link NodeDictionary}
+ * 
  */
 public abstract class AbstractNodeDictionary implements NodeDictionary {
 	protected boolean isThereAnySpecialReferenceTripleDistributionConditions;

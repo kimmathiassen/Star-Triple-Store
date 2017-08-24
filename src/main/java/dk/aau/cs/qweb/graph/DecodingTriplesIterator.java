@@ -12,18 +12,16 @@ import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 
+/**
+ * Class for making a Jena ExtendedIterator\<Jena triple\> from a ExtendedIterator\<KeyContainer\>
+ *
+ */
 public class DecodingTriplesIterator extends NiceIterator<Triple>
 implements ExtendedIterator<Triple>
 {
 	final protected NodeDictionary nodeDict;
 	final protected Iterator<KeyContainer> inputIterator;
 	final protected TripleStarPattern tripleStarPattern;
-	
-//	public DecodingTriplesIterator (Iterator<TripleStar> inputIterator )
-//	{
-//		this.nodeDict = NodeDictionary.getInstance();
-//		this.inputIterator = inputIterator;
-//	}
 	
 	public DecodingTriplesIterator(ExtendedIterator<KeyContainer> inputIterator, TripleStarPattern tripleStarPattern) {
 		this.tripleStarPattern = tripleStarPattern;
@@ -49,25 +47,31 @@ implements ExtendedIterator<Triple>
 	inputIterator.remove();
 	}
 	
-	public Triple decode ( KeyContainer t )
+	/**
+	 * Transform a KeyContainer to a Jena Triple (with containing nodes as oppose to keys)
+	 * 
+	 * @param keyContainer
+	 * @return Triple
+	 */
+	public Triple decode ( KeyContainer keyContainer )
 	{
 		Node subject;
 		Node predicate;
 		Node object;
-		if (t.containsSubject()) {
-			subject = this.nodeDict.getNode(t.getSubject());
+		if (keyContainer.containsSubject()) {
+			subject = this.nodeDict.getNode(keyContainer.getSubject());
 		} else {
 			subject = this.nodeDict.getNode(tripleStarPattern.getSubject().getKey());
 		}
 
-		if (t.containsPredicate()) {
-			predicate = this.nodeDict.getNode(t.getPredicate());
+		if (keyContainer.containsPredicate()) {
+			predicate = this.nodeDict.getNode(keyContainer.getPredicate());
 		} else {
 			predicate = this.nodeDict.getNode(tripleStarPattern.getPredicate().getKey());
 		}
 		
-		if (t.containsObject()) {
-			object = this.nodeDict.getNode(t.getObject());
+		if (keyContainer.containsObject()) {
+			object = this.nodeDict.getNode(keyContainer.getObject());
 		} else {
 			object = this.nodeDict.getNode(tripleStarPattern.getObject().getKey());
 		}

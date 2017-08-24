@@ -40,7 +40,7 @@ public class Key implements Element, Comparable<Key>{
 	public String toString() {
 		if (id > minReferenceTripleId && id < maxReferenceTripleId) {
 			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
-			String body = Long.toBinaryString(BitHelper.getOverflowBody(id));
+			String body = Long.toBinaryString(BitHelper.getReferenceKeyBody(id));
 			return header + "-"+body;
 		}
 		else if (id > minEmbeddedTripleId && id < maxEmbeddedTripleId) { //is embedded triple

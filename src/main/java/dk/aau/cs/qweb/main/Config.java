@@ -3,9 +3,9 @@ package dk.aau.cs.qweb.main;
 public class Config {
 
 	private static boolean prefixDictionaryState = true;
-	private static int subjectSize = 20;
-	private static int predicateSize = 20;
-	private static int objectSize = 20;
+	private static int subjectSizeInBits = 20;
+	private static int predicateSizeInBits = 20;
+	private static int objectSizeInBits = 20;
 	private static int nodeDictionaryInitialSize = 10000;
 	private static int nodeReferenceDictionaryInitialSize = 10000;
 	private static String dictionaryType = "DiskBTree";
@@ -20,15 +20,15 @@ public class Config {
 	}
 
 	public static long getLargestSubjectId() {
-		return (long) Math.pow(2, subjectSize);
+		return (long) Math.pow(2, subjectSizeInBits);
 	}
 	
 	public static long getLargestPredicateId() {
-		return (long) Math.pow(2, predicateSize);
+		return (long) Math.pow(2, predicateSizeInBits);
 	}
 	
 	public static long getLargestObjectId() {
-		return (long) Math.pow(2, objectSize);
+		return (long) Math.pow(2, objectSizeInBits);
 	}
 
 	public static int getNodeDictionaryInitialSize() {

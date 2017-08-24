@@ -8,6 +8,12 @@ import org.apache.jena.sparql.core.Var;
 
 import dk.aau.cs.qweb.triplepattern.Variable;
 
+/**
+ * This dictonary creates and contains the mappings from a jena Var {@link Var} to an integer.
+ * This integer is used to represent and compare variables.
+ *
+ * It is implemented as a singleton class.	
+ */
 public class VarDictionary
 {
 	private int freshVariableCounter = 1;
