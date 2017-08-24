@@ -12,6 +12,16 @@ import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
+/**
+ * The Node Dictionary is responsibility is two fold.
+ * Its primary function is to store the values and mappings
+ * between {@link Key} and and {@link Node} (Blank nodes, SimpleNodes(URI and Literals), Embedded Nodes) 
+ * 
+ * As a secondary function it also stores the mapping between reference keys and the simple/embedded keys. 
+ * 
+ * For more info about reference keys and none-reference keys see {@link NodeDictionary}
+ * For more info about "special reference triple distrubution conditions" see {@link NodeDictionary}
+ */
 public abstract class AbstractNodeDictionary implements NodeDictionary {
 	protected boolean isThereAnySpecialReferenceTripleDistributionConditions;
 	protected int referenceTripleDistributionPercentage;
@@ -25,22 +35,6 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 	@Override
 	public int getNumberOfEmbeddedTriples() {
 		return numberOfEmbeddedTriples;
-	}
-	
-	protected Key nodeToKey(Node node) {
-		if (node instanceof EmbeddedNode) {
-			EmbeddedNode embeddedNode = (EmbeddedNode) node;
-			
-			Key s1 = nodeToKey(normalizeNode(embeddedNode.getSubject())); 
-			Key p1 = nodeToKey(normalizeNode(embeddedNode.getPredicate()));
-			Key o1 = nodeToKey(normalizeNode(embeddedNode.getObject()));
-			
-			return registerOrGetEmbeddedNode(s1,p1,o1,embeddedNode);
-		} else if (node instanceof SimpleNode) {
-			return registerOrGetNode((SimpleNode)node);
-		} else {
-			throw new IllegalArgumentException("The type of "+node.getClass().getSimpleName()+" is not a instance of SimpleNode or Node_triple. Node.toString() "+node);
-		}
 	}
 	
 	protected Node normalizeNode(Node node) {
@@ -178,7 +172,19 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 
 	@Override
 	public Key createKey(Node node) {
-		return nodeToKey(node);
+		if (node instanceof EmbeddedNode) {
+			EmbeddedNode embeddedNode = (EmbeddedNode) node;
+			
+			Key s1 = createKey(normalizeNode(embeddedNode.getSubject())); 
+			Key p1 = createKey(normalizeNode(embeddedNode.getPredicate()));
+			Key o1 = createKey(normalizeNode(embeddedNode.getObject()));
+			
+			return registerOrGetEmbeddedNode(s1,p1,o1,embeddedNode);
+		} else if (node instanceof SimpleNode) {
+			return registerOrGetNode((SimpleNode)node);
+		} else {
+			throw new IllegalArgumentException("The type of "+node.getClass().getSimpleName()+" is not a instance of SimpleNode or Node_triple. Node.toString() "+node);
+		}
 	}
 	
 	@Override
