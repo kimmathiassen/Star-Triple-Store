@@ -5,7 +5,6 @@ import org.apache.jena.graph.NodeVisitor;
 
 /**
  * Simple Node abstract class
- *
  */
 public abstract class SimpleNode extends StarNode {
 

@@ -24,7 +24,11 @@ import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.transform.MyTransform;
 
-
+/**
+ * The query engine that replaces the standard Jena query engine.
+ * It makes sure the OpStarEngine is registered
+ * The Transformer {@link MyTransform} is also registered by this class
+ */
 public class QueryEngineStar extends QueryEngineMain {
     // Do nothing template for a query engine.  
 	final public boolean RECORD_PROVENANCE = false;

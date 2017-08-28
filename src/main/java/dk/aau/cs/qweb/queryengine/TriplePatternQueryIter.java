@@ -18,10 +18,12 @@ import dk.aau.cs.qweb.triplepattern.Variable;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 
 
+/**
+ * Iterator for Triple pattern
+ *
+ */
 public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closeable
 {
-	// members
-
 	final protected ExecutionContext execCxt;
 
 	/** the input iterator consumed by this one */
@@ -58,8 +60,12 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 	}
 
 
-	// implementation of the Iterator interface
 
+	/* (non-Javadoc)
+	 * @see java.util.Iterator#hasNext()
+	 * 
+	 * Method for testing if the iterator contains more elements.
+	 */
 	public boolean hasNext ()
 	{
 		while ( currentMatches == null || ! currentMatches.hasNext() )
@@ -103,9 +109,9 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 		// the copy corresponding to the currently matching triple (currentMatch).
 		KeyContainer keyContainer = currentMatches.next();
 		TripleStar currentMatch = createTriple(keyContainer);
-		//BindingProvenance currentMatchProvenance = execCxt.recordProvenance ? new BindingProvenanceImpl( (TraceableTriple) currentMatch, tp ) : null;
 		SolutionMapping result = new SolutionMapping( currentInputMapping );
 
+		//Add solution mappings for variables
 		if ( !currentQueryPattern.getSubject().isConcrete() ) {
 			result.set( currentQueryPattern.getSubject().getVariable().getId(), currentMatch.subjectId );
 		}
@@ -152,16 +158,12 @@ public class TriplePatternQueryIter implements Iterator<SolutionMapping>, Closea
 
 
 	// implementation of the Closable interface
-
 	public void close ()
 	{
 		if ( input instanceof Closeable ) {
 			( (Closeable) input ).close();
 		}
 	}
-
-
-	// helper methods
 
 	/**
 	 * Replaces each query variable in the given triple pattern that is bound to

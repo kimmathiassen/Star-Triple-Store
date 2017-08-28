@@ -59,19 +59,6 @@ public class OpStarExecutor extends OpExecutor{
 	{
 		throw new IllegalArgumentException("This iterator should never be called! All BGPs should have been rewritten. opBGP: "+opBGP.toString());
 		//TODO this should never happen
-//		if (    opBGP.getPattern().isEmpty()
-//		     || ! (execCxt.getDataset().getDefaultGraph() instanceof Graph) )
-//		{
-//			return super.execute( opBGP, input );
-//		}
-//
-//
-//		Iterator<SolutionMapping> qIt = new EncodeBindingsIterator( input, execCxt );
-//		for ( Triple t : opBGP.getPattern().getList() ) {
-//			qIt = new TriplePatternQueryIter( encode(t), qIt, execCxt );
-//		}
-//
-//		return new DecodeBindingsIterator( qIt, execCxt );
 	}
 	
 	@Override
@@ -82,39 +69,7 @@ public class OpStarExecutor extends OpExecutor{
 	@Override
 	protected QueryIterator execute(OpJoin opJoin, QueryIterator input) {
 		return new DecodeBindingsIterator(execute((OpJoin)opJoin, new EncodeBindingsIterator( input, execCxt )),execCxt);
-		
-//		Op opLeft = opJoin.getLeft();
-//		Op opRight = opJoin.getRight();
-//		QueryIterator jenaIterator = input;
-//		Iterator<SolutionMapping> leftIter = null;
-//		QueryIterator leftBindings = null;
-//		
-//		if (opLeft instanceof OpTriple) {
-//			leftIter = execute((OpTriple)opLeft,new EncodeBindingsIterator( input, execCxt ));
-//		} else if (opLeft instanceof OpJoin) {
-//			leftIter = execute((OpJoin)opLeft,new EncodeBindingsIterator( input, execCxt ));
-//		} else if (opLeft instanceof OpExtend) {
-//			leftIter = execute((OpExtend)opLeft,new EncodeBindingsIterator( input, execCxt ));
-//		} else {
-//			leftBindings = exec(opLeft, input);
-//		}
-//			
-//		if (leftIter != null) {
-//			if (opRight instanceof OpTriple) {
-//				jenaIterator = new DecodeBindingsIterator(execute((OpTriple)opRight,leftIter), execCxt);
-//			} else if (opRight instanceof OpJoin) {
-//				jenaIterator = new DecodeBindingsIterator(execute((OpJoin)opRight,leftIter), execCxt);
-//			} else if (opRight instanceof OpExtend) {
-//				jenaIterator = new DecodeBindingsIterator(execute((OpExtend)opRight,leftIter), execCxt);
-//			} 
-//		} else {
-//			jenaIterator = exec(opRight, leftBindings) ;
-//		}
-//			
-//		
-//        return jenaIterator ;
     }
-	
 	
 	private Iterator<SolutionMapping> execute(OpJoin opJoin, Iterator<SolutionMapping> solutionMappingIter) {
 		Op opLeft = opJoin.getLeft();
@@ -186,8 +141,6 @@ public class OpStarExecutor extends OpExecutor{
 	private Iterator<SolutionMapping> execute(OpTriple opTriple, Iterator<SolutionMapping> solutionMappingIter) {
 		return new TriplePatternQueryIter( encode(opTriple.getTriple()), solutionMappingIter, execCxt );
 	}
-
-	// helper methods
 
 	final protected TripleStarPattern encode ( Triple tp) {
 		TriplePatternBuilder builder = new TriplePatternBuilder();

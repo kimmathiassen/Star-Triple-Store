@@ -22,10 +22,11 @@ import dk.aau.cs.qweb.triplepattern.Variable;
 import dk.aau.cs.qweb.triplestore.KeyContainer;
 
 
+/**
+ * Iterator for the bind operator
+ */
 public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<SolutionMapping>, Closeable
 {
-	// members
-
 	final protected ExecutionContext execCxt;
 
 	/** the input iterator consumed by this one */
@@ -118,6 +119,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 		//BindingProvenance currentMatchProvenance = execCxt.recordProvenance ? new BindingProvenanceImpl( (TraceableTriple) currentMatch, tp ) : null;
 		SolutionMapping result = new SolutionMapping( currentInputMapping );
 
+		//Set bindings for each variable
 		if ( !currentQueryPattern.getSubject().isConcrete() ) {
 			result.set( currentQueryPattern.getSubject().getVariable().getId(), currentMatch.subjectId );
 		}
@@ -130,6 +132,7 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			result.set( currentQueryPattern.getObject().getVariable().getId(), currentMatch.objectId );
 		}
 
+		// set solution mappings for the bind variable
 		result.set(var,createBindKey(currentMatch.subjectId, currentMatch.predicateId, currentMatch.objectId));
 		return result;
 	}
@@ -169,9 +172,6 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 			( (Closeable) input ).close();
 		}
 	}
-
-
-	// helper methods
 
 	/**
 	 * Replaces each query variable in the given triple pattern that is bound to

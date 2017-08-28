@@ -15,6 +15,10 @@ import dk.aau.cs.qweb.triple.Key;
 
 
 
+/**
+ * Iterator for decoding the solution mappings (bindings)
+ *
+ */
 public class DecodeBindingsIterator extends QueryIter
 {
 	// members

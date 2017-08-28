@@ -14,6 +14,9 @@ import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 
 
+/**
+ * Iterator for encoding solution mappings (bindings)
+ */
 public class EncodeBindingsIterator implements Iterator<SolutionMapping>, Closeable
 {
 	/** the input iterator consumed by this one */

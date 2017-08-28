@@ -2,6 +2,9 @@ package dk.aau.cs.qweb.queryengine;
 
 import dk.aau.cs.qweb.triple.Key;
 
+/**
+ * This class represents the solution mappings (variable bindings)
+ */
 public class SolutionMapping {
 	final protected long[] map;
 	final static public int UNBOUND = 0;
