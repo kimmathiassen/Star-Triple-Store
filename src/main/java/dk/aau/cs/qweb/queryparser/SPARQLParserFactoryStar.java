@@ -4,6 +4,10 @@ import org.apache.jena.query.Syntax;
 import org.apache.jena.sparql.lang.SPARQLParser;
 import org.apache.jena.sparql.lang.SPARQLParserFactory;
 
+/**
+ * Class for registering the parser and ensure it is selected to answer query using the SPARQL* syntax
+ *
+ */
 public class SPARQLParserFactoryStar implements SPARQLParserFactory {
 
 	

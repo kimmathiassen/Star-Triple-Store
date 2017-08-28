@@ -13,6 +13,10 @@ import org.apache.jena.sparql.lang.SPARQLParser;
 import org.apache.jena.sparql.lang.SyntaxVarScope;
 import org.apache.jena.sparql.lang.sparql_11.ParseException;
 
+/**
+ * The parser for SPARQL*
+ * The actual parsing is done in the @link {@link ParserSPARQL11} class
+ */
 public class ParserSPARQLStar extends SPARQLParser {
 
 	private interface Action { void exec(SPARQLStarParser11 parser) throws Exception ; }

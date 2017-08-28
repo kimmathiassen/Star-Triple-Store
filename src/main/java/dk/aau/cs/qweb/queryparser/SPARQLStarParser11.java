@@ -133,6 +133,14 @@ import org.apache.jena.update.Update;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.triplepattern.TriplePatternBuilder;
 
+/**
+ * This class is based on a generated query parser
+ * We made some changes in it, in regards to the nodes that are craeted.
+ * Only Simple nodes or EmbeddedNodes are created. See bottom of class.
+ * We also add support for parsing embedded triples.
+ * This is done by adding an extra case to the "<" token,
+ * if the next token is also a "<" than an embedded triple is expected.
+ */
 @SuppressWarnings("unused")
 public class SPARQLStarParser11 extends SPARQLParserBase implements SPARQLParser11Constants {
 	protected final Node nRDFtype       = NodeFactoryStar.createSimpleURINode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type") ;
