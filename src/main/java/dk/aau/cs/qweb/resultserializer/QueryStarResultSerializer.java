@@ -21,10 +21,11 @@ import org.apache.jena.sparql.syntax.Element;
 import org.apache.jena.sparql.syntax.Template;
 import org.apache.jena.sparql.util.FmtUtils;
 
-/** 
- * Serialize a query into SPARQL or ARQ formats 
+
+/**
+ * Serializer class for printing results.
  */
-public class QueryStarSerializer implements QueryVisitor
+public class QueryStarResultSerializer implements QueryVisitor
 {
     static final int BLOCK_INDENT = 2 ;
     protected FormatterTemplate fmtTemplate ;
@@ -32,7 +33,7 @@ public class QueryStarSerializer implements QueryVisitor
     protected FmtExprSPARQL fmtExpr ;
     protected IndentedWriter out = null ;
 
-    QueryStarSerializer(OutputStream        _out,
+    QueryStarResultSerializer(OutputStream        _out,
                     FormatterStarElement    formatterElement, 
                     FmtExprSPARQL       formatterExpr,
                     FormatterTemplate   formatterTemplate)
@@ -41,7 +42,7 @@ public class QueryStarSerializer implements QueryVisitor
              formatterElement, formatterExpr, formatterTemplate) ;
     }
 
-    QueryStarSerializer(IndentedWriter      iwriter,
+    QueryStarResultSerializer(IndentedWriter      iwriter,
                     FormatterStarElement    formatterElement, 
                     FmtExprSPARQL       formatterExpr,
                     FormatterTemplate   formatterTemplate)

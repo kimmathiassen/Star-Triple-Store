@@ -37,7 +37,7 @@ import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.queryengine.QueryEngineStar;
 import dk.aau.cs.qweb.queryparser.SPARQLParserFactoryStar;
 import dk.aau.cs.qweb.queryparser.SyntaxStar;
-import dk.aau.cs.qweb.resultserializer.QuerySerializerFactoryStar;
+import dk.aau.cs.qweb.resultserializer.QueryStarResultSerializerFactory;
 import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
@@ -183,7 +183,7 @@ public class App {
 		SPARQLParserRegistry.addFactory(SyntaxStar.syntaxSPARQL_Star, f);
 		
 		SerializerRegistry s = SerializerRegistry.get();
-		QuerySerializerFactoryStar serializer = new QuerySerializerFactoryStar();
+		QueryStarResultSerializerFactory serializer = new QueryStarResultSerializerFactory();
 		s.addQuerySerializer(SyntaxStar.syntaxSPARQL_Star, serializer);
 		
 		QueryEngineStar.register();

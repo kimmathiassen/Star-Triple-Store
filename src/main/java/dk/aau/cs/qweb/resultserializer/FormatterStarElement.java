@@ -18,6 +18,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.path.PathWriter;
 import org.apache.jena.sparql.serializer.FmtExprSPARQL;
 import org.apache.jena.sparql.serializer.FormatterBase;
+import org.apache.jena.sparql.serializer.FormatterElement;
 import org.apache.jena.sparql.serializer.QuerySerializer;
 import org.apache.jena.sparql.serializer.QuerySerializerFactory;
 import org.apache.jena.sparql.serializer.SerializationContext;
@@ -44,6 +45,12 @@ import org.apache.jena.sparql.syntax.ElementVisitor;
 import org.apache.jena.sparql.util.FmtUtils;
 import org.apache.jena.vocabulary.RDF;
 
+/**
+ * Class for printing results sets in a nice way.
+ * This class is identical to the {@link FormatterElement} (I think)
+ * I cant remember why it was nessary to create this class
+ *
+ */
 public class FormatterStarElement extends FormatterBase
 implements ElementVisitor
 {

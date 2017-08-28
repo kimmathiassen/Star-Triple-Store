@@ -12,7 +12,10 @@ import org.apache.jena.sparql.util.NodeToLabelMapBNode;
 
 import dk.aau.cs.qweb.queryparser.SyntaxStar;
 
-public class QuerySerializerFactoryStar implements QuerySerializerFactory {
+/**
+ * Factory for registering this result serializer
+ */
+public class QueryStarResultSerializerFactory implements QuerySerializerFactory {
 
 	 @Override
      public QueryVisitor create(Syntax syntax, Prologue prologue, IndentedWriter writer) {
@@ -21,13 +24,13 @@ public class QuerySerializerFactoryStar implements QuerySerializerFactory {
          // For the construct pattern
          SerializationContext cxt2 = new SerializationContext(prologue, new NodeToLabelMapBNode("c", false));
 
-         return new QueryStarSerializer(writer, new FormatterStarElement(writer, cxt1), new FmtExprSPARQL(writer, cxt1),
+         return new QueryStarResultSerializer(writer, new FormatterStarElement(writer, cxt1), new FmtExprSPARQL(writer, cxt1),
                  new FmtTemplate(writer, cxt2));
      }
 
      @Override
      public QueryVisitor create(Syntax syntax, SerializationContext context, IndentedWriter writer) {
-         return new QueryStarSerializer(writer, new FormatterStarElement(writer, context), new FmtExprSPARQL(writer,
+         return new QueryStarResultSerializer(writer, new FormatterStarElement(writer, context), new FmtExprSPARQL(writer,
                  context), new FmtTemplate(writer, context));
      }
 
