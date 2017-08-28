@@ -1,5 +1,9 @@
 package dk.aau.cs.qweb.node;
 
+/**
+ * Literal Node
+ *
+ */
 public class SimpleLiteralNode extends SimpleNode {
 
 	protected SimpleLiteralNode(String label) {

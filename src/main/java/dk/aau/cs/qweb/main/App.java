@@ -62,7 +62,10 @@ public class App {
 		options.addOption("f", "query-folder", true, "path to folder with .sparqls files");
 		options.addOption("l", "location", true, "path to the turtle* file");
 		options.addOption("p", "disable-prefix-dictionary", false, "disable the prefix dictionary (default on)");
+		options.addOption("i", "index", true, "type of index: hashindex, flatindex, treeindex. (default hashindex)");
+		options.addOption("d", "dictionary", true, "type of dictionary: InMemoryHashMap, DiskBTree. (default DiskBTree)");
 		
+		// Parse options
 		try {
 		    CommandLine line = parser.parse( options, args );
 				    
@@ -101,17 +104,29 @@ public class App {
 		    	Config.enablePrefixDictionary(false);
 		    }
 		    
+		    if (line.hasOption("index")) {
+		    	Config.setIndex(line.getOptionValue("index"));
+		    }
+		    
+		    if (line.hasOption("dictionary")) {
+		    	Config.setDictionaryType(line.getOptionValue("dictionary"));
+		    }
+		    
 		} catch( ParseException exp ) {
 			printHelp(exp, options);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
 		
+		// register the .ttls reader and parser
         registerTTLS();
+        
+        // register the sparql* query parser and optimizer
         registerQueryEngine();
-        ModelFactory.createDefaultModel();
+        
         long start_time;
         
+        // load data
         try {
         	NodeDictionaryFactory.getDictionary().open();
         	System.out.println("Loading file: "+filename);
@@ -119,14 +134,18 @@ public class App {
             RDFDataMgr.read(model, filename);
             System.out.println("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
 		} finally {
+			//Ensure that potential physical database connections are closed.
 			NodeDictionaryFactory.getDictionary().close();
 		}
+        
+        // Delete duplicate triples
         System.out.println();
         System.out.println("Deleting duplicates");
         start_time = System.nanoTime();
         g.eliminateDuplicates();
         System.out.println("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
         
+        // Evaluation of the queries
         System.out.println();
         System.out.println("Evaluating queries:");
         for (String queryString : queries) {

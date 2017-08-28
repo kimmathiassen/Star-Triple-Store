@@ -1,6 +1,10 @@
 package dk.aau.cs.qweb.node;
 
 
+/**
+ * The Blank Node
+ *
+ */
 public class SimpleBlankNode extends  SimpleNode {
 
 	protected SimpleBlankNode(String label) {

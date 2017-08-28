@@ -6,6 +6,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeVisitor;
 
+/**
+ * The embedded node
+ */
 public class EmbeddedNode extends StarNode {
 
 	private Node node1;

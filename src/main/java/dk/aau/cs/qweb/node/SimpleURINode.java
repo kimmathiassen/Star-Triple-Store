@@ -2,6 +2,9 @@ package dk.aau.cs.qweb.node;
 
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
 
+/**
+ * URI node
+ */
 public class SimpleURINode extends SimpleNode {
 	
 	private int urlBodyId;
