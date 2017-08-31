@@ -33,6 +33,11 @@ public class OpWrapper {
 		return op;
 	}
 
+	/**
+	 * This is a wrapper class for op, it contains method for accessing variables and selectivity in an easy manner.
+	 * An opWrapper can be a tree of opWrappers, e.g. in the example of a OpJoin.
+	 * @param op
+	 */
 	public OpWrapper(Op op) {
 		this.op = op;
 		
@@ -52,7 +57,7 @@ public class OpWrapper {
 		}
 	}
 
-	public boolean isTripleOverflown() {
+	public boolean containsReferenceNode() {
 		Triple triple =  getTriple(op);
 		NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 		if (triple != null) {
@@ -99,16 +104,29 @@ public class OpWrapper {
 		selectivity = SelectivityMap.getSelectivityScore(op.getTriple());
 	}
 
+	/**
+	 * Calculate the selectivity of the bind keyword, might not work on the default implementation e.g. when a literal is bound to a variable.
+	 * The selectivity is calculated based on the triple pattern, the bind variable is not taken into account.
+	 */
 	private void calculateSelectivity(OpExtend op) {
 		Collection<Expr> expressions = op.getVarExprList().getExprs().values();
 		if (expressions.size() != 1) {
 			throw new IllegalArgumentException("OpExtend contains multiple or zero expressions, expected one: "+op);
 		}
-		for (Expr expr : expressions) {
-			NodeValueNode node = (NodeValueNode) expr;
-			EmbeddedNode t = (EmbeddedNode) node.getNode();
-			selectivity = SelectivityMap.getSelectivityScore(new Triple(t.getSubject(),t.getPredicate(),t.getObject()));
+		
+		if (op.getVarExprList().getVars().get(0).isVariable()) {
+			//Because of query rewriting, there can only be one element in the expression list.
+			for (Expr expr : expressions) {
+				NodeValueNode node = (NodeValueNode) expr;
+				EmbeddedNode t = (EmbeddedNode) node.getNode();
+				selectivity = SelectivityMap.getSelectivityScore(new Triple(t.getSubject(),t.getPredicate(),t.getObject()));
+			}
+		} else {
+			//If the the bind variable is set, then the triple pattern corresponds to the full pattern e.g. <s> <p> <o>
+			selectivity = SelectivityMap.getHighestSelectivity();
 		}
+		
+		
 	}
 
 	private void extractVariables(OpTriple op) {
@@ -162,9 +180,9 @@ public class OpWrapper {
 		variables.addAll(op.getVarExprList().getVars());
 	}
 
-	private void extractVariables(OpJoin op) {
-		OpJoin join = (OpJoin)op;
+	private void extractVariables(OpJoin join) {
 		Op left = join.getLeft();
+		
 		if (left instanceof OpJoin) {
 			extractVariables((OpJoin) left);
 		} else if (left instanceof OpTriple) {
@@ -195,10 +213,6 @@ public class OpWrapper {
 	@Override
 	public String toString() {
 		return op.toString();
-	}
-
-	public boolean onlyContainsVariables() {
-		return variables.size() == 3 ? true : false;
 	}
 
 	public boolean isOpExtend() {

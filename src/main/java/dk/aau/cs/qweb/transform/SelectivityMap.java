@@ -5,6 +5,10 @@ import java.util.Map;
 
 import org.apache.jena.graph.Triple;
 
+/**
+ * Class that define the triple pattern selectivity heuristics
+ * High selectivity is good.
+ */
 public class SelectivityMap {
 	private static Map<Integer,Integer> score = createMap();
 	
@@ -34,5 +38,9 @@ public class SelectivityMap {
 		}
 		
 		return score.get(key);
+	}
+	
+	public static int getHighestSelectivity() {
+		return 8;
 	}
 }

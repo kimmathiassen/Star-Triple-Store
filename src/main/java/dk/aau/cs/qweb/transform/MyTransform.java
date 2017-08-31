@@ -23,6 +23,10 @@ import org.apache.jena.sparql.expr.nodevalue.NodeValueNode;
 import dk.aau.cs.qweb.dictionary.VarDictionary;
 import dk.aau.cs.qweb.node.EmbeddedNode;
 
+/**
+ * The class contains the logic for the query optimization.
+ *
+ */
 public class MyTransform extends TransformCopy {
 
 	@Override
@@ -75,28 +79,36 @@ public class MyTransform extends TransformCopy {
 		}
 	}
 
+	/**
+	 * This method create a left based join tree based on some heuristics. 
+	 * It is created in a bottom up fashion.
+	 */
 	private Op createJoinTree(Op op) {
-		List<OpWrapper> triplePatterns = addToList(op);
-		OpWrapper result = getOpWithHighestSelectivity(triplePatterns);;
+		List<OpWrapper> unusedOpwrappers = addToList(op);
+		OpWrapper headOfTree = getOpWithHighestSelectivity(unusedOpwrappers);;
 		
-		while(containsJoin(result,triplePatterns)) {
-			result = opJoin(result,getOpWithHighestSelectivityThatJoins(result,triplePatterns));
+		while(containsJoin(headOfTree,unusedOpwrappers)) {
+			headOfTree = opJoin(headOfTree,getOpWithHighestSelectivityThatJoins(headOfTree,unusedOpwrappers));
 		}
 		
-		while (triplePatterns.size() > 0) {
-			Op seq = OpSequence.create(result.asOp(), triplePatterns.get(0).asOp());
-			result = new OpWrapper(seq);
-			triplePatterns.remove(0);
+		//handle case if there are opWrappers that do join with the tree. In this case a opSequence is created.
+		while (unusedOpwrappers.size() > 0) {
+			Op seq = OpSequence.create(headOfTree.asOp(), unusedOpwrappers.get(0).asOp());
+			headOfTree = new OpWrapper(seq);
+			unusedOpwrappers.remove(0);
 		}
 		
-		return result.asOp();
+		return headOfTree.asOp();
 	}
 
-	private boolean containsJoin(OpWrapper op, List<OpWrapper> triplePatterns) {
+	/**
+	 * Return true iff there exist at least two OPs that share a variable.
+	 */
+	private boolean containsJoin(OpWrapper op, List<OpWrapper> opWrappers) {
 		List<Var> variables = new ArrayList<Var>();
 		variables.addAll(op.getVariables());
 		
-		for (OpWrapper opWrapper : triplePatterns) {
+		for (OpWrapper opWrapper : opWrappers) {
 			if (!Collections.disjoint(variables,opWrapper.getVariables())) {
 				return true;
 			}
@@ -104,15 +116,28 @@ public class MyTransform extends TransformCopy {
 		return false;
 	}
 
+	/**
+	 * Create a join between the opWrappers
+	 * @param The old treeHead should be the left.
+	 * @param The new opWrapper should be right.
+	 * @return A OpJoin that is head of the tree
+	 */
 	private OpWrapper opJoin(OpWrapper left, OpWrapper right) {
 		return new OpWrapper(OpJoin.create(left.asOp(),right.asOp()));
 	}
 
-	private OpWrapper getOpWithHighestSelectivityThatJoins(OpWrapper tree,List<OpWrapper> triplePatterns) {
+	/**
+	 * The op with the highest selectivity (that joins) is removed from the list and returned. 
+	 * 
+	 * @param operatorTree, used to find join candidates
+	 * @param opWrappers, list of unused opwrappers.
+	 * @return The opwrapper to be added to the operator tree.
+	 */
+	private OpWrapper getOpWithHighestSelectivityThatJoins(OpWrapper operatorTree,List<OpWrapper> opWrappers) {
 		List<Var> variables = new ArrayList<Var>();
 		OpWrapper highestSelectivity = null;
-		variables.addAll(tree.getVariables());
-		for (OpWrapper opWrapper : triplePatterns) {
+		variables.addAll(operatorTree.getVariables());
+		for (OpWrapper opWrapper : opWrappers) {
 			if (!Collections.disjoint(variables,opWrapper.getVariables())) {
 				if (highestSelectivity == null) {
 					highestSelectivity = opWrapper;
@@ -122,40 +147,57 @@ public class MyTransform extends TransformCopy {
 				}
 			}
 		}
-		triplePatterns.remove(highestSelectivity);
+		opWrappers.remove(highestSelectivity);
 		return highestSelectivity;
 	}
 
-	private OpWrapper getOpWithHighestSelectivity(List<OpWrapper> triplePatterns) {
-		OpWrapper highestSelectivity = triplePatterns.get(0);
-		for (OpWrapper opWrapper : triplePatterns) {
+	/**
+	 * Traverse the list of OpWappers and find the element with the highest selectivity, see {@link SelectivityMap}
+	 * That element is removed from the list and returned.
+	 */
+	private OpWrapper getOpWithHighestSelectivity(List<OpWrapper> opWrappers) {
+		OpWrapper highestSelectivity = opWrappers.get(0);
+		for (OpWrapper opWrapper : opWrappers) {
 			if (compareSelectivity(highestSelectivity, opWrapper)) {
 				highestSelectivity = opWrapper;
 			}
 		}
-		triplePatterns.remove(highestSelectivity);
+		opWrappers.remove(highestSelectivity);
 		return highestSelectivity;
 	}
 
-	private boolean compareSelectivity(OpWrapper highestSelectivity, OpWrapper opWrapper) {
-		//True means that opWrapper is higher
-		if (opWrapper.getSelectivity() == highestSelectivity.getSelectivity()) {
-			if (opWrapper.isTripleOverflown() || highestSelectivity.isTripleOverflown()) {
-				return opWrapper.isTripleOverflown() ? false : true;
+	/**
+	 * Method for comparing the selectivty of two opWrappers
+	 * 
+	 * @param defender
+	 * @param opposer
+	 * @return return true if the selectivity of the opposer is higher than the defender. If equals 
+	 * two cases are considered. 
+	 * OPs without reference nodes are preferred. (reference nodes are more expensive to process than non-reference nodes, thus the fewer that better)
+	 * If both only contains varialbes e.g.  bind(?s, ?p, ?o) as ?b
+	 * Then the bind operation is preferred (OpExtend). (Bind have more variables than triple patterns, thus better joins can potentialy be selected from this point on. )
+	 */
+	private boolean compareSelectivity(OpWrapper defender, OpWrapper opposer) {
+		//True means that opposer is higher
+		if (opposer.getSelectivity() == defender.getSelectivity()) {
+			
+			if (opposer.isOpExtend()) {
+				return true;
+			} else if (defender.isOpExtend()) {
+				return false;
 			}
-			if (opWrapper.onlyContainsVariables() && highestSelectivity.onlyContainsVariables()) {
-				
-				if (opWrapper.isOpExtend()) {
-					return true;
-				} else if (highestSelectivity.isOpExtend()) {
-					return false;
-				}
+			
+			if (opposer.containsReferenceNode() || defender.containsReferenceNode()) {
+				return opposer.containsReferenceNode() ? false : true;
 			}
 		}
 		
-		return opWrapper.getSelectivity() > highestSelectivity.getSelectivity();
+		return opposer.getSelectivity() > defender.getSelectivity();
 	}
 
+	/**
+	 * Create a list of OpWrappers
+	 */
 	private List<OpWrapper> addToList(Op op) {
 		List<OpWrapper> wrappedOp = new ArrayList<OpWrapper>();
 		if (op instanceof OpBGP) {
@@ -215,6 +257,14 @@ public class MyTransform extends TransformCopy {
 		return result;
 	}
 
+	/**
+	 * Method for traversing the query operator and printing it.
+	 * This is not very well polished method.
+	 * Alternativly the standard printer could be updated to support embedded triple patterns.
+	 * This is a recursive function. 
+	 * @param The head operator
+	 * @param depth of the tree.
+	 */
 	private void print(Op op, int depth) {
 		if (op instanceof OpExtend) {
 			for (Op element : splitExtend(op)) {
