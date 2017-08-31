@@ -58,7 +58,7 @@ public class App {
 		// create the Options
 		Options options = new Options();
 		options.addOption("h", "help", false, "Display this message." );
-		options.addOption("q", "query", true, "the sparql* query");
+		options.addOption("q", "query", true, "the path to a file containing the sparql* query ");
 		options.addOption("f", "query-folder", true, "path to folder with .sparqls files");
 		options.addOption("l", "location", true, "path to the turtle* file");
 		options.addOption("p", "disable-prefix-dictionary", false, "disable the prefix dictionary (default on)");
