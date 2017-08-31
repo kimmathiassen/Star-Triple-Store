@@ -6,7 +6,7 @@ public class NodeDictionaryFactory {
 
 	static public NodeDictionary getDictionary() {
 		if (Config.getDictionaryType().equals("InMemoryHashMap")) {
-			return HashNodeHybridDictionary.getInstance();
+			return HashNodeDictionary.getInstance();
 		} else if  (Config.getDictionaryType().equals("DiskBTree")) {
 			return BTreePhysicalDictionary.getInstance(); 
 		} else {

@@ -8,21 +8,21 @@ import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 
-public class HashNodeHybridDictionary extends AbstractNodeDictionary {
-	private static HashNodeHybridDictionary instance;
+public class HashNodeDictionary extends AbstractNodeDictionary {
+	private static HashNodeDictionary instance;
 	HashBiMap<Key,StarNode> nodeDictionary;
 	HashBiMap<Key,StarNode> referenceNodeDictionary;
 	
-	private HashNodeHybridDictionary() {
+	private HashNodeDictionary() {
 		
 		nodeDictionary = HashBiMap.create(Config.getNodeDictionaryInitialSize());
 		referenceNodeDictionary = HashBiMap.create(Config.getReferenceNodeDictionaryInitialSize());
 		numberOfEmbeddedTriples = 0;
 	}
 	
-	protected static HashNodeHybridDictionary getInstance() {
+	protected static HashNodeDictionary getInstance() {
 		if(instance == null) {
-	         instance = new HashNodeHybridDictionary();
+	         instance = new HashNodeDictionary();
 	    }
 	    return instance;
 	}

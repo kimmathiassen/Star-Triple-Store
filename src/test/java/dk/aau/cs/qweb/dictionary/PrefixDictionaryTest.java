@@ -24,7 +24,7 @@ public class PrefixDictionaryTest {
 	@After
 	public void tearDown() {
 		PrefixDictionary.getInstance().clear();
-		HashNodeHybridDictionary.getInstance().clear();
+		HashNodeDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().close();
 		Config.enablePrefixDictionary(true);
 	}
@@ -49,7 +49,7 @@ public class PrefixDictionaryTest {
 		Node embeddedNode4 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
 		
 		
-		HashNodeHybridDictionary dict = HashNodeHybridDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		dict.createKey(embeddedNode);
@@ -70,7 +70,7 @@ public class PrefixDictionaryTest {
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
 		Node embeddedNode = NodeFactoryStar.createEmbeddedNode(subject, predicate, object);
 		
-		HashNodeHybridDictionary dict = HashNodeHybridDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		dict.createKey(embeddedNode);
@@ -97,7 +97,7 @@ public class PrefixDictionaryTest {
 		Node subject4 = NodeFactoryStar.createSimpleURINode("http://example.fgg/product/41");
 		Node embeddedNode4 = NodeFactoryStar.createEmbeddedNode(subject4, predicate, object);
 		
-		HashNodeHybridDictionary dict = HashNodeHybridDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		dict.createKey(embeddedNode);
@@ -113,7 +113,7 @@ public class PrefixDictionaryTest {
 	public void simpleURIs() {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		
-		HashNodeHybridDictionary dict = HashNodeHybridDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		Key key = dict.createKey(subject);
@@ -127,7 +127,7 @@ public class PrefixDictionaryTest {
 		Config.enablePrefixDictionary(false);
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		
-		HashNodeHybridDictionary dict = HashNodeHybridDictionary.getInstance();
+		HashNodeDictionary dict = HashNodeDictionary.getInstance();
 		dict.clear();
 		
 		assertEquals(false,((SimpleURINode)subject).hasPrefix());
