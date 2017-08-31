@@ -10,9 +10,9 @@ import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 
-public class BTreePhysicalDictionary extends AbstractNodeDictionary  {
+public class BTreeHybridDictionary extends AbstractNodeDictionary  {
 
-	private static BTreePhysicalDictionary instance;
+	private static BTreeHybridDictionary instance;
 	private BTreeMap<String, Long> node2IdDictionary;
 	private BTreeMap<Long, String> id2NodeDictionary;
 	private BTreeMap<String, Long> referenceNode2IdDictionary;
@@ -24,7 +24,7 @@ public class BTreePhysicalDictionary extends AbstractNodeDictionary  {
 	private DB node2IdDB;
 	private DB referenceNode2IdDB;
 
-	private BTreePhysicalDictionary() {
+	private BTreeHybridDictionary() {
 	}
 
 	@Override
@@ -115,9 +115,9 @@ public class BTreePhysicalDictionary extends AbstractNodeDictionary  {
 		referenceNode2IdDB.close();
 	}
 	
-	protected static BTreePhysicalDictionary getInstance() {
+	protected static BTreeHybridDictionary getInstance() {
 		if(instance == null) {
-	         instance = new BTreePhysicalDictionary();
+	         instance = new BTreeHybridDictionary();
 	    }
 	    return instance;
 	}

@@ -8,7 +8,7 @@ public class NodeDictionaryFactory {
 		if (Config.getDictionaryType().equals("InMemoryHashMap")) {
 			return HashNodeDictionary.getInstance();
 		} else if  (Config.getDictionaryType().equals("DiskBTree")) {
-			return BTreePhysicalDictionary.getInstance(); 
+			return BTreeHybridDictionary.getInstance(); 
 		} else {
 			throw new IllegalArgumentException("unknown dictionary datastructure "+Config.getDictionaryType());
 		}
