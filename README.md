@@ -280,7 +280,7 @@ It takes up less memory but is slower than the hashIndex.
 The Flatindex
 Is designed to have a simple data structure at the cost of storing duplicate data.
 Each triple is stored twice.
-E.g. <s> <p> <o> is stored as follows
+E.g. s p o is stored as follows
 sp -> {o}
 s -> {po}
 where the left side is the key and the right side is a list of keyContainers.
