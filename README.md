@@ -42,6 +42,7 @@ WHERE {
 
 
 == Dictionary ==
+
 Each node of a triple, the subject, predicate or object, is encoded as a key.
 An essential feature of the Star Triple Store is that all operations are conducted on keys (longs).
 To determine if a triple pattern matches a triple, the keys from the triple pattern is compared to the keys of the triple.
@@ -67,6 +68,7 @@ When triples are loaded into the star triple store, the system will try to find 
 
 
 == Encoding ==
+
 These base idea is to allocate a fixed amount of bits for representing a triple.
 In this project we decided to use three times 64 bits to represent, i.e. 64 bits to represent each the subject, predicate, and object.
 
@@ -113,6 +115,7 @@ In case (2) the right side of the reference dictionary would contains another re
 
 
 == Index == 
+
 The system contains three in-memory indexes: a SPO, POS, OSP.
 
 SPO answers triple patterns: SP* and S**
@@ -123,6 +126,7 @@ POS answers triple patterns: PO* and P**
 
 
 == Query optimization ==
+
 Before I can explain the query optimizations I need to explain how Jena performs query evaluation and optimization.
 Jena use iterators when evaluating queries.
 This means that when a triple pattern is being evaluated, as oppose returning a set of matching triples, an iterator of the triples are returned.
@@ -179,6 +183,7 @@ We look at the same values, if one of them is a reference key, we break the tie 
 The reason for this is because there is an overhead associated with reference keys.
 
 == Turtle Star ==
+
 In order to serialize RDF* we created Turtle Star (extension .ttls).
 It uses the same syntax a turtle and it only differs in a few places.
 An element of a triple can now be another triple. 
@@ -186,6 +191,7 @@ e.g. <<<http://test.com/obama> a :president>> :trueInYear 2015^^xsd:integer
 Multiple levels of nested embedded triples are allowed.
 
 == Custom reference key distribution ==
+
 Reference keys are normally only created if an embedded key contains an key (subject, predicate, or object) that cannot be represented in the allocated number of bits.
 For testing purposes, we have introduced a flag that allows the tester to artificially change the number of reference keys.
 Currently, this option is only possible to enable by modifying the Triple Star Store. 
@@ -198,25 +204,30 @@ where the <percentage> is an integer number between 0-100 corresponding to the p
 
 
 === Software structure ===
+
 This section explain the software on a package level.
 It may be useful to reference the Class Diagram while reading this section, 
 despite the fact that this section talk about packages and the class diagram is about the classes.
 
 
 == Main ==
+
 This is the entry point of the code.
 It parses the input parameters and makes them available for the rest of the program.
 Here the query engine and triple parser is registered.
 
 == TurtleStar ==
+
 This package contains all logic for parsing turtleStar files. 
 
 == Node ==
+
 The turtle star parser produce Jena triples.
 These triples consist of nodes, this package contains the classes of these nodes.
 These nodes are only used when the data is loaded into the system and when printing the result set. (exceptions can happen)
 
 == Dictionary ==
+
 This package contains the three(four) dictionaries: NodeDictionary, ReferenceDictionary, VariableDictionary, and PrefixDictionary.
 
 The NodeDictionary is by far the most important.
@@ -237,14 +248,17 @@ If the dictionary is not closed when done, the file might be corrupted and have 
 Currently, an existing db cannot be used.
 
 == Triple ==
+
 This package defines a triple (not the same as a Jena triple).
 A triple consists of three keys. Keys are also define in this package.
 
 == Graph ==
+
 Contains the logic of a graph. 
 A graph is the abstraction over the internal storage.
 
 == TripleStore ==
+
 This package and its three subpackages (flatindex,hashindex,treeindex)
 It define the triple store, the three types of indexes, and the keyContainer.
 Due to a memory optimization the triple store does not contains triples, but keyContainers. 
@@ -274,31 +288,38 @@ where the left side is the key and the right side is a list of keyContainers.
 All index are stored in memory.
 
 == QueryParser ==
+
 This package handles the parsing of sparql* queries
 
 == TriplePattern ==
+
 The where clause of a query contains one or more triple patterns.
 Triple patterns consists of elements. 
 Elements can be variables, keys, and other triple patterns.
 
 == QueryEngine ==
+
 This package contains the logical that evaluate the query over the store.
 It contains classes for evaluating the query operators.
 
 == Transform ==
+
 This package is responsible for the query optimization.
 It creates a new query plan as described in Section "Query optimization"
 
 == ResultSerilizer ==
+
 This package contains classes used to print the result of a query after it has been evaluiated.
 It is important to always print the result, because the class ResultSet only contains bindings (solution mappings), and they need to be evaluated.
 
 
 == Helper ==
+
 This package contains helper classes.
 
 
 === Class diagram ===
+
 Below is the class digram of the Star Triple Store.
 It is not an exhaustive diagram, several classes have been omitted.
 Either because they are classes for creating other objects, i.e. factories or builders.
@@ -385,6 +406,7 @@ Or because they do not "fint" in the diagram.
 
 
 === Reading the code ===
+
 When first reading the code, I recommend that you begin in the App class.
 This this contains the main method and is the entry point of the code.
 It goes through a few stages that is worthwhile to understand.
@@ -401,11 +423,13 @@ These combined with the debugging tool is a nice way to gain understanding of th
 
 
 === Test cases ===
+
 This project contains several test cases written in JUnit 4.
 All of the tests are integration tests, (sorry, no unit tests)
 These data used for the tests are contained in the project.
 
 === Running the software ===
+
 The recommended way to run the software is to create a JAR and run it with the wanted set of options.
 By running the JAR with the --help option, all options will be printed with an explanation.
 
@@ -423,6 +447,7 @@ Only the location and query parameters are mandatory.
 
 
 === Opponents ===
+
 Olaf and I plans to compare against two opponents.
 The primary opponent is "itself".
 The purpose of the project is to test the feasibility of using RDF* as a physical storage model.
@@ -435,6 +460,7 @@ Because reviews might not be content with us only comparing against us self, we 
 While there has been some discussions about this, there exist no concrete plans on how to do this.
 
 === TODO ===
+
 This is a list of some of the TODOs for the project.
 I have split the list in "essential" and "Nice to have" features
 
