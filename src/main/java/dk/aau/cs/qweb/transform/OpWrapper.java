@@ -114,12 +114,12 @@ public class OpWrapper {
 			throw new IllegalArgumentException("OpExtend contains multiple or zero expressions, expected one: "+op);
 		}
 		
-		if (op.getVarExprList().getVars().get(0).isVariable()) {
+		if (getBindVariable(op).isVariable()) {
 			//Because of query rewriting, there can only be one element in the expression list.
 			for (Expr expr : expressions) {
 				NodeValueNode node = (NodeValueNode) expr;
 				EmbeddedNode t = (EmbeddedNode) node.getNode();
-				selectivity = SelectivityMap.getSelectivityScore(new Triple(t.getSubject(),t.getPredicate(),t.getObject()));
+				selectivity = SelectivityMap.getSelectivityScore(new Triple(t.getSubject(),t.getPredicate(),t.getObject()),getBindVariable(op));
 			}
 		} else {
 			//If the the bind variable is set, then the triple pattern corresponds to the full pattern e.g. <s> <p> <o>
@@ -127,6 +127,10 @@ public class OpWrapper {
 		}
 		
 		
+	}
+
+	private Var getBindVariable(OpExtend op) {
+		return op.getVarExprList().getVars().get(0);
 	}
 
 	private void extractVariables(OpTriple op) {

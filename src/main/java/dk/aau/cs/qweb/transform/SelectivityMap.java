@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jena.graph.Triple;
+import org.apache.jena.sparql.core.Var;
 
 /**
  * Class that define the triple pattern selectivity heuristics
@@ -14,14 +15,14 @@ public class SelectivityMap {
 	
 	private static Map<Integer, Integer> createMap() {
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
-        result.put(7, 8); //(s,p,o)
-        result.put(5, 7); //(s,?,o)
-        result.put(6, 6); //(?,p,o)
-        result.put(3, 5); //(s,p,?)
-        result.put(4, 4); //(?,?,o)
-        result.put(1, 3); //(s,?,?)
-        result.put(2, 2); //(?,p,?)
-        result.put(0, 1); //(?,?,?)
+        result.put(7, 16); //(s,p,o)
+        result.put(5, 14); //(s,?,o)
+        result.put(6, 12); //(?,p,o)
+        result.put(3, 10); //(s,p,?)
+        result.put(4, 8); //(?,?,o)
+        result.put(1, 6); //(s,?,?)
+        result.put(2, 4); //(?,p,?)
+        result.put(0, 2); //(?,?,?)
         return result;
     }
 
@@ -40,7 +41,13 @@ public class SelectivityMap {
 		return score.get(key);
 	}
 	
+	
+	
 	public static int getHighestSelectivity() {
-		return 8;
+		return 17;
+	}
+
+	public static int getSelectivityScore(Triple triple, Var bindVariable) {
+		return getSelectivityScore(triple)+1;
 	}
 }
