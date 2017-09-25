@@ -8,7 +8,7 @@ public class Config {
 	private static int objectSizeInBits = 20;
 	private static int nodeDictionaryInitialSize = 10000;
 	private static int nodeReferenceDictionaryInitialSize = 10000;
-	private static String dictionaryType = "DiskBTree";
+	private static String dictionaryType = "HybridBTree";
 	private static String indexType = "hashindex";
 	private static String filename;
 	

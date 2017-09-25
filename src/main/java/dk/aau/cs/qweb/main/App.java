@@ -63,7 +63,7 @@ public class App {
 		options.addOption("l", "location", true, "path to the turtle* file");
 		options.addOption("p", "disable-prefix-dictionary", false, "disable the prefix dictionary (default on)");
 		options.addOption("i", "index", true, "type of index: hashindex, flatindex, treeindex. (default hashindex)");
-		options.addOption("d", "dictionary", true, "type of dictionary: InMemoryHashMap, DiskBTree. (default DiskBTree)");
+		options.addOption("d", "dictionary", true, "type of dictionary: InMemoryHashMap, DiskBTree, HybridBTree, DiskBloomfilterBTree. (default HybridBTree)");
 		
 		// Parse options
 		try {
