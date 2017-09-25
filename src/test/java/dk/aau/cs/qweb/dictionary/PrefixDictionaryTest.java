@@ -2,6 +2,8 @@ package dk.aau.cs.qweb.dictionary;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.apache.jena.graph.Node;
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +24,7 @@ public class PrefixDictionaryTest {
 	
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws IOException {
 		PrefixDictionary.getInstance().clear();
 		HashNodeDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().close();
@@ -30,7 +32,7 @@ public class PrefixDictionaryTest {
 	}
 	
 	@Test
-	public void multipleCommonPrefixes() {
+	public void multipleCommonPrefixes() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -64,7 +66,7 @@ public class PrefixDictionaryTest {
 	}
 	
 	@Test
-	public void onePrefix() {
+	public void onePrefix() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://example.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -79,7 +81,7 @@ public class PrefixDictionaryTest {
 	}
 	
 	@Test
-	public void multipleDistinctPrefixes() {
+	public void multipleDistinctPrefixes() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -110,7 +112,7 @@ public class PrefixDictionaryTest {
 	}
 	
 	@Test
-	public void simpleURIs() {
+	public void simpleURIs() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		
 		HashNodeDictionary dict = HashNodeDictionary.getInstance();
@@ -123,7 +125,7 @@ public class PrefixDictionaryTest {
 	}
 	
 	@Test
-	public void disablePrefixDictionary() {
+	public void disablePrefixDictionary() throws IOException {
 		Config.enablePrefixDictionary(false);
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		

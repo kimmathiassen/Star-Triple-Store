@@ -3,6 +3,7 @@ package dk.aau.cs.qweb.dictionary;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.jena.graph.Node;
@@ -25,7 +26,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws IOException {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
 		NodeDictionaryFactory.getDictionary().close();
@@ -53,7 +54,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void overflowBitIsSet() {
+	public void overflowBitIsSet() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -69,7 +70,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void embeddedTripleBitIsSet() {
+	public void embeddedTripleBitIsSet() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -85,7 +86,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void countUniqueEmbeddedReferenceNodes() {
+	public void countUniqueEmbeddedReferenceNodes() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -115,7 +116,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void countEmbeddedNodes() {
+	public void countEmbeddedNodes() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");
@@ -146,7 +147,7 @@ public class NodeDictionaryTest {
 	}
 	
 	@Test
-	public void customDistribution() {
+	public void customDistribution() throws IOException {
 		Node subject = NodeFactoryStar.createSimpleURINode("http://example.com/product/1");
 		Node predicate = NodeFactoryStar.createSimpleURINode("http://product.com/name");
 		Node object = NodeFactoryStar.createSimpleLiteralNode("Eclipse");

@@ -2,6 +2,8 @@ package dk.aau.cs.qweb.turtlestar;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -46,7 +48,7 @@ public class TurtleStarReaderSeventiesShowTest {
 	}
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws IOException {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
 		NodeDictionaryFactory.getDictionary().close();

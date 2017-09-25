@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.querylayer;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.jena.query.Query;
@@ -80,7 +81,7 @@ public class queriesWithEmbeddedTriplePatterns {
 	}
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws IOException {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
 		NodeDictionaryFactory.getDictionary().close();

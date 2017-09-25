@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.querylayer.referenceTriples;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.jena.query.Query;
@@ -32,7 +33,7 @@ public class queriesWithReferenceTriplePatterns {
 	Model model;
 	
 	@Before
-	public void setup() {
+	public void setup() throws IOException {
 //		g = new Graph();
 //		model = ModelFactory.createModelForGraph(g);
 //		Resource kim = ResourceFactory .createResource("http://example.org/kim");
@@ -87,7 +88,7 @@ public class queriesWithReferenceTriplePatterns {
 	}
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws IOException {
 		PrefixDictionary.getInstance().clear();
 		NodeDictionaryFactory.getDictionary().clear();
 		NodeDictionaryFactory.getDictionary().close();

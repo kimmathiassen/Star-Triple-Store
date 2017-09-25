@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.dictionary;
 
+import java.io.IOException;
+
 import org.apache.jena.graph.Node;
 
 import dk.aau.cs.qweb.triple.Key;
@@ -77,8 +79,9 @@ public interface NodeDictionary {
 
 	/**
 	 * Empties the dicitonary
+	 * @throws IOException 
 	 */
-	public void clear() ;
+	public void clear() throws IOException ;
 	
 	/**
 	 * @return the number of entiers in the reference dictionary

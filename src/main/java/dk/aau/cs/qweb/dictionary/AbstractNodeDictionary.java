@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.dictionary;
 
+import java.io.IOException;
+
 import org.apache.jena.graph.Node;
 import org.apache.jena.reasoner.IllegalParameterException;
 
@@ -208,7 +210,7 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 	}
 	
 	@Override
-	public void clear() {
+	public void clear() throws IOException {
 		clearNodeDirectory();
 		clearReferenceNodeDirectory();
 		KeyFactory.reset();
@@ -226,6 +228,7 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 	protected abstract boolean containsSimpleNode(StarNode node);
 	protected abstract boolean containsSimpleKey(Key subject) ;
 	protected abstract boolean containsReferenceNode(StarNode node) ;
+	protected abstract boolean containsReferenceKey(Key key) ;
 	
 	protected abstract void addToNodeDictionary(StarNode node,Key key);
 	protected abstract void addToReferenceDictionary(StarNode node,Key key);

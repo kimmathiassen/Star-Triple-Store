@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.triplestore;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.junit.After;
@@ -32,7 +33,7 @@ public class IndexEmbeddedTripleTest {
 	}
 	
 	@After
-	public void tearDown(){
+	public void tearDown() throws IOException{
 		NodeDictionaryFactory.getDictionary().clear();
 		NodeDictionaryFactory.getDictionary().close();
 	}
