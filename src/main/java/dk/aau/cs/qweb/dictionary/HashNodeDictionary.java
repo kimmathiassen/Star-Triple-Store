@@ -113,4 +113,9 @@ public class HashNodeDictionary extends AbstractNodeDictionary {
 	protected boolean containsSimpleKey(Key key) {
 		return nodeDictionary.containsKey(key);
 	}
+	
+	@Override
+	protected boolean containsReferenceKey(Key key) {
+		return referenceNodeDictionary.containsKey(key);
+	}
 }
