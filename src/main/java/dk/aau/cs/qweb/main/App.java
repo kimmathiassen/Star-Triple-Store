@@ -98,6 +98,7 @@ public class App {
 		    
 		    if (line.hasOption("location")) {
 		    	filename = line.getOptionValue("location");
+		    	Config.setLocation(filename);
 		    }
 		    
 		    if (line.hasOption("disable-prefix-dictionary")) {

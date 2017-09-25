@@ -10,6 +10,7 @@ public class Config {
 	private static int nodeReferenceDictionaryInitialSize = 10000;
 	private static String dictionaryType = "DiskBTree";
 	private static String indexType = "hashindex";
+	private static String filename;
 	
 	public static void enablePrefixDictionary(boolean flag) {
 		prefixDictionaryState = flag;
@@ -57,5 +58,13 @@ public class Config {
 	
 	public static void setIndex(String name) {
 		indexType = name;
+	}
+
+	public static void setLocation(String filename) {
+		Config.filename = filename;
+	}
+	
+	public static String getLocation() {
+		return filename;
 	}
 }
