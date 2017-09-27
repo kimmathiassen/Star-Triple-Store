@@ -9,7 +9,7 @@ public class Config {
 	private static int nodeDictionaryInitialSize = 10000;
 	private static int nodeReferenceDictionaryInitialSize = 10000;
 	//private static String dictionaryType = "HybridBTree";
-	private static String dictionaryType = "DiskBloomfilterBTree";
+	private static String dictionaryType = "InMemoryHashMap";
 	private static String indexType = "hashindex";
 	private static String filename;
 	
