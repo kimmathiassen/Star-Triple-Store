@@ -172,8 +172,6 @@ public class App {
 	public static void validateBitEncoding() {
 		if (Config.getSubjectSizeInBits()+Config.getPredicateSizeInBits()+Config.getObjectSizeInBits() > 62) {
 			throw new IllegalArgumentException("The bit encoding is invalid. No more than 62 bits can be allocated" );
-		}  else if (Config.getSubjectSizeInBits()+Config.getPredicateSizeInBits()+Config.getObjectSizeInBits() < 60) {
-			throw new IllegalArgumentException("The bit encoding is invalid. At least 60 bits should be allocated" );
 		}
 		
 	}

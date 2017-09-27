@@ -115,13 +115,16 @@ public class KeyFactoryTest {
 		assertEquals(id, key.getId());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
 	public void embeddedKeyEncoding101030() {
 		Config.setSubjectSizeInBits(10);
 		Config.setPredicateSizeInBits(10);
 		Config.setObjectSizeInBits(30);
 		
 		App.validateBitEncoding();
+		
+		Key key = KeyFactory.createKey(1023,511,255);
+		long id = Long.MIN_VALUE + Long.parseLong("11111111110111111111000000000000000000000011111111", 2);
+		assertEquals(id, key.getId());
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
