@@ -42,7 +42,8 @@ public class bindOptimizations {
         		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  " +
         		"PREFIX foaf: <http://xmlns.com/foaf/0.1/>  " + 
         		"PREFIX ex: <http://example.org/>  " + 
-        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  ";
+        		"PREFIX rel: <http://www.perceive.net/schemas/relationship/>  "+
+        		"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>   ";
     	
         RDFDataMgr.read(model, filename);
         g.eliminateDuplicates();
@@ -57,9 +58,8 @@ public class bindOptimizations {
 
 	@Test
 	public void saveLookupInBindWithBindVariableUseInLaterTriplePattern() {
-		//Known bug
 		String queryString = prolog +
-				"SELECT ?date ?t WHERE {BIND(<<ex:kim ex:worksAt ex:aau>> as ?t) .  ?t ex:started  ?date . }" ; 
+				"SELECT ?date ?t WHERE {BIND(<<ex:kim ex:worksAt ex:aau>> as ?t) .  ?t ex:started  \"1999-08-16\"^^xsd:date . }" ; 
        
 	    Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
 	    int count = 0;
@@ -73,7 +73,6 @@ public class bindOptimizations {
 	        }
 	    }
 	    
-	    //Since contains do not count as a lookup, the number of lookups should be 0
 	    assertEquals(0,g.getNumberOfLookups());
 		assertEquals(1,count);
 	}
