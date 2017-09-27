@@ -1,21 +1,46 @@
 package dk.aau.cs.qweb.helper;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triple.Key;
 
 /**
  * Helper class for parsing keys.
  */
 public class BitHelper {
-	private static final long OVERFLOWN_MASK =	Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2);
-	private static final long OBJECT_MASK = 	Long.parseLong("0000000000000000000000000000000000000000000011111111111111111111", 2);
-	private static final long PREDICATE_MASK = 	Long.parseLong("0000000000000000000000001111111111111111111100000000000000000000", 2);
-	private static final long SUBJECT_MASK =	Long.parseLong("0000111111111111111111110000000000000000000000000000000000000000", 2);
-	private static final long BODY_MASK =		Long.parseLong("0000111111111111111111111111111111111111111111111111111111111111", 2);
-	public static final long LARGEST_20_BIT_NUMBER = 1048575;
+	private static final long REFERENCE_BIT_MASK =			Long.parseLong("0100000000000000000000000000000000000000000000000000000000000000", 2);
+	private static final long REFERENCE_TRIPLE_BODY_MASK =	Long.parseLong("0000111111111111111111111111111111111111111111111111111111111111", 2);
 	private static final long REFERENCE_TRIPLE_HEADER = 12;
 	private static final long EMBEDDED_TRIPLE_HEADER = 8;
 
+	public static long maxValue(int numberOfBits) {
+		return (long)Math.pow(2, numberOfBits)-1;
+	}
+	
+	private static long getSubjectMask() {
+		return maxValue(Config.getSubjectSizeInBits()) << (Config.getObjectSizeInBits() + Config.getPredicateSizeInBits());
+	}
+	
+	private static long getPredicateMask() {
+		return maxValue(Config.getPredicateSizeInBits()) << Config.getObjectSizeInBits();
+	}
+	
+	private static long getObjectMask() {
+		return maxValue(Config.getObjectSizeInBits());
+	}
+	
+	public static long createEmbeddedSubject(long id) {
+		return id << (Config.getPredicateSizeInBits() + Config.getObjectSizeInBits());
+	}
+	
+	public static long createEmbeddedPredicate(long id) {
+		return id << (Config.getObjectSizeInBits());
+	}
+	
+	public static long createEmbeddedObject(long id) {
+		return id;
+	}
+	
 	/**
 	 * @param key
 	 * @return True iff key is an embedded or reference key. 
@@ -43,7 +68,7 @@ public class BitHelper {
 		if (!isIdAnEmbeddedTriple(id)) {
 			throw new IllegalArgumentException("expected an embedded triple, but recieved: "+String.format("%64s", Long.toBinaryString(id)).replace(' ', '0'));
 		}
-		return (id & SUBJECT_MASK) >>> 40;
+		return (id & getSubjectMask()) >>> (Config.getPredicateSizeInBits() + Config.getObjectSizeInBits());
 	}
 	
 	/**
@@ -57,7 +82,7 @@ public class BitHelper {
 		if (!isIdAnEmbeddedTriple(id)) {
 			throw new IllegalArgumentException("expected an embedded triple, but recieved: "+String.format("%64s", Long.toBinaryString(id)).replace(' ', '0'));
 		}
-		return (id & PREDICATE_MASK) >>> 20;
+		return (id & getPredicateMask()) >>> Config.getObjectSizeInBits();
 	}
 
 	/**
@@ -71,7 +96,7 @@ public class BitHelper {
 		if (!isIdAnEmbeddedTriple(id)) {
 			throw new IllegalArgumentException("expected an embedded triple, but recieved: "+String.format("%64s", Long.toBinaryString(id)).replace(' ', '0'));
 		}
-		return id & OBJECT_MASK;
+		return id & getObjectMask();
 	}
 	
 	/**
@@ -121,7 +146,7 @@ public class BitHelper {
 	 */
 	public static boolean isReferenceBitSet(long id) {
 		if (isIdAnEmbeddedTriple(id)) {
-			if ((id & OVERFLOWN_MASK) == OVERFLOWN_MASK) {
+			if ((id & REFERENCE_BIT_MASK) == REFERENCE_BIT_MASK) {
 				return true;
 			}
 		}
@@ -146,6 +171,6 @@ public class BitHelper {
 	 * @return Return the body (60 least significant bits) of reference key
 	 */
 	public static long getReferenceKeyBody(long id) {
-		return (id & BODY_MASK );
+		return (id & REFERENCE_TRIPLE_BODY_MASK );
 	}
 }

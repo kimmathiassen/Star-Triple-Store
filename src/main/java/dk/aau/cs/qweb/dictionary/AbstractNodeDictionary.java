@@ -65,9 +65,9 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 	
 	protected Key registerOrGetEmbeddedNode(Key subject, Key predicate, Key object, EmbeddedNode node) {
 		//If reference triple
-		if (subject.getId() > Config.getLargestSubjectId() || 
-				predicate.getId() > Config.getLargestPredicateId() ||
-				object.getId() > Config.getLargestObjectId()) {
+		if (subject.getId() > Config.getSubjectSizeInBits() || 
+				predicate.getId() > Config.getPredicateSizeInBits() ||
+				object.getId() > Config.getObjectSizeInBits()) {
 			if (containsReferenceNode(node)) {
 				return getReferenceDictionaryKey(node);
 			}  else {

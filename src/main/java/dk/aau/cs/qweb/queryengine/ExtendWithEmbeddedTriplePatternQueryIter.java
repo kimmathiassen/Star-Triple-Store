@@ -240,9 +240,9 @@ public class ExtendWithEmbeddedTriplePatternQueryIter implements Iterator<Soluti
 	}
 	
 	private static boolean isReferenceTriple(Element s, Element p , Element o) {
-		if (s.getKey().getId() > Config.getLargestSubjectId() ||
-				p.getKey().getId() > Config.getLargestPredicateId() ||
-				o.getKey().getId() > Config.getLargestObjectId()) {
+		if (s.getKey().getId() > Config.getSubjectSizeInBits() ||
+				p.getKey().getId() > Config.getPredicateSizeInBits() ||
+				o.getKey().getId() > Config.getObjectSizeInBits()) {
 			return true;
 		} else {
 			return false;

@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
+import dk.aau.cs.qweb.main.App;
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triple.Key;
 import dk.aau.cs.qweb.triple.KeyFactory;
 
@@ -51,7 +53,6 @@ public class KeyFactoryTest {
 	
 	@Test
 	public void normalKey() {
-		
 		Key key = KeyFactory.createKey(56);
 		
 		assertEquals(56, key.getId());
@@ -59,7 +60,6 @@ public class KeyFactoryTest {
 	
 	@Test
 	public void embeddedKeyNegativLongOneParameter() {
-		
 		exception.expect(IllegalArgumentException.class);
 		KeyFactory.createKey(-45,65,148451);
 	}
@@ -69,17 +69,6 @@ public class KeyFactoryTest {
 		exception.expect(IllegalArgumentException.class);
 		KeyFactory.createKey(-44,-1,Long.MIN_VALUE);
 	}
-	
-//	@Test
-//	public void embeddedKeyMaxLongOneParameter() {
-//		long twoFirstBitsAreSet = Long.MIN_VALUE >> 1;
-//		
-//		Key key = KeyFactory.createKey(4566,1531,1048576);
-//		long twoFirstBitsOfKeyId = key.getId() & twoFirstBitsAreSet; 
-//		
-//		//Here we assert that the two first bits should be set.
-//		assertEquals(twoFirstBitsAreSet, twoFirstBitsOfKeyId);
-//	}
 	
 	@Test
 	public void embeddedKeyMaxLongThreeParameter() {
@@ -92,20 +81,55 @@ public class KeyFactoryTest {
 		assertEquals(twoFirstBitsAreSet, twoFirstBitsOfKeyId);
 	}
 	
-//	@Test
-//	public void embeddedKeyMaxLongNegativeLongNormalLongParameters() {
-//		
-//		exception.expect(IllegalArgumentException.class);
-//		KeyFactory.createKey(454,Long.MIN_VALUE,Long.MAX_VALUE);
-//	}
-	
 	@Test
-	public void embeddedKey() {
+	public void embeddedKeyEncoding202020() {
+		Config.setSubjectSizeInBits(20);
+		Config.setPredicateSizeInBits(20);
+		Config.setObjectSizeInBits(20);
 		
 		Key key = KeyFactory.createKey(1023,511,255);
 		long id = Long.MIN_VALUE + Long.parseLong("0000000000000011111111110000000000011111111100000000000011111111", 2);
-		
 		assertEquals(id, key.getId());
 	}
-
+	
+	@Test
+	public void embeddedKeyEncoding202022() {
+		Config.setSubjectSizeInBits(20);
+		Config.setPredicateSizeInBits(20);
+		Config.setObjectSizeInBits(22);
+		
+		Key key = KeyFactory.createKey(1023,511,255);
+		long id = Long.MIN_VALUE + Long.parseLong("000000000000001111111111000000000001111111110000000000000011111111", 2);
+		assertEquals(id, key.getId());
+	}
+	
+	
+	@Test
+	public void embeddedKeyEncoding201030() {
+		Config.setSubjectSizeInBits(20);
+		Config.setPredicateSizeInBits(10);
+		Config.setObjectSizeInBits(30);
+		
+		Key key = KeyFactory.createKey(1023,511,255);
+		long id = Long.MIN_VALUE + Long.parseLong("0000000000000011111111110111111111000000000000000000000011111111", 2);
+		assertEquals(id, key.getId());
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void embeddedKeyEncoding101030() {
+		Config.setSubjectSizeInBits(10);
+		Config.setPredicateSizeInBits(10);
+		Config.setObjectSizeInBits(30);
+		
+		App.validateBitEncoding();
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void embeddedKeyEncoding103030() {
+		Config.setSubjectSizeInBits(10);
+		Config.setPredicateSizeInBits(30);
+		Config.setObjectSizeInBits(30);
+		
+		App.validateBitEncoding();
+	}
 }

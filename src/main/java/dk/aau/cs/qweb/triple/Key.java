@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.helper.BitHelper;
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.triplepattern.Element;
 import dk.aau.cs.qweb.triplepattern.TripleStarPattern;
 import dk.aau.cs.qweb.triplepattern.Variable;
@@ -38,16 +39,23 @@ public class Key implements Element, Comparable<Key>{
 	
 	@Override
 	public String toString() {
+		// Reference triple
 		if (id > minReferenceTripleId && id < maxReferenceTripleId) {
 			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
 			String body = Long.toBinaryString(BitHelper.getReferenceKeyBody(id));
 			return header + "-"+body;
 		}
-		else if (id > minEmbeddedTripleId && id < maxEmbeddedTripleId) { //is embedded triple
-			String header = String.format("%4s",Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
-			String subject = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedSubject(id))).replace(' ', '0');
-			String predicate = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedPredicate(id))).replace(' ', '0');
-			String object = String.format("%20s",Long.toBinaryString(BitHelper.getEmbeddedObject(id))).replace(' ', '0');
+		//Embedded triple
+		else if (id > minEmbeddedTripleId && id < maxEmbeddedTripleId) { 
+			String headerFormat = "%"+Integer.toString(Config.getEmbeddedHeaderSize())+"s";
+			String subjectFormat = "%"+Integer.toString(Config.getSubjectSizeInBits())+"s";
+			String predicateFormat = "%"+Integer.toString(Config.getPredicateSizeInBits())+"s";
+			String objectFormat = "%"+Integer.toString(Config.getObjectSizeInBits())+"s";
+			
+			String header = String.format(headerFormat,Long.toBinaryString(BitHelper.getEmbeddedHeader(id))).replace(' ', '0');
+			String subject = String.format(subjectFormat,Long.toBinaryString(BitHelper.getEmbeddedSubject(id))).replace(' ', '0');
+			String predicate = String.format(predicateFormat,Long.toBinaryString(BitHelper.getEmbeddedPredicate(id))).replace(' ', '0');
+			String object = String.format(objectFormat,Long.toBinaryString(BitHelper.getEmbeddedObject(id))).replace(' ', '0');
 			return header + "-"+subject+"-"+predicate+"-"+object;
 		}
 		return Long.toBinaryString(id);

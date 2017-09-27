@@ -174,21 +174,21 @@ public class TripleStore {
 	/**
 	 * Returns the SPO index, used for testing purposes.
 	 */
-	protected Index getSPO() {
+	public Index getSPO() {
 		return SPO;
 	}
 	
 	/**
 	 * Returns the SPO index, used for testing purposes.
 	 */
-	protected Index getPOS() {
+	public Index getPOS() {
 		return POS;
 	}
 	
 	/**
 	 * Returns the SPO index, used for testing purposes.
 	 */
-	protected Index getOSP() {
+	public Index getOSP() {
 		return OSP;
 	}
 }

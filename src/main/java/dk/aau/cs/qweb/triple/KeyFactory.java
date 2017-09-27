@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.triple;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
+import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.SimpleNode;
 
@@ -71,9 +72,9 @@ public class KeyFactory {
 	}
 
 	private static boolean isElementsTooLargeToEncode(long subject, long predicate, long object) {
-		return subject > Config.getLargestSubjectId() || 
-				predicate > Config.getLargestSubjectId() ||
-				object > Config.getLargestSubjectId();
+		return subject > BitHelper.maxValue(Config.getSubjectSizeInBits()) || 
+				predicate > BitHelper.maxValue(Config.getSubjectSizeInBits()) ||
+				object > BitHelper.maxValue(Config.getSubjectSizeInBits());
 	}
 
 	
@@ -85,10 +86,10 @@ public class KeyFactory {
 	}
 	
 	private static Key createEmbeddedTriple(long subject, long predicate, long object) {
-		subject = subject << 40;
-		predicate = predicate << 20;
-		
-		return new Key(EMBEDDED_BIT + subject + predicate + object);
+		long sKey = BitHelper.createEmbeddedSubject(subject);
+		long pKey = BitHelper.createEmbeddedPredicate(predicate);
+		long oKey = object;
+		return new Key(EMBEDDED_BIT | pKey | sKey | oKey);
 	}
 
 	public static Key createKey(SimpleNode node) {

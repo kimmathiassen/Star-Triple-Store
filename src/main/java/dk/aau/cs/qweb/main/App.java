@@ -119,6 +119,8 @@ public class App {
 			e.printStackTrace();
 		} 
 		
+		validateBitEncoding();
+		
 		// register the .ttls reader and parser
         registerTTLS();
         
@@ -166,6 +168,15 @@ public class App {
              System.out.println();
 		}
     }
+
+	public static void validateBitEncoding() {
+		if (Config.getSubjectSizeInBits()+Config.getPredicateSizeInBits()+Config.getObjectSizeInBits() > 62) {
+			throw new IllegalArgumentException("The bit encoding is invalid. No more than 62 bits can be allocated" );
+		}  else if (Config.getSubjectSizeInBits()+Config.getPredicateSizeInBits()+Config.getObjectSizeInBits() < 60) {
+			throw new IllegalArgumentException("The bit encoding is invalid. At least 60 bits should be allocated" );
+		}
+		
+	}
 
 	public static void registerTTLS() {
 		Lang lang = LangBuilder.create("SSE", "text/turtle-star").addFileExtensions("ttls").build() ;

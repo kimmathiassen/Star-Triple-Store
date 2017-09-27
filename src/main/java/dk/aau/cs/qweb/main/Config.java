@@ -4,11 +4,12 @@ public class Config {
 
 	private static boolean prefixDictionaryState = true;
 	private static int subjectSizeInBits = 20;
-	private static int predicateSizeInBits = 20;
-	private static int objectSizeInBits = 20;
+	private static int predicateSizeInBits = 10;
+	private static int objectSizeInBits = 32;
 	private static int nodeDictionaryInitialSize = 10000;
 	private static int nodeReferenceDictionaryInitialSize = 10000;
-	private static String dictionaryType = "HybridBTree";
+	//private static String dictionaryType = "HybridBTree";
+	private static String dictionaryType = "DiskBloomfilterBTree";
 	private static String indexType = "hashindex";
 	private static String filename;
 	
@@ -20,16 +21,34 @@ public class Config {
 		return prefixDictionaryState;
 	}
 
-	public static long getLargestSubjectId() {
-		return (long) Math.pow(2, subjectSizeInBits);
+	public static void setSubjectSizeInBits(int size) {
+		subjectSizeInBits = size;
 	}
 	
-	public static long getLargestPredicateId() {
-		return (long) Math.pow(2, predicateSizeInBits);
+	public static void setPredicateSizeInBits(int size) {
+		predicateSizeInBits =  size;
 	}
 	
-	public static long getLargestObjectId() {
-		return (long) Math.pow(2, objectSizeInBits);
+	public static void setObjectSizeInBits(int size) {
+		objectSizeInBits = size;
+	}
+	
+	public static int getEmbeddedHeaderSize() {
+		
+		// TODO Auto-generated method stub
+		return 64-(subjectSizeInBits+predicateSizeInBits+objectSizeInBits);
+	}
+	
+	public static int getSubjectSizeInBits() {
+		return subjectSizeInBits;
+	}
+	
+	public static int getPredicateSizeInBits() {
+		return predicateSizeInBits;
+	}
+	
+	public static int getObjectSizeInBits() {
+		return objectSizeInBits;
 	}
 
 	public static int getNodeDictionaryInitialSize() {
@@ -67,4 +86,6 @@ public class Config {
 	public static String getLocation() {
 		return filename;
 	}
+
+	
 }
