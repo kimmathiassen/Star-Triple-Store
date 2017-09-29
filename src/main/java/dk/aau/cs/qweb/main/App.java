@@ -58,12 +58,15 @@ public class App {
 		// create the Options
 		Options options = new Options();
 		options.addOption("h", "help", false, "Display this message." );
-		options.addOption("q", "query", true, "the path to a file containing the sparql* query ");
-		options.addOption("f", "query-folder", true, "path to folder with .sparqls files");
-		options.addOption("l", "location", true, "path to the turtle* file");
-		options.addOption("p", "disable-prefix-dictionary", false, "disable the prefix dictionary (default on)");
-		options.addOption("i", "index", true, "type of index: hashindex, flatindex, treeindex. (default hashindex)");
-		options.addOption("d", "dictionary", true, "type of dictionary: InMemoryHashMap, DiskBTree, HybridBTree, DiskBloomfilterBTree. (default HybridBTree)");
+		options.addOption("q", "query", true, "The path to a file containing the sparql* query ");
+		options.addOption("f", "query-folder", true, "Path to folder with .sparqls files");
+		options.addOption("l", "location", true, "Path to the turtle* file");
+		options.addOption("p", "disable-prefix-dictionary", false, "Disable the prefix dictionary (default on)");
+		options.addOption("i", "index", true, "Types of index: hashindex, flatindex, treeindex. (default hashindex)");
+		options.addOption("d", "dictionary", true, "Types of dictionary: InMemoryHashMap, DiskBTree, HybridBTree, DiskBloomfilterBTree. (default HybridBTree)");
+		options.addOption("e", "encoding", true, "The partitioning of the 62 bits of the embedded triples, format is AABBCC, e.g. 201032");
+		options.addOption("r", "reference-triple-distribution", true, "Give a percentage number that artificially determine the distribution of reference triples, e.g. 50 ");
+		
 		
 		// Parse options
 		try {
@@ -111,6 +114,19 @@ public class App {
 		    
 		    if (line.hasOption("dictionary")) {
 		    	Config.setDictionaryType(line.getOptionValue("dictionary"));
+		    }
+		    
+		    if (line.hasOption("encoding")) {
+		    	
+		    	String encoding = line.getOptionValue("encoding");
+		    	Config.setSubjectSizeInBits(Integer.parseInt(encoding.substring(0, 1)));
+		    	Config.setPredicateSizeInBits(Integer.parseInt(encoding.substring(2, 3)));
+		    	Config.setObjectSizeInBits(Integer.parseInt(encoding.substring(4, 5)));
+		    }
+		    
+		    if (line.hasOption("reference-triple-distribution")) {
+		    	int percentage = Integer.parseInt( line.getOptionValue("encoding"));
+		    	NodeDictionaryFactory.getDictionary().setReferenceTripleDistribution(percentage);
 		    }
 		    
 		} catch( ParseException exp ) {

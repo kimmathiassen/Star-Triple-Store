@@ -34,8 +34,6 @@ public class Config {
 	}
 	
 	public static int getEmbeddedHeaderSize() {
-		
-		// TODO Auto-generated method stub
 		return 64-(subjectSizeInBits+predicateSizeInBits+objectSizeInBits);
 	}
 	
