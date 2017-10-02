@@ -44,7 +44,7 @@ import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 public class App {
 	
 	/* Get actual class name to be printed on */
-	   static Logger log = Logger.getLogger(App.class.getName());
+	static Logger log = Logger.getLogger(App.class.getName());
 	   
 	
 	public static void main(String[] args) {
@@ -72,7 +72,7 @@ public class App {
 		options.addOption("e", "encoding", true, "The partitioning of the 62 bits of the embedded triples, format is AABBCC, e.g. 201032");
 		options.addOption("r", "reference-triple-distribution", true, "Give a percentage number that artificially determine the distribution of reference triples, e.g. 50 ");
 		
-	    log.info("Hello this is an info message");
+	    
 	
 		
 		// Parse options
@@ -155,10 +155,10 @@ public class App {
         // load data
         try {
         	NodeDictionaryFactory.getDictionary().open();
-        	System.out.println("Loading file: "+filename);
+        	log.info("Loading file: "+filename);
         	start_time = System.nanoTime();
             RDFDataMgr.read(model, filename);
-            System.out.println("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+            log.info("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
 		} finally {
 			//Ensure that potential physical database connections are closed.
 			NodeDictionaryFactory.getDictionary().close();
@@ -166,16 +166,16 @@ public class App {
         
         // Delete duplicate triples
         System.out.println();
-        System.out.println("Deleting duplicates");
+        log.info("Deleting duplicates");
         start_time = System.nanoTime();
         g.eliminateDuplicates();
-        System.out.println("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+        log.info("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
         
         // Evaluation of the queries
-        System.out.println();
-        System.out.println("Evaluating queries:");
+        log.info("Evaluating queries:");
         for (String queryString : queries) {
-        	System.out.println(queryString);
+        	
+        	log.info(queryString);
              
             try{
             	 start_time = System.nanoTime();
@@ -183,12 +183,11 @@ public class App {
             	 QueryExecution qexec = QueryExecutionFactory.create(query, model);
             	 NodeDictionaryFactory.getDictionary().open();
                  ResultSet rs = qexec.execSelect() ;
-                 ResultSetFormatter.out(System.out, rs, query) ;
+                 log.info(ResultSetFormatter.asText(rs));
              } finally {
             	 NodeDictionaryFactory.getDictionary().close();
              }
-             System.out.println("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
-             System.out.println();
+             log.info("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
 		}
     }
 
@@ -196,7 +195,6 @@ public class App {
 		if (Config.getSubjectSizeInBits()+Config.getPredicateSizeInBits()+Config.getObjectSizeInBits() > 62) {
 			throw new IllegalArgumentException("The bit encoding is invalid. No more than 62 bits can be allocated" );
 		}
-		
 	}
 
 	public static void registerTTLS() {
