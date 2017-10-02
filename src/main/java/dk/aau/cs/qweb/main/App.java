@@ -31,6 +31,7 @@ import org.apache.jena.riot.RDFParserRegistry;
 import org.apache.jena.riot.ReaderRIOTFactory;
 import org.apache.jena.sparql.lang.SPARQLParserRegistry;
 import org.apache.jena.sparql.serializer.SerializerRegistry;
+import org.apache.log4j.Logger;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.graph.Graph;
@@ -41,6 +42,10 @@ import dk.aau.cs.qweb.resultserializer.QueryStarResultSerializerFactory;
 import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
+	
+	/* Get actual class name to be printed on */
+	   static Logger log = Logger.getLogger(App.class.getName());
+	   
 	
 	public static void main(String[] args) {
 		List<String> queries = new ArrayList<String>();
@@ -67,6 +72,8 @@ public class App {
 		options.addOption("e", "encoding", true, "The partitioning of the 62 bits of the embedded triples, format is AABBCC, e.g. 201032");
 		options.addOption("r", "reference-triple-distribution", true, "Give a percentage number that artificially determine the distribution of reference triples, e.g. 50 ");
 		
+	    log.info("Hello this is an info message");
+	
 		
 		// Parse options
 		try {

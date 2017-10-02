@@ -20,3 +20,4 @@ local.properties
 /openId2ReferenceNode.db
 /openNode2Id.db
 /openReferenceNode2Id.db
+/log.out
