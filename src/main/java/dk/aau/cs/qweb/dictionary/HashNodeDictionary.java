@@ -118,4 +118,8 @@ public class HashNodeDictionary extends AbstractNodeDictionary {
 	protected boolean containsReferenceKey(Key key) {
 		return referenceNodeDictionary.containsKey(key);
 	}
+
+	@Override
+	protected void logStatistics() {
+	}
 }

@@ -111,6 +111,7 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	
 	@Override
 	public void close() {
+		logStatistics();
 		id2ReferenceNodeDB.close();
 		id2NodeDB.close();
 		node2IdDB.close();
@@ -207,5 +208,9 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	@Override
 	protected boolean containsReferenceKey(Key key) {
 		return id2ReferenceNodeDictionary.containsKey(key);
+	}
+
+	@Override
+	protected void logStatistics() {
 	}
 }

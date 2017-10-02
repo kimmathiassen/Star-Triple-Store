@@ -4,11 +4,12 @@ import java.io.IOException;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.reasoner.IllegalParameterException;
+import org.apache.log4j.Logger;
 
 import dk.aau.cs.qweb.helper.BitHelper;
 import dk.aau.cs.qweb.main.Config;
-import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.node.EmbeddedNode;
+import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
@@ -26,6 +27,8 @@ import dk.aau.cs.qweb.triple.KeyFactory;
  * 
  */
 public abstract class AbstractNodeDictionary implements NodeDictionary {
+	static Logger log = Logger.getLogger(AbstractNodeDictionary.class.getName());
+	
 	protected boolean isThereAnySpecialReferenceTripleDistributionConditions;
 	protected int referenceTripleDistributionPercentage;
 	protected int numberOfEmbeddedTriples;
@@ -218,6 +221,8 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 		isThereAnySpecialReferenceTripleDistributionConditions = false;
 		setReferenceTripleDistribution(0);
 	}
+	
+	protected abstract void logStatistics();
 	
 	protected abstract void clearNodeDirectory();
 	protected abstract void clearReferenceNodeDirectory();
