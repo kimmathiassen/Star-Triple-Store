@@ -21,7 +21,7 @@ public interface NodeDictionary {
 
 	/**
 	 * see {@link NodeDictionary#setReferenceTripleDistribution(int)} for more information about this flag.
-	 * @return returns true iff any special reference triple distribution conditions are set.
+	 * @return returns true iff the special reference triple distribution condition is set.
 	 */
 	public boolean isThereAnySpecialReferenceTripleDistributionConditions() ;
 	
