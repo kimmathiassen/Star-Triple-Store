@@ -85,5 +85,10 @@ public class Config {
 		return filename;
 	}
 
+	public static String getLocationFileName() {
+		String[] split = filename.split("/");
+		return split[split.length];
+	}
+
 	
 }

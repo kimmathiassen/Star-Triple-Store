@@ -7,6 +7,7 @@ import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 
+import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.NodeFactoryStar;
 import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.node.StarNode;
@@ -21,89 +22,63 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	protected BTreeMap<Long, String> id2ReferenceNodeDictionary;
 	protected int nodeDictionarySize;
 	protected int referenceDictionarySize;
-	private DB id2ReferenceNodeDB;
-	private DB id2NodeDB;
-	private DB node2IdDB;
-	private DB referenceNode2IdDB;
+	private DB database;
 
 	protected BTreeDiskDictionary() {
 	}
 
 	@Override
 	public void open() {
+		database = DBMaker
+		        .fileDB(dbName())
+		        .fileMmapEnable()
+		        .fileMmapPreclearDisable()   // Make mmap file faster
+
+		        // Unmap (release resources) file when its closed.
+		        // That can cause JVM crash if file is accessed after it was unmapped
+		        // (there is possible race condition).
+		        .cleanerHackEnable()
+		        .make();
+		
 		openId2Node();
 		openNode2Id();
 		openId2ReferenceNode();
 		openReferenceNode2Id();
 	}
 	
-	private void openId2ReferenceNode() {
-		id2ReferenceNodeDB = DBMaker
-		        .fileDB("openId2ReferenceNode.db")
-		        .fileMmapEnable()
-		        .fileMmapPreclearDisable()   // Make mmap file faster
+	private String dbName() {
+		return Config.getLocationFileName()+
+				Config.getEmbeddedHeaderSize()+
+				Config.getSubjectSizeInBits()+
+				Config.getPredicateSizeInBits()+
+				Config.getObjectSizeInBits()+".db";
+	}
+	
 
-		        // Unmap (release resources) file when its closed.
-		        // That can cause JVM crash if file is accessed after it was unmapped
-		        // (there is possible race condition).
-		        .cleanerHackEnable()
-		        .make();
-		
-		id2ReferenceNodeDictionary = id2ReferenceNodeDB.treeMap("id2ReferenceNodeDictionary")
+	
+	private void openId2ReferenceNode() {
+		id2ReferenceNodeDictionary = database.treeMap("id2Reference")
 		        .keySerializer(Serializer.LONG)
 		        .valueSerializer(Serializer.STRING)
 		        .createOrOpen();
 	}
 	
 	private void openId2Node() {
-		id2NodeDB = DBMaker
-		        .fileDB("openId2Node.db")
-		        .fileMmapEnable()
-		        .fileMmapPreclearDisable()   // Make mmap file faster
-
-		        // Unmap (release resources) file when its closed.
-		        // That can cause JVM crash if file is accessed after it was unmapped
-		        // (there is possible race condition).
-		        .cleanerHackEnable()
-		        .make();
-		
-		id2NodeDictionary = id2NodeDB.treeMap("id2NodeDictionary")
+		id2NodeDictionary = database.treeMap("id2Node")
 		        .keySerializer(Serializer.LONG)
 		        .valueSerializer(Serializer.STRING)
 		        .createOrOpen();
 	}
 	
 	private void openNode2Id() {
-		node2IdDB = DBMaker
-		        .fileDB("openNode2Id.db")
-		        .fileMmapEnable()
-		        .fileMmapPreclearDisable()   // Make mmap file faster
-
-		        // Unmap (release resources) file when its closed.
-		        // That can cause JVM crash if file is accessed after it was unmapped
-		        // (there is possible race condition).
-		        .cleanerHackEnable()
-		        .make();
-		
-		node2IdDictionary = node2IdDB.treeMap("node2Id")
+		node2IdDictionary = database.treeMap("node2Id")
 		        .keySerializer(Serializer.STRING)
 		        .valueSerializer(Serializer.LONG)
 		        .createOrOpen();
 	}
 	
 	private void openReferenceNode2Id() {
-		referenceNode2IdDB = DBMaker
-		        .fileDB("openReferenceNode2Id.db")
-		        .fileMmapEnable()
-		        .fileMmapPreclearDisable()   // Make mmap file faster
-
-		        // Unmap (release resources) file when its closed.
-		        // That can cause JVM crash if file is accessed after it was unmapped
-		        // (there is possible race condition).
-		        .cleanerHackEnable()
-		        .make();
-		
-		referenceNode2IdDictionary = referenceNode2IdDB.treeMap("map")
+		referenceNode2IdDictionary = database.treeMap("reference2Id")
 		        .keySerializer(Serializer.STRING)
 		        .valueSerializer(Serializer.LONG)
 		        .createOrOpen();
@@ -111,13 +86,8 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	
 	@Override
 	public void close() {
-		id2ReferenceNodeDB.close();
-		id2NodeDB.close();
-		node2IdDB.close();
-		referenceNode2IdDB.close();
+		database.close();
 	}
-	
-
 
 	@Override
 	protected int nodeDirectorySize() {
