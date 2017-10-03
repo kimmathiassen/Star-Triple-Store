@@ -8,12 +8,22 @@ import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 
 public class BTreeHybridDictionary extends BTreeDiskDictionary {
+	private static BTreeHybridDictionary instance;
 	private int bufferSize = 10000;
 	private HashMap<String, Long> node2IdDictionaryBuffer;
 	private HashMap<Long, String> id2NodeDictionaryBuffer;
 	private HashMap<String, Long> referenceNode2IdDictionaryBuffer;
 	private HashMap<Long, String> id2ReferenceNodeDictionaryBuffer;
+	private int referenceBufferWrittenToDiskTimes = 0;
+	private int nodeBufferWrittenToDiskTimes = 0;
 
+	public static BTreeHybridDictionary getBTreeHybridDictionaryInstance()  {
+		if(instance == null) {
+	         instance = new BTreeHybridDictionary();
+	    }
+	    return instance;
+	}
+	
 	public BTreeHybridDictionary() {
 		super();
 		
@@ -117,6 +127,7 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 			
 			id2ReferenceNodeDictionaryBuffer.clear();
 			referenceNode2IdDictionaryBuffer.clear();
+			referenceBufferWrittenToDiskTimes++;
 		}
 		
 		id2ReferenceNodeDictionaryBuffer.put(key.getId(), node.serialize());
@@ -134,6 +145,7 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 			
 			id2NodeDictionaryBuffer.clear();
 			node2IdDictionaryBuffer.clear();
+			nodeBufferWrittenToDiskTimes++;
 		}
 		
 		id2NodeDictionaryBuffer.put(key.getId(), node.serialize());
@@ -142,4 +154,15 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 		nodeDictionarySize++;
 	}
 	
+	@Override
+	public void logStatistics() {
+		super.logStatistics();
+		log.debug("BTreeHybridDictionary");
+		log.debug("Buffer size: " +bufferSize);
+		log.debug("Reference buffer written to disk "+referenceBufferWrittenToDiskTimes +" Times");
+		log.debug("Node buffer written to disk "+nodeBufferWrittenToDiskTimes +" Times");
+		log.debug("Reference buffer contains "+referenceNode2IdDictionaryBuffer.size()+" triples");
+		log.debug("Node buffer contains "+referenceNode2IdDictionaryBuffer.size()+" triples");
+		log.debug("");
+	}
 }

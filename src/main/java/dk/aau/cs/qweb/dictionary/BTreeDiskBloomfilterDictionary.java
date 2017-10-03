@@ -10,13 +10,21 @@ import dk.aau.cs.qweb.main.Config;
 import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 
+
  /*
   * Class that makes loading the data faster by using a bloom filter to answer the containsSimpleKey query in a cheeper way.
   * This Class use memory to store the bloomfilter. 
-  * 
   */
 public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	
+	private static BTreeDiskBloomfilterDictionary instance;
+	
+	public static BTreeDiskBloomfilterDictionary getBTreeDiskBloomfilterDictionaryInstance()  {
+		if(instance == null) {
+	         instance = new BTreeDiskBloomfilterDictionary();
+	    }
+	    return instance;
+	}
 	
 	//Contains the simple  keys
 	private BloomFilter<Long> filter;
@@ -24,7 +32,7 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	private int negative;
 	private int truePositive;
 
-	private BTreeDiskBloomfilterDictionary() throws IOException {
+	private BTreeDiskBloomfilterDictionary()  {
 		initilizeBloomfilter();
 		initilizeStatistics();
 	}
@@ -35,8 +43,14 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 		truePositive = 0;
 	}
 
-	private void initilizeBloomfilter() throws IOException {
-		int lines = FileHelper.countLines(Config.getLocation());
+	private void initilizeBloomfilter() {
+		int lines;
+		try {
+			lines = FileHelper.countLines(Config.getLocation());
+		} catch (IOException e) {
+			lines = 100000;
+			log.warn("lines could not be counted, default value used instead");
+		}
 		
 		//Here we estimate the number of unique elements.
 		//the reasoning is that each line contains at least one unique object in average.
@@ -87,11 +101,14 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	}
 	
 	@Override
-	protected void logStatistics() {
+	public void logStatistics() {
+		super.logStatistics();
+		log.debug("BTreeDiskBloomfilterDictionary");
 		log.debug("Total calls on bloomfilter: " + (falsePositive+ truePositive + negative));
 		log.debug("Negative hits: " + (negative));
 		log.debug("Positive hits: " + (falsePositive+ truePositive));
 		log.debug("True positive hits: " + (truePositive));
 		log.debug("False positive hits: " + (falsePositive));
+		log.debug("");
 	}
 }

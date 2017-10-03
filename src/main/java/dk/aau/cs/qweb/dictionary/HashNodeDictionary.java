@@ -120,6 +120,10 @@ public class HashNodeDictionary extends AbstractNodeDictionary {
 	}
 
 	@Override
-	protected void logStatistics() {
+	public void logStatistics() {
+		log.debug("HashNodeDictionary");
+		log.debug("Node dictionary size: "+ nodeDirectorySize());
+		log.debug("Reference dictionary size: "+ referenceDictionarySize());
+		log.debug("");
 	}
 }

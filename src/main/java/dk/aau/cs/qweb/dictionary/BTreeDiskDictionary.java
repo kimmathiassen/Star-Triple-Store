@@ -14,7 +14,7 @@ import dk.aau.cs.qweb.triple.Key;
 
 public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 
-	private static BTreeDiskDictionary instance;
+	private static BTreeDiskDictionary instance = null;
 	protected BTreeMap<String, Long> node2IdDictionary;
 	protected BTreeMap<Long, String> id2NodeDictionary;
 	protected BTreeMap<String, Long> referenceNode2IdDictionary;
@@ -111,19 +111,13 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	
 	@Override
 	public void close() {
-		logStatistics();
 		id2ReferenceNodeDB.close();
 		id2NodeDB.close();
 		node2IdDB.close();
 		referenceNode2IdDB.close();
 	}
 	
-	protected static BTreeDiskDictionary getInstance() {
-		if(instance == null) {
-	         instance = new BTreeDiskDictionary();
-	    }
-	    return instance;
-	}
+
 
 	@Override
 	protected int nodeDirectorySize() {
@@ -211,6 +205,16 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	}
 
 	@Override
-	protected void logStatistics() {
+	public void logStatistics() {
+		log.debug("BTreeDiskDictionary");
+		log.debug("Node Dictionary Size: "+nodeDirectorySize());
+		log.debug("Reference Dictionary Size: "+referenceDictionarySize());
+	}
+
+	public static BTreeDiskDictionary getBTreeDiskDictionaryInstance() {
+		if(instance == null) {
+	         instance = new BTreeDiskDictionary();
+	    }
+	    return instance;
 	}
 }

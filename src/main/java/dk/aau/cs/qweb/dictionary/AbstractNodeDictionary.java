@@ -222,7 +222,7 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 		setReferenceTripleDistribution(0);
 	}
 	
-	protected abstract void logStatistics();
+	public abstract void logStatistics();
 	
 	protected abstract void clearNodeDirectory();
 	protected abstract void clearReferenceNodeDirectory();

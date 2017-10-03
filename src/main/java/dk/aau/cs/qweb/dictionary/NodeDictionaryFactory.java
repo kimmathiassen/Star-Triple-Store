@@ -8,11 +8,11 @@ public class NodeDictionaryFactory {
 		if (Config.getDictionaryType().equals("InMemoryHashMap")) {
 			return HashNodeDictionary.getInstance();
 		} else if  (Config.getDictionaryType().equals("DiskBTree")) {
-			return BTreeDiskDictionary.getInstance(); 
+			return BTreeDiskDictionary.getBTreeDiskDictionaryInstance(); 
 		} else if  (Config.getDictionaryType().equals("HybridBTree")) {
-			return BTreeHybridDictionary.getInstance(); 
+			return BTreeHybridDictionary.getBTreeHybridDictionaryInstance(); 
 		} else if  (Config.getDictionaryType().equals("DiskBloomfilterBTree")) {
-			return BTreeDiskBloomfilterDictionary.getInstance(); 
+			return BTreeDiskBloomfilterDictionary.getBTreeDiskBloomfilterDictionaryInstance(); 
 		} else {
 			throw new IllegalArgumentException("unknown dictionary datastructure "+Config.getDictionaryType());
 		}

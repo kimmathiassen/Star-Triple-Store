@@ -11,29 +11,29 @@ public interface NodeDictionary {
 	 * Method for closing the dictionary, only relevant in case the dictionary is disk based.
 	 * However, it is good practice to always close a dictionary after use.
 	 */
-	public void close();
+	void close();
 	
 	/**
 	 * Method for opening the dictionary, this method should be called before any of the other methods are called.
 	 * In theory this methods is only relevant in case the dictionary is disk based.
 	 */
-	public void open();
+	void open();
 
 	/**
 	 * see {@link NodeDictionary#setReferenceTripleDistribution(int)} for more information about this flag.
 	 * @return returns true iff the special reference triple distribution condition is set.
 	 */
-	public boolean isThereAnySpecialReferenceTripleDistributionConditions() ;
+	boolean isThereAnySpecialReferenceTripleDistributionConditions() ;
 	
 	/**
 	 * @return the combined size of the node dictionary and the reference dictionary.
 	 */
-	public int size() ;
+	int size() ;
 	
 	/**
 	 * @return the number of embedded triples added to the system. Duplicates will be counted.
 	 */
-	public int getNumberOfEmbeddedTriples() ;
+	int getNumberOfEmbeddedTriples() ;
 
 	/**
 	 * This method is used when a key should be serialized.
@@ -41,7 +41,7 @@ public interface NodeDictionary {
 	 * @param The key encoding the Node
 	 * @return The node that was encoding using the key.
 	 */
-	public Node getNode(Key id) ;
+	Node getNode(Key id) ;
 	
 	/**
 	 * Method for retrieving a referece key based on a subject, predicate, and object key.
@@ -52,7 +52,7 @@ public interface NodeDictionary {
 	 * @param object key
 	 * @return a reference key
 	 */
-	public Key getReferernceTripleKey(Key subjectId, Key predicateId, Key objectId) ;
+	Key getReferernceTripleKey(Key subjectId, Key predicateId, Key objectId) ;
 	
 	/**
 	 * This method creates a new entry in the dictionary for the node and returns the newly 
@@ -61,7 +61,7 @@ public interface NodeDictionary {
 	 * @param The node to be encoded
 	 * @return The key that is the encoding.
 	 */
-	public Key createKey(Node node) ;
+	Key createKey(Node node) ;
 	
 	/**
 	 * It is possible to tell the software to fake the need for reference keys. 
@@ -75,18 +75,18 @@ public interface NodeDictionary {
 	 * 
 	 * @param a percentage that determine the distribution of reference vs none-reference keys. (between 0-100)
 	 */
-	public void setReferenceTripleDistribution(int i) ;
+	void setReferenceTripleDistribution(int i) ;
 
 	/**
 	 * Empties the dicitonary
 	 * @throws IOException 
 	 */
-	public void clear() throws IOException ;
+	void clear() throws IOException ;
 	
 	/**
 	 * @return the number of entiers in the reference dictionary
 	 */
-	public int getNumberOfReferenceTriples() ;
+	int getNumberOfReferenceTriples() ;
 	
 	/**
 	 * Method for checking if a reference key already exist for a embedded triple.
@@ -95,6 +95,10 @@ public interface NodeDictionary {
 	 * @param object key
 	 * @return true iff a reference key mathcing the input parameters already exist.
 	 */
-	public boolean containsReferernceTripleKey(Key subjectId, Key predicateId, Key objectId) ;
+	boolean containsReferernceTripleKey(Key subjectId, Key predicateId, Key objectId) ;
 	
+	/**
+	 * Write statistics about the dictionary to the log
+	 */
+	void logStatistics();
 }
