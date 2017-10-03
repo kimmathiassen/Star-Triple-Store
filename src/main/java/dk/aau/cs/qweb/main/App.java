@@ -35,6 +35,7 @@ import org.apache.jena.sparql.serializer.SerializerRegistry;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.queryengine.QueryEngineStar;
@@ -73,7 +74,6 @@ public class App {
 		options.addOption("e", "encoding", true, "The partitioning of the 62 bits of the embedded triples, format is AABBCC, e.g. 201032");
 		options.addOption("r", "reference-triple-distribution", true, "Give a percentage number that artificially determine the distribution of reference triples, e.g. 50 ");
 		options.addOption("j", "log4j", true, "set the logging level for log4j, i.e. All, Debug, Error, Fatal, Info, Off, Trace or Warn. (default Info) ");
-	    
 		
 		// Parse options
 		try {
@@ -124,7 +124,6 @@ public class App {
 		    }
 		    
 		    if (line.hasOption("encoding")) {
-		    	
 		    	String encoding = line.getOptionValue("encoding");
 		    	Config.setSubjectSizeInBits(Integer.parseInt(encoding.substring(0, 1)));
 		    	Config.setPredicateSizeInBits(Integer.parseInt(encoding.substring(2, 3)));
@@ -170,13 +169,12 @@ public class App {
 		log.info("Dictionary type: "+Config.getDictionaryType());
 		log.info("Index type: "+ Config.getIndex());
 		log.info("Prefix dictionary is enabled: "+Config.isPrefixDictionaryEnabled());
-		log.info("Custom reference triple distribution is enabled: "+ NodeDictionaryFactory.getDictionary().isThereAnySpecialReferenceTripleDistributionConditions());
 		log.info("EmbeddedTriple encoding head:"+ Config.getEmbeddedHeaderSize()+
 				" Subject: "+Config.getSubjectSizeInBits()+
 				" Predicate "+Config.getPredicateSizeInBits()+
 				" Object: "+Config.getObjectSizeInBits());
 		log.info("Log4J logging level:" + Logger.getRootLogger().getLevel().toString());
-		
+		log.info("");
 		
 	}
 
@@ -194,7 +192,7 @@ public class App {
             	 NodeDictionaryFactory.getDictionary().open();
                  ResultSet rs = qexec.execSelect() ;
                  log.info(ResultSetFormatter.asText(rs));
-             } finally {
+			} finally {
             	 NodeDictionaryFactory.getDictionary().close();
              }
              log.info("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
@@ -206,6 +204,7 @@ public class App {
 		long start_time = System.nanoTime();
         g.eliminateDuplicates();
         log.info("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+        log.info("");
 	}
 
 	private static void loadData(String filename, Model model) {
@@ -216,6 +215,11 @@ public class App {
         	start_time = System.nanoTime();
             RDFDataMgr.read(model, filename);
             log.info("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+            log.info("");
+            
+            //NodeDictionaryFactory.getDictionary().logStatistics();
+            NodeDictionary dictionary = NodeDictionaryFactory.getDictionary();
+            dictionary.logStatistics();
 		} finally {
 			//Ensure that potential physical database connections are closed.
 			NodeDictionaryFactory.getDictionary().close();
