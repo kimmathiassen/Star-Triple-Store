@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,6 +32,7 @@ import org.apache.jena.riot.RDFParserRegistry;
 import org.apache.jena.riot.ReaderRIOTFactory;
 import org.apache.jena.sparql.lang.SPARQLParserRegistry;
 import org.apache.jena.sparql.serializer.SerializerRegistry;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
@@ -43,12 +45,11 @@ import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
 	
-	/* Get actual class name to be printed on */
 	static Logger log = Logger.getLogger(App.class.getName());
+	static List<String> queries = new ArrayList<String>();
 	   
-	
 	public static void main(String[] args) {
-		List<String> queries = new ArrayList<String>();
+		
 		CommandLineParser parser = new DefaultParser();
 		Graph g = new Graph();
 		String filename = "";
@@ -71,9 +72,8 @@ public class App {
 		options.addOption("d", "dictionary", true, "Types of dictionary: InMemoryHashMap, DiskBTree, HybridBTree, DiskBloomfilterBTree. (default HybridBTree)");
 		options.addOption("e", "encoding", true, "The partitioning of the 62 bits of the embedded triples, format is AABBCC, e.g. 201032");
 		options.addOption("r", "reference-triple-distribution", true, "Give a percentage number that artificially determine the distribution of reference triples, e.g. 50 ");
-		
+		options.addOption("j", "log4j", true, "set the logging level for log4j, i.e. All, Debug, Error, Fatal, Info, Off, Trace or Warn. (default Info) ");
 	    
-	
 		
 		// Parse options
 		try {
@@ -134,13 +134,19 @@ public class App {
 		    if (line.hasOption("reference-triple-distribution")) {
 		    	int percentage = Integer.parseInt( line.getOptionValue("encoding"));
 		    	NodeDictionaryFactory.getDictionary().setReferenceTripleDistribution(percentage);
-		    }
+		    } 
+		    
+		    if (line.hasOption("log4j")) {
+				setLoggingLevel(line.getOptionValue("log4j"));
+			}
 		    
 		} catch( ParseException exp ) {
 			printHelp(exp, options);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+		
+		writeExperimentalSetupToLog();
 		
 		validateBitEncoding();
 		
@@ -150,29 +156,33 @@ public class App {
         // register the sparql* query parser and optimizer
         registerQueryEngine();
         
-        long start_time;
+        loadData(filename, model);
         
-        // load data
-        try {
-        	NodeDictionaryFactory.getDictionary().open();
-        	log.info("Loading file: "+filename);
-        	start_time = System.nanoTime();
-            RDFDataMgr.read(model, filename);
-            log.info("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
-		} finally {
-			//Ensure that potential physical database connections are closed.
-			NodeDictionaryFactory.getDictionary().close();
-		}
+        deleteDuplicateTriples(g);
         
-        // Delete duplicate triples
-        System.out.println();
-        log.info("Deleting duplicates");
-        start_time = System.nanoTime();
-        g.eliminateDuplicates();
-        log.info("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
-        
-        // Evaluation of the queries
-        log.info("Evaluating queries:");
+        evaluateQueries(queries, model);
+    }
+
+	private static void writeExperimentalSetupToLog() {
+		log.info("----------------------------- "+new Date().toString()+" -----------------------------");
+		log.info("Dataset path: "+Config.getLocation());
+		log.info("Query count: "+ queries.size());
+		log.info("Dictionary type: "+Config.getDictionaryType());
+		log.info("Index type: "+ Config.getIndex());
+		log.info("Prefix dictionary is enabled: "+Config.isPrefixDictionaryEnabled());
+		log.info("Custom reference triple distribution is enabled: "+ NodeDictionaryFactory.getDictionary().isThereAnySpecialReferenceTripleDistributionConditions());
+		log.info("EmbeddedTriple encoding head:"+ Config.getEmbeddedHeaderSize()+
+				" Subject: "+Config.getSubjectSizeInBits()+
+				" Predicate "+Config.getPredicateSizeInBits()+
+				" Object: "+Config.getObjectSizeInBits());
+		log.info("Log4J logging level:" + Logger.getRootLogger().getLevel().toString());
+		
+		
+	}
+
+	private static void evaluateQueries(List<String> queries, Model model) {
+		long start_time;
+		log.info("Evaluating queries:");
         for (String queryString : queries) {
         	
         	log.info(queryString);
@@ -189,7 +199,48 @@ public class App {
              }
              log.info("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
 		}
-    }
+	}
+
+	private static void deleteDuplicateTriples(Graph g) {
+		log.info("Deleting duplicates");
+		long start_time = System.nanoTime();
+        g.eliminateDuplicates();
+        log.info("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+	}
+
+	private static void loadData(String filename, Model model) {
+		long start_time;
+		try {
+        	NodeDictionaryFactory.getDictionary().open();
+        	log.info("Loading file: "+filename);
+        	start_time = System.nanoTime();
+            RDFDataMgr.read(model, filename);
+            log.info("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+		} finally {
+			//Ensure that potential physical database connections are closed.
+			NodeDictionaryFactory.getDictionary().close();
+		}
+	}
+
+	private static void setLoggingLevel(String optionValue) {
+		if (optionValue.equals("All")) {
+			Logger.getRootLogger().setLevel(Level.ALL);
+		} else if (optionValue.equals("Debug")) {
+			Logger.getRootLogger().setLevel(Level.DEBUG);
+		} else if (optionValue.equals("Error")) {
+			Logger.getRootLogger().setLevel(Level.ERROR);
+		} else if (optionValue.equals("Fatal")) {
+			Logger.getRootLogger().setLevel(Level.FATAL);
+		} else if (optionValue.equals("Error")) {
+			Logger.getRootLogger().setLevel(Level.ERROR);
+		} else if (optionValue.equals("Off")) {
+			Logger.getRootLogger().setLevel(Level.OFF);
+		} else if (optionValue.equals("Trace")) {
+			Logger.getRootLogger().setLevel(Level.TRACE);
+		} else if (optionValue.equals("Warn")) {
+			Logger.getRootLogger().setLevel(Level.WARN);
+		} 
+	}
 
 	public static void validateBitEncoding() {
 		if (Config.getSubjectSizeInBits()+Config.getPredicateSizeInBits()+Config.getObjectSizeInBits() > 62) {
