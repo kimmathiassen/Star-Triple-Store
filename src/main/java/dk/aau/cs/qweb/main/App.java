@@ -181,24 +181,32 @@ public class App {
 	private static void evaluateQueries(List<String> queries, Model model) {
 		long start_time;
 		log.info("Evaluating queries:");
+		
+		start_time = System.nanoTime();
+	   	NodeDictionaryFactory.getDictionary().open();
+	   	log.info("Dictionary initialization: "+(System.nanoTime() - start_time) / 1e6+" ms");
+		
         for (String queryString : queries) {
         	
             try{
-            	 start_time = System.nanoTime();
+            	start_time = System.nanoTime();
             	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
             	 log.info(query.toString());
+            	 log.info("Query creation: "+(System.nanoTime() - start_time) / 1e6+" ms");
+            	 
+            	 start_time = System.nanoTime();
             	 QueryExecution qexec = QueryExecutionFactory.create(query, model);
-            	 NodeDictionaryFactory.getDictionary().open();
                  ResultSet rs = qexec.execSelect() ;
                  log.info(ResultSetFormatter.asText(rs));
-                 NodeDictionaryFactory.getDictionary().close();
+                 log.info("Evaluation finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
                  
-                 log.info("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+                 
 			} catch (Exception e) {
 				NodeDictionaryFactory.getDictionary().clear();
 				log.warn(e.toString());
             }
 		}
+        NodeDictionaryFactory.getDictionary().close();
 	}
 
 	private static void deleteDuplicateTriples(Graph g) {
