@@ -1,13 +1,14 @@
 package dk.aau.cs.qweb.dictionary;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
 import dk.aau.cs.qweb.helper.FileHelper;
 import dk.aau.cs.qweb.main.Config;
-import dk.aau.cs.qweb.node.StarNode;
+import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.triple.Key;
 
 
@@ -27,12 +28,13 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	}
 	
 	//Contains the simple  keys
-	private BloomFilter<Long> filter;
+	private BloomFilter<String> filter;
 	private int falsePositive;
 	private int negative;
 	private int truePositive;
 
 	private BTreeDiskBloomfilterDictionary()  {
+		super();
 		initilizeBloomfilter();
 		initilizeStatistics();
 	}
@@ -59,32 +61,39 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 		int numberOfUniqueElementsEstimate = (int) Math.round(lines * 1.2);
 		log.debug("Initilizing bloomfilter with size "+numberOfUniqueElementsEstimate);
 		filter = BloomFilter.create(
-				  Funnels.longFunnel(),
+				  Funnels.unencodedCharsFunnel(),
 				  numberOfUniqueElementsEstimate,
 				  0.01);
+		
+		//If the dictionary already contains values, we need to populate the bloomfilter
+		if (node2IdDictionary.getSize() != 0) {
+			log.info("Dictionary found, populating bloomfilter");
+			Iterator<String> iterator = node2IdDictionary.keyIterator();
+			while (iterator.hasNext()) {
+				filter.put(iterator.next());
+			}
+		}
 	}
 	
 	@Override
-	public void clear() throws IOException {
+	public void clear() {
 		super.clear();
 		initilizeBloomfilter(); //this clears the bloomfilter
 	}
 	
 	@Override
-	protected boolean containsSimpleKey(Key key) {
-		if (filter.mightContain(key.getId())) {
-			
-			//To avoid the scenario where a nonexisting key is requiested and null is returned.
+	protected boolean containsSimpleNode(SimpleNode node) {
+		if (filter.mightContain(node.serialize())) {
+			//To avoid the scenario where a nonexisting node is requiested and null is returned.
 			//We call contains on the disk store to ensure that there are no false positives returned by this method.
-			
-			if (id2NodeDictionary.containsKey(key.getId())) {
-				truePositive++;
-				return true;
-			} else {
-				falsePositive++;
-				return false;
-			}
-			
+//			if (node2IdDictionary.containsKey(node.serialize())) {
+//				truePositive++;
+//				return true;
+//			} else {
+//				falsePositive++;
+//				return false;
+//			}
+			return true;
 		} else {
 			negative++;
 			return false;
@@ -92,8 +101,19 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	}
 	
 	@Override
-	protected void addToNodeDictionary(StarNode node, Key key) {
-		filter.put(key.getId());
+	protected Key getNodeDictionaryKey(SimpleNode node) {
+		Long id = node2IdDictionary.get(node.serialize());
+		if (id == null) {
+			//The null case can occure if the bloomfilter returnes a falsePositive, in this case the node does not exist and should be registered.
+			return registerNode(node);
+		}
+		
+		return new Key(id);
+	}
+	
+	@Override
+	protected void addToNodeDictionary(SimpleNode node, Key key) {
+		filter.put(node.serialize());
 		id2NodeDictionary.put(key.getId(), node.serialize());
 		node2IdDictionary.put(node.serialize(), key.getId());
 		

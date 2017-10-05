@@ -1,7 +1,5 @@
 package dk.aau.cs.qweb.dictionary;
 
-import java.io.IOException;
-
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -23,35 +21,38 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	protected int nodeDictionarySize;
 	protected int referenceDictionarySize;
 	private DB database;
+	protected boolean open = false;
 
 	protected BTreeDiskDictionary() {
+		open();
 	}
 
 	@Override
 	public void open() {
-		database = DBMaker
-		        .fileDB(dbName())
-		        .fileMmapEnable()
-		        .fileMmapPreclearDisable()   // Make mmap file faster
-
-		        // Unmap (release resources) file when its closed.
-		        // That can cause JVM crash if file is accessed after it was unmapped
-		        // (there is possible race condition).
-		        .cleanerHackEnable()
-		        .make();
+		if (!open) {
+			open = true;
+			database = DBMaker
+			        .fileDB(dbName())
+			        .fileMmapEnable()
+			        .fileMmapPreclearDisable()   // Make mmap file faster
+			        .cleanerHackEnable()
+			        .make();
+			
+			openId2Node();
+			openNode2Id();
+			openId2ReferenceNode();
+			openReferenceNode2Id();
+		}
 		
-		openId2Node();
-		openNode2Id();
-		openId2ReferenceNode();
-		openReferenceNode2Id();
 	}
 	
 	private String dbName() {
-		return Config.getLocationFileName()+
+		String name = Config.getLocationFileName()+
 				Config.getEmbeddedHeaderSize()+
 				Config.getSubjectSizeInBits()+
 				Config.getPredicateSizeInBits()+
 				Config.getObjectSizeInBits()+".db";
+		return name; 
 	}
 	
 
@@ -87,6 +88,7 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	@Override
 	public void close() {
 		database.close();
+		open = false;
 	}
 
 	@Override
@@ -95,18 +97,18 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	}
 
 	@Override
-	protected Key getNodeDictionaryKey(StarNode node) {
-		return new Key(node2IdDictionary.get(((SimpleNode)node).serialize()));
-	}
-
-	@Override
-	protected boolean containsSimpleNode(StarNode node) {
-		return node2IdDictionary.containsKey(((SimpleNode)node).serialize());
+	protected boolean containsSimpleNode(SimpleNode node) {
+		return node2IdDictionary.containsKey(node.serialize());
 	}
 
 	@Override
 	protected Key getReferenceDictionaryKey(StarNode node) {
 		return new Key(referenceNode2IdDictionary.get(node.serialize()));
+	}
+	
+	@Override
+	protected Key getNodeDictionaryKey(SimpleNode node) {
+		return new Key(node2IdDictionary.get(node.serialize()));
 	}
 
 	@Override
@@ -115,7 +117,7 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	}
 
 	@Override
-	protected void addToNodeDictionary(StarNode node, Key key) {
+	protected void addToNodeDictionary(SimpleNode node, Key key) {
 		id2NodeDictionary.put(key.getId(), ((SimpleNode)node).serialize());
 		node2IdDictionary.put(((SimpleNode)node).serialize(),key.getId());
 		nodeDictionarySize++;
@@ -146,22 +148,38 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	}
 	
 	@Override
-	public void clear() throws IOException {
+	public void clear() {
 		super.clear();
+		
+//		try {
+//			Files.delete(Paths.get(dbName()));
+//		} catch (Exception e) {
+//			log.warn("Database could not be deleted at location: "+ Config.getLocation());
+//			log.warn(e.toString());
+//		}
+		
 		nodeDictionarySize = 0;
 		referenceDictionarySize = 0;
 	}
 
 	@Override
 	protected void clearNodeDirectory() {
-		node2IdDictionary.clear();
-		id2NodeDictionary.clear();
+		if (node2IdDictionary != null) {
+			node2IdDictionary.clear();
+		}
+		if (id2NodeDictionary != null) {
+			id2NodeDictionary.clear();
+		}
 	}
 
 	@Override
 	protected void clearReferenceNodeDirectory() {
-		referenceNode2IdDictionary.clear();
-		id2ReferenceNodeDictionary.clear();
+		if (referenceNode2IdDictionary != null) {
+			referenceNode2IdDictionary.clear();
+		}
+		if (id2ReferenceNodeDictionary != null) {
+			id2ReferenceNodeDictionary.clear();
+		}
 	}
 
 	@Override
@@ -187,4 +205,6 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	    }
 	    return instance;
 	}
+
+
 }

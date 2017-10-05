@@ -1,9 +1,9 @@
 package dk.aau.cs.qweb.dictionary;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import dk.aau.cs.qweb.node.NodeFactoryStar;
+import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 
@@ -34,7 +34,7 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 	}
 	
 	@Override
-	public void clear() throws IOException {
+	public void clear()  {
 		super.clear();
 		node2IdDictionaryBuffer.clear();
 		id2NodeDictionaryBuffer.clear();
@@ -52,7 +52,7 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 	}
 	
 	@Override
-	protected boolean containsSimpleNode(StarNode node) {
+	protected boolean containsSimpleNode(SimpleNode node) {
 		if (node2IdDictionaryBuffer.containsKey(node.serialize())) {
 			return true;
 		} else {
@@ -79,7 +79,7 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 	}
 	
 	@Override
-	protected Key getNodeDictionaryKey(StarNode node) {
+	protected Key getNodeDictionaryKey(SimpleNode node) {
 		if (node2IdDictionaryBuffer.containsKey(node.serialize())) {
 			Long id = node2IdDictionaryBuffer.get(node.serialize());
 			return new Key(id);
@@ -137,7 +137,7 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 	}
 	
 	@Override
-	protected void addToNodeDictionary(StarNode node, Key key) {
+	protected void addToNodeDictionary(SimpleNode node, Key key) {
 		if (node2IdDictionaryBuffer.size() >= bufferSize) {
 			
 			id2NodeDictionary.putAll(id2NodeDictionaryBuffer);

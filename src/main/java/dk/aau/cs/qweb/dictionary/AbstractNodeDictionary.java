@@ -1,7 +1,5 @@
 package dk.aau.cs.qweb.dictionary;
 
-import java.io.IOException;
-
 import org.apache.jena.graph.Node;
 import org.apache.jena.reasoner.IllegalParameterException;
 import org.apache.log4j.Logger;
@@ -102,7 +100,7 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 		if (node instanceof EmbeddedNode) {
 			numberOfEmbeddedTriples++;
 		}
-		addToNodeDictionary(node, key);
+		addToNodeDictionary((SimpleNode)node, key);
 	}
 	
 	protected boolean shouldNextNodeBeAnReference() {
@@ -213,7 +211,7 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 	}
 	
 	@Override
-	public void clear() throws IOException {
+	public void clear()  {
 		clearNodeDirectory();
 		clearReferenceNodeDirectory();
 		KeyFactory.reset();
@@ -230,15 +228,15 @@ public abstract class AbstractNodeDictionary implements NodeDictionary {
 	protected abstract int nodeDirectorySize();
 	protected abstract int referenceDictionarySize();
 	
-	protected abstract boolean containsSimpleNode(StarNode node);
+	protected abstract boolean containsSimpleNode(SimpleNode node);
 	protected abstract boolean containsSimpleKey(Key subject) ;
 	protected abstract boolean containsReferenceNode(StarNode node) ;
 	protected abstract boolean containsReferenceKey(Key key) ;
 	
-	protected abstract void addToNodeDictionary(StarNode node,Key key);
+	protected abstract void addToNodeDictionary(SimpleNode node,Key key);
 	protected abstract void addToReferenceDictionary(StarNode node,Key key);
 	
-	protected abstract Key getNodeDictionaryKey(StarNode node);
+	protected abstract Key getNodeDictionaryKey(SimpleNode node);
 	protected abstract StarNode getNodeDictionaryNode(Key id);
 	protected abstract StarNode getReferenceDictionaryNode(Key id);
 	protected abstract Key getReferenceDictionaryKey(StarNode node);

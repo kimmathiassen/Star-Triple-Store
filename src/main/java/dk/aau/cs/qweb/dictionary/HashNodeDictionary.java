@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.HashBiMap;
 
 import dk.aau.cs.qweb.main.Config;
+import dk.aau.cs.qweb.node.SimpleNode;
 import dk.aau.cs.qweb.node.StarNode;
 import dk.aau.cs.qweb.triple.Key;
 
@@ -33,12 +34,12 @@ public class HashNodeDictionary extends AbstractNodeDictionary {
 	}
 	
 	@Override
-	protected Key getNodeDictionaryKey(StarNode node) {
+	protected Key getNodeDictionaryKey(SimpleNode node) {
 		return nodeDictionary.inverse().get(node);
 	}
 
 	@Override
-	protected boolean containsSimpleNode(StarNode node) {
+	protected boolean containsSimpleNode(SimpleNode node) {
 		return nodeDictionary.containsValue(node);
 	}
 
@@ -53,7 +54,7 @@ public class HashNodeDictionary extends AbstractNodeDictionary {
 	}
 
 	@Override
-	protected void addToNodeDictionary(StarNode node, final Key key) {
+	protected void addToNodeDictionary(SimpleNode node, final Key key) {
 		nodeDictionary.put(key, node);
 	}
 

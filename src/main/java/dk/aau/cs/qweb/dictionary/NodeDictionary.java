@@ -81,7 +81,7 @@ public interface NodeDictionary {
 	 * Empties the dicitonary
 	 * @throws IOException 
 	 */
-	void clear() throws IOException ;
+	void clear();
 	
 	/**
 	 * @return the number of entiers in the reference dictionary
