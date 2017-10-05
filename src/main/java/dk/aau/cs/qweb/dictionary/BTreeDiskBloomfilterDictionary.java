@@ -84,15 +84,6 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	@Override
 	protected boolean containsSimpleNode(SimpleNode node) {
 		if (filter.mightContain(node.serialize())) {
-			//To avoid the scenario where a nonexisting node is requiested and null is returned.
-			//We call contains on the disk store to ensure that there are no false positives returned by this method.
-//			if (node2IdDictionary.containsKey(node.serialize())) {
-//				truePositive++;
-//				return true;
-//			} else {
-//				falsePositive++;
-//				return false;
-//			}
 			return true;
 		} else {
 			negative++;
