@@ -35,7 +35,6 @@ import org.apache.jena.sparql.serializer.SerializerRegistry;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.queryengine.QueryEngineStar;
@@ -48,11 +47,12 @@ public class App {
 	
 	static Logger log = Logger.getLogger(App.class.getName());
 	static List<String> queries = new ArrayList<String>();
+	static Graph g = new Graph();
 	   
 	public static void main(String[] args) {
 		
 		CommandLineParser parser = new DefaultParser();
-		Graph g = new Graph();
+		
 		String filename = "";
 		Model model = ModelFactory.createModelForGraph(g);
 		String  prolog = "PREFIX dc: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  "+
@@ -183,19 +183,21 @@ public class App {
 		log.info("Evaluating queries:");
         for (String queryString : queries) {
         	
-        	log.info(queryString);
-             
             try{
             	 start_time = System.nanoTime();
             	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
+            	 log.info(query.toString());
             	 QueryExecution qexec = QueryExecutionFactory.create(query, model);
             	 NodeDictionaryFactory.getDictionary().open();
                  ResultSet rs = qexec.execSelect() ;
                  log.info(ResultSetFormatter.asText(rs));
-			} finally {
-            	 NodeDictionaryFactory.getDictionary().close();
-             }
-             log.info("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+                 NodeDictionaryFactory.getDictionary().close();
+                 
+                 log.info("Query finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+			} catch (Exception e) {
+				NodeDictionaryFactory.getDictionary().clear();
+				log.warn(e.toString());
+            }
 		}
 	}
 
@@ -214,16 +216,18 @@ public class App {
         	log.info("Loading file: "+filename);
         	start_time = System.nanoTime();
             RDFDataMgr.read(model, filename);
-            log.info("Loading finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
+            double time = (System.nanoTime() - start_time) / 1e6;
+            log.info("Loading finished: "+time+" ms");
+            log.info("Number of triples: "+g.getNumberOfTriples());
+            log.info("average load time: "+g.getNumberOfTriples()/time*1000 +" triples per second");
             log.info("");
             
-            //NodeDictionaryFactory.getDictionary().logStatistics();
-            NodeDictionary dictionary = NodeDictionaryFactory.getDictionary();
-            dictionary.logStatistics();
-		} finally {
-			//Ensure that potential physical database connections are closed.
-			NodeDictionaryFactory.getDictionary().close();
-		}
+            NodeDictionaryFactory.getDictionary().close();
+            NodeDictionaryFactory.getDictionary().logStatistics();
+		}  catch (Exception e) {
+			NodeDictionaryFactory.getDictionary().clear();
+			log.warn(e.toString());
+        }
 	}
 
 	private static void setLoggingLevel(String optionValue) {

@@ -156,4 +156,8 @@ public class Graph extends GraphBase {
 		return store.getNumberOfLookups();
 	}
 	
+	public int getNumberOfTriples() {
+		return store.getNumberOfTriples();
+	}
+	
 }
