@@ -88,7 +88,7 @@ public class App {
 		    	Scanner in = new Scanner(new FileReader(line.getOptionValue("query")));
 		    	StringBuilder sb = new StringBuilder();
 		    	while(in.hasNext()) {
-		    	    sb.append(in.next());
+		    	    sb.append(in.next()+" ");
 		    	}
 		    	in.close();
 		    	String queryString = prolog + sb.toString(); 
@@ -187,7 +187,6 @@ public class App {
 	   	log.info("Dictionary initialization: "+(System.nanoTime() - start_time) / 1e6+" ms");
 		
         for (String queryString : queries) {
-        	
             try{
             	start_time = System.nanoTime();
             	 Query query = QueryFactory.create(queryString,SyntaxStar.syntaxSPARQL_Star) ;
@@ -197,9 +196,9 @@ public class App {
             	 start_time = System.nanoTime();
             	 QueryExecution qexec = QueryExecutionFactory.create(query, model);
                  ResultSet rs = qexec.execSelect() ;
+                 
                  log.info(ResultSetFormatter.asText(rs));
                  log.info("Evaluation finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
-                 
                  
 			} catch (Exception e) {
 				NodeDictionaryFactory.getDictionary().clear();
