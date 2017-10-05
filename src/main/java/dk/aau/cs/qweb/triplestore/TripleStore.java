@@ -7,7 +7,9 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.util.iterator.WrappedIterator;
+import org.apache.log4j.Logger;
 
+import dk.aau.cs.qweb.dictionary.AbstractNodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionary;
 import dk.aau.cs.qweb.dictionary.NodeDictionaryFactory;
 import dk.aau.cs.qweb.dictionary.PrefixDictionary;
@@ -19,6 +21,7 @@ import dk.aau.cs.qweb.triplestore.hashindex.MapIndex.Field;
 import dk.aau.cs.qweb.triplestore.treeindex.TreeIndex;
 
 public class TripleStore {
+	static Logger log = Logger.getLogger(AbstractNodeDictionary.class.getName());
     protected Index SPO;
     protected Index POS;
     protected Index OSP;
@@ -48,21 +51,21 @@ public class TripleStore {
         POS.add( t );
         OSP.add( t ); 
         if (triplesAddedCount % 100000 == 0) {
-			System.out.println("Triples added: " + triplesAddedCount+" Time diff: "+(millis - System.currentTimeMillis()));
+        	log.info("Triples added: " + triplesAddedCount+" Time diff: "+(millis - System.currentTimeMillis()));
 			millis = System.currentTimeMillis();
 		}
         
         if (triplesAddedCount % 10000000 == 0) {
-			System.out.println("Index contains: " + SPO.size() );
+        	log.info("Index contains: " + SPO.size() );
 			NodeDictionary dict = NodeDictionaryFactory.getDictionary();
 			int embeddedTriples = dict.getNumberOfEmbeddedTriples();
 			int overflow = dict.getNumberOfReferenceTriples();
 			int size = dict.size();
-			System.out.println("Node Dictionary size: " + size);
-			System.out.println("+ Normal triples: " + (size-(embeddedTriples)));
-			System.out.println("+ Embedded triples: " + (embeddedTriples));
-			System.out.println("+ Overflow triples: " + (overflow));
-			System.out.println("Prefix Dictionary size: " + PrefixDictionary.getInstance().size());
+			log.info("Node Dictionary size: " + size);
+			log.info("+ Embedded triples: " + (embeddedTriples));
+			log.info("+ Overflow triples: " + (overflow));
+			log.info("Prefix Dictionary size: " + PrefixDictionary.getInstance().size());
+			
 		}
     }
      
@@ -170,6 +173,9 @@ public class TripleStore {
 		return numberOfLookups;
 	}
 
+	public int getNumberOfTriples() {
+		return triplesAddedCount;
+	}
 	
 	/**
 	 * Returns the SPO index, used for testing purposes.
