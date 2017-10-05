@@ -125,7 +125,8 @@ public class FlatIndex implements Index {
 		return chain;
 	}
 
-	public void eliminateDuplicates() {
+	public int eliminateDuplicates() {
+		int count = 0;
 		for (Entry<FlatKey, ArrayList<KeyContainer>> list : indexMap.entrySet()) {
 			ArrayList<Integer> duplicates = new ArrayList<Integer>();
 			ArrayList<KeyContainer> values = list.getValue();
@@ -140,8 +141,10 @@ public class FlatIndex implements Index {
 			//Remove dup in reverse order to avoid changeing the indexs
 			for (Integer integer : Lists.reverse(duplicates)) {
 				list.getValue().remove((int)integer);
+				count++;
 			}
 		}
+		return count;
 	}
 	
 	@Override

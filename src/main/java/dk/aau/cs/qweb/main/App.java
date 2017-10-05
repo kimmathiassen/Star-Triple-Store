@@ -204,7 +204,8 @@ public class App {
 	private static void deleteDuplicateTriples(Graph g) {
 		log.info("Deleting duplicates");
 		long start_time = System.nanoTime();
-        g.eliminateDuplicates();
+        int count = g.eliminateDuplicates();
+        log.info("Number of triples deleted: "+count);
         log.info("Deleting duplicates finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
         log.info("");
 	}

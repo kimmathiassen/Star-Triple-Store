@@ -163,10 +163,12 @@ public class TripleStore {
 	 * 	Foreach of the materialized indexes (SPO, POS, OSP) duplicates are eliminated.
 	 * See the implementation of Index ({@link Index}) for more details {@link HashIndex}, {@link FlatIndex}, {@link TreeIndex}
 	 */
-	public void eliminateDuplicates() {
-		SPO.eliminateDuplicates();
+	public int eliminateDuplicates() {
+		int count = SPO.eliminateDuplicates();
 		POS.eliminateDuplicates();
 		OSP.eliminateDuplicates();
+		
+		return count;
 	}
 
 	public int getNumberOfLookups() {

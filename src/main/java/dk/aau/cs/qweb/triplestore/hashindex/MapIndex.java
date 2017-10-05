@@ -96,10 +96,13 @@ public abstract class MapIndex  implements Index {
 		return chain;
 	}
 
-	public void eliminateDuplicates() {
+	public int eliminateDuplicates() {
+		int count = 0;
 		for (MapTripleBunch tripleBunch : indexMap.values()) {
 			tripleBunch.eliminateDuplicates();
+			count++;
 		}
+		return count;
 	}
 	
 	@Override

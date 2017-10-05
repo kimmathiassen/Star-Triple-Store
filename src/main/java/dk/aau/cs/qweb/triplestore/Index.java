@@ -61,6 +61,7 @@ public interface Index   {
 	
 	/**
 	 * Remove all duplicate triples
+	 * return the count
 	 */
-	void eliminateDuplicates() ;
+	int eliminateDuplicates() ;
 }

@@ -148,8 +148,8 @@ public class Graph extends GraphBase {
     */
     protected GraphEventManager gem;
 
-	public void eliminateDuplicates() {
-		store.eliminateDuplicates();
+	public int eliminateDuplicates() {
+		return store.eliminateDuplicates();
 	}
 
 	public int getNumberOfLookups() {
