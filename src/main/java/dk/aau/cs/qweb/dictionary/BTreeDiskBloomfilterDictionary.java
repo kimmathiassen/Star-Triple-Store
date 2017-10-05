@@ -104,10 +104,12 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 	protected Key getNodeDictionaryKey(SimpleNode node) {
 		Long id = node2IdDictionary.get(node.serialize());
 		if (id == null) {
+			falsePositive++;
 			//The null case can occure if the bloomfilter returnes a falsePositive, in this case the node does not exist and should be registered.
 			return registerNode(node);
 		}
 		
+		truePositive++;
 		return new Key(id);
 	}
 	

@@ -221,9 +221,9 @@ public class App {
             log.info("Number of triples: "+g.getNumberOfTriples());
             log.info("average load time: "+g.getNumberOfTriples()/time*1000 +" triples per second");
             log.info("");
-            
-            NodeDictionaryFactory.getDictionary().close();
             NodeDictionaryFactory.getDictionary().logStatistics();
+            NodeDictionaryFactory.getDictionary().close();
+            
 		}  catch (Exception e) {
 			NodeDictionaryFactory.getDictionary().clear();
 			log.warn(e.toString());

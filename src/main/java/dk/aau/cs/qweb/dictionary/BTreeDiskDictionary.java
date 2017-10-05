@@ -183,6 +183,7 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 		log.debug("BTreeDiskDictionary");
 		log.debug("Node Dictionary Size: "+nodeDirectorySize());
 		log.debug("Reference Dictionary Size: "+referenceDictionarySize());
+		log.debug("");
 	}
 
 	public static BTreeDiskDictionary getBTreeDiskDictionaryInstance() {
