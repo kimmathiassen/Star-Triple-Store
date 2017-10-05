@@ -116,8 +116,6 @@ public class BTreeDiskBloomfilterDictionary extends BTreeDiskDictionary {
 		filter.put(node.serialize());
 		id2NodeDictionary.put(key.getId(), node.serialize());
 		node2IdDictionary.put(node.serialize(), key.getId());
-		
-		nodeDictionarySize++;
 	}
 	
 	@Override

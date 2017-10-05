@@ -132,8 +132,6 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 		
 		id2ReferenceNodeDictionaryBuffer.put(key.getId(), node.serialize());
 		referenceNode2IdDictionaryBuffer.put(node.serialize(), key.getId());
-		
-		referenceDictionarySize++;
 	}
 	
 	@Override
@@ -150,8 +148,6 @@ public class BTreeHybridDictionary extends BTreeDiskDictionary {
 		
 		id2NodeDictionaryBuffer.put(key.getId(), node.serialize());
 		node2IdDictionaryBuffer.put(node.serialize(), key.getId());
-		
-		nodeDictionarySize++;
 	}
 	
 	@Override

@@ -18,8 +18,6 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	protected BTreeMap<Long, String> id2NodeDictionary;
 	protected BTreeMap<String, Long> referenceNode2IdDictionary;
 	protected BTreeMap<Long, String> id2ReferenceNodeDictionary;
-	protected int nodeDictionarySize;
-	protected int referenceDictionarySize;
 	private DB database;
 	protected boolean open = false;
 
@@ -93,7 +91,7 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 
 	@Override
 	protected int nodeDirectorySize() {
-		return nodeDictionarySize;
+		return node2IdDictionary.size();
 	}
 
 	@Override
@@ -120,19 +118,17 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	protected void addToNodeDictionary(SimpleNode node, Key key) {
 		id2NodeDictionary.put(key.getId(), ((SimpleNode)node).serialize());
 		node2IdDictionary.put(((SimpleNode)node).serialize(),key.getId());
-		nodeDictionarySize++;
 	}
 
 	@Override
 	protected void addToReferenceDictionary(StarNode node, Key key) {
 		id2ReferenceNodeDictionary.put(key.getId(), node.serialize());
 		referenceNode2IdDictionary.put(node.serialize(),key.getId());
-		referenceDictionarySize++;
 	}
 
 	@Override
 	protected int referenceDictionarySize() {
-		return referenceDictionarySize;
+		return referenceNode2IdDictionary.size();
 	}
 
 	@Override
@@ -150,16 +146,6 @@ public class BTreeDiskDictionary extends AbstractNodeDictionary  {
 	@Override
 	public void clear() {
 		super.clear();
-		
-//		try {
-//			Files.delete(Paths.get(dbName()));
-//		} catch (Exception e) {
-//			log.warn("Database could not be deleted at location: "+ Config.getLocation());
-//			log.warn(e.toString());
-//		}
-		
-		nodeDictionarySize = 0;
-		referenceDictionarySize = 0;
 	}
 
 	@Override
