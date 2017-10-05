@@ -1,0 +1,7 @@
+select ?work
+where {
+
+	<http://example.org/kim> ex:worksAt ?work .
+}
+
+
