@@ -1,0 +1,5 @@
+SELECT  ?name ?gender
+WHERE
+  { <Alex_Latta>  <hasGivenName>  ?name ;
+              <hasGender>     ?gender
+  }
