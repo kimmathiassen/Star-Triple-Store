@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.resultserializer;
+package dk.aau.cs.qweb.queryserializer;
 
 import java.util.ArrayList;
 import java.util.Iterator;

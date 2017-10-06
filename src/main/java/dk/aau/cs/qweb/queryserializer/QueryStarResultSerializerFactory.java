@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.resultserializer;
+package dk.aau.cs.qweb.queryserializer;
 
 import org.apache.jena.atlas.io.IndentedWriter;
 import org.apache.jena.query.QueryVisitor;
