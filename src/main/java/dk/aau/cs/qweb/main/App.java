@@ -21,7 +21,6 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
@@ -40,7 +39,8 @@ import dk.aau.cs.qweb.graph.Graph;
 import dk.aau.cs.qweb.queryengine.QueryEngineStar;
 import dk.aau.cs.qweb.queryparser.SPARQLParserFactoryStar;
 import dk.aau.cs.qweb.queryparser.SyntaxStar;
-import dk.aau.cs.qweb.resultserializer.QueryStarResultSerializerFactory;
+import dk.aau.cs.qweb.queryserializer.QueryStarResultSerializerFactory;
+import dk.aau.cs.qweb.resultserializer.ResultSetStarFormatter;
 import dk.aau.cs.qweb.turtlestar.TTLSReaderFactory;
 
 public class App {
@@ -197,12 +197,17 @@ public class App {
             	 QueryExecution qexec = QueryExecutionFactory.create(query, model);
                  ResultSet rs = qexec.execSelect() ;
                  
-                 log.info(ResultSetFormatter.asText(rs));
+                 try {
+                	 log.info(ResultSetStarFormatter.asText(rs));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+                 
                  log.info("Evaluation finished: "+(System.nanoTime() - start_time) / 1e6+" ms");
                  
 			} catch (Exception e) {
 				NodeDictionaryFactory.getDictionary().clear();
-				log.warn(e.toString());
+				e.printStackTrace();
             }
 		}
         NodeDictionaryFactory.getDictionary().close();
@@ -234,7 +239,7 @@ public class App {
             
 		}  catch (Exception e) {
 			NodeDictionaryFactory.getDictionary().clear();
-			log.warn(e.toString());
+			e.printStackTrace();
         }
 	}
 
